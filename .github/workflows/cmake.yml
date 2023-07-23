@@ -3,13 +3,20 @@ name: CMake
 on:
   push:
     branches: [ "master" ]
+    paths-ignore:
+      - '*.md' 
+      - '*.MD'
+      - '*ignore'
+      - '.github/*'
+      - '!.github/workflows/*'
+      - '*.logs'
+      - '**/*.log'
+      - '**/**/*.log/' 
+      - '**/**/**/*.log'
+      - '**/**/**/**/*.log'
   pull_request:
     branches: [ "master" ]
-
-path-ignore:
-  - '*.md' 
-  - '*.MD' 
-  - '*ignore' 
+  workflow_run:
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
