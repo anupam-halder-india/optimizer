@@ -27,7 +27,7 @@ jobs:
         sudo apt install ninja-build -y
         rm -rf build
         mkdir build
-        cmake -GNinja build -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=./bin
+        cmake -GNinja ./build -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=./bin
 
     - name: Build
       run: cmake --build build
