@@ -5,7 +5,7 @@ FROM ubuntu:latest
 WORKDIR /optimizer
 
 # setting up the oprarating system by updating its repos and istalling nacessary packages
-RUN sudo apt update -y && apt dist-update -y && apt upgrade -y
+RUN sudo apt update -y && apt dist-upgrade -y && apt upgrade -y
 RUN sudo apt install cmake make g++ ninja-build -y
 
 # copying everything from the project to the container
