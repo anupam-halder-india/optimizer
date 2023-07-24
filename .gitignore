@@ -1,32 +1,15 @@
-# Prerequisites
-*.d
+# test folder
+*/Testing
+*/**/Testing
+*/**/**/Testing
+*/**/**/**/Testing
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# ninja tem files
+.ninja_deps
+.ninja_log
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+# Log files
+*.log
+*.log.*
+*_log
+*_log_*
