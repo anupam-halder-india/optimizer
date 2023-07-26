@@ -10,6 +10,8 @@ on:
       - '.github/*'
       - '!.github/workflows/*'
       - 'build'
+      - 'Dockerfile'
+      - '.devcontainer/*'
 
   pull_request:
     branches: [ "master" ]
