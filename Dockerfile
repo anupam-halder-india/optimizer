@@ -11,5 +11,13 @@ RUN sudo apt install cmake make g++ ninja-build -y
 # copying everything from the project to the container
 COPY . .
 
+# making necessary functions
+# empty for now
+
 # finally building the oroject inside container
-RUN cmake -GNinja build -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=./bin && cmake --build build 
+RUN if [ ! -d "build" ]; then \
+      mkdir "build"; \
+    fi && \
+    cd build && \
+    cmake -GNinja .. -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin && \
+    ninja
