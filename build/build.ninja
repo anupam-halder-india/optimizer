@@ -55,13 +55,13 @@ build CMakeFiles/optimizer.dir/src/main.cpp.o: CXX_COMPILER__optimizer_ /root/op
 
 
 #############################################
-# Link the executable bin/optimizer
+# Link the executable ../bin/optimizer
 
-build bin/optimizer: CXX_EXECUTABLE_LINKER__optimizer_ CMakeFiles/optimizer.dir/src/main.cpp.o
+build ../bin/optimizer: CXX_EXECUTABLE_LINKER__optimizer_ CMakeFiles/optimizer.dir/src/main.cpp.o
   OBJECT_DIR = CMakeFiles/optimizer.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_FILE = bin/optimizer
+  TARGET_FILE = ../bin/optimizer
   TARGET_PDB = optimizer.dbg
 
 
@@ -90,7 +90,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # =============================================================================
 # Target aliases.
 
-build optimizer: phony bin/optimizer
+build optimizer: phony ../bin/optimizer
 
 # =============================================================================
 # Folder targets.
@@ -100,7 +100,7 @@ build optimizer: phony bin/optimizer
 #############################################
 # Folder: /root/optimizer/build
 
-build all: phony bin/optimizer
+build all: phony ../bin/optimizer
 
 # =============================================================================
 # Built-in targets

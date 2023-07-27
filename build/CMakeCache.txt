@@ -151,7 +151,7 @@ CMAKE_RANLIB:FILEPATH=/bin/ranlib
 CMAKE_READELF:FILEPATH=/bin/readelf
 
 //No help, variable specified on the command line.
-CMAKE_RUNTIME_OUTPUT_DIRECTORY:UNINITIALIZED=./bin
+CMAKE_RUNTIME_OUTPUT_DIRECTORY:UNINITIALIZED=../bin
 
 //Flags used by the linker during the creation of shared libraries
 // during all build types.
