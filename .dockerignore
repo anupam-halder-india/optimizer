@@ -1,0 +1,16 @@
+# Markdowns files
+*.md
+*.Md
+
+# Testing realted files
+Testing
+**/Testing
+**/**/Testing
+**/**/**/Testing
+**/**/**/**/Testing
+
+# Non essential folders
+.github/*
+.git/*
+.build/*
+.bin/*

@@ -14,5 +14,5 @@
 *_log
 *_log_*
 
-# local cache
+# unnecessary folders
 build/*
