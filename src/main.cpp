@@ -17,13 +17,13 @@ string yes[] = { "yes", "Yes", "YES", "y", "Y" };
 string no[] = { "no", "No", "NO", "n", "N" };
 
 // colours
-#define RED "\033[0;31m"
-#define GREEN "\033[0;32m"
-#define YELLOW "\033[0;33m"
-#define BLUE "\033[0;34m"
-#define MAGENTA "\033[0;35m"
-#define CYAN "\033[0;36m"
-#define BOLD "\033[1;0m"
+#define RED "\033[31m"
+#define GREEN "\033[32m"
+#define YELLOW "\033[33m"
+#define BLUE "\033[34m"
+#define MAGENTA "\033[35m"
+#define CYAN "\033[36m"
+#define BOLD "\033[1m"
 #define RESET "\033[0;0m"
 
 // Function prototypes
@@ -48,7 +48,7 @@ int main() {
 
   // name for coustomization pourposes
   while (true) {
-    cout << MAGENTA << "[1]" << RESET << " Please enter your name, we need it for customization purposes (2 to 25 characters, no spaces): ";
+    cout << BOLD << MAGENTA << "[1]" << RESET << " Please enter your name, we need it for customization purposes (2 to 25 characters, no spaces): ";
     getline(cin, name);
 
     // to check if there is space or not
@@ -64,12 +64,12 @@ int main() {
   bool validation;
   // Installation permission of GitLab Runner and Validation of the chosen option
   while (true) {
-    cout << MAGENTA << "[2]" << RESET << "Do you want to install GitLab Runner? (yes/no): ";
+    cout << BOLD << MAGENTA << "[2]" << RESET << "Do you want to install GitLab Runner? (yes/no): ";
     getline(cin, GRIP);
     bool validation = Switch(GRIP);
     if (validation) {
       while (true) {
-        cout << MAGENTA << "[2.1] " << RESET << " What is your architecture (arm32, arm64, amd64): ";
+        cout << BOLD << MAGENTA << "[2.1] " << RESET << " What is your architecture (arm32, arm64, amd64): ";
         getline(cin, arch);
 	bool hasSpaces = (arch.find(' ') != string::npos);
 	string arm32[] = {"ARM32", "Arm32", "arm32"};
@@ -85,9 +85,9 @@ int main() {
 	  string arch = amd64[2];
 	  break;
         } else if (hasSpaces || arch.empty()) {
-	  cout << RED << "[ERROR] " << RESET << "pls don't enter spaces or emptyness" << endl;
+	  cout << BOLD << RED << "[ERROR] " << RESET << "pls don't enter spaces or emptyness" << endl;
         } else {
-	  cout << RED << "[ERROR] " << RESET << "pls choose from arm32, arm64 or amd64" << endl;
+	  cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from arm32, arm64 or amd64" << endl;
 	}
       }
       break;
@@ -109,10 +109,10 @@ bool Switch(const string& str) {
   } else if (find(begin(no), end(no), str) != end(no)) {
     return true; // Return true for a valid input
   } else if (hasSpaces || str.empty()) {
-    cout << RED << "[ERROR] " << RESET << "pls don't enter spaces or emptyness" << endl;
+    cout << BOLD << RED << "[ERROR] " << RESET << "pls don't enter spaces or emptyness" << endl;
     return false;
   } else {
-    cout << RED << "[ERROR]" << RESET << "Please choose from 'yes' or 'no'." << endl;
+    cout << BOLD << RED << "[ERROR]" << RESET << "Please choose from 'yes' or 'no'." << endl;
     return false; // Return false for an invalid input
   }
 }
