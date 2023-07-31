@@ -2,6 +2,7 @@
 #include <string>
 #include <algorithm> // For std::find
 #include <curl/curl.h> // for curl
+#include <fstream> // for the os detction
 
 using std::cout;
 using std::endl;
@@ -11,6 +12,7 @@ using std::find;
 using std::begin;
 using std::end;
 using std::cerr;
+using std::ifstream;
 
 // The global necessary variables
 
@@ -34,6 +36,9 @@ string no[] = { "no", "No", "NO", "n", "N" };
 bool Switch(const string& str);
 // curl
 size_t WriteCallback(void* contents, size_t size, size_t nmemb, string* response);
+// os dector
+int osDection();
+int osType = osDection();
 
 int main() {
   // initilizing curl
@@ -62,6 +67,8 @@ int main() {
   string amd64;  
 
   // gitlab runner installation command exicution section
+  string url;
+  string dpkging; 
   string retryal = "yes";
   string retryal2 = "yes";
 
@@ -90,30 +97,31 @@ int main() {
     bool validation = Switch(GRIP);
     if (validation) {
       while (true) {
-        cout << BOLD << MAGENTA << "[2.1] " << RESET << " What is your architecture, you can say 'cancel', to cancel the installation of gitlab runner (arm32, arm64, amd64): ";
+	string armWord; 
+	if (osType == 3) { string armWord = "arm"; } else string armWord = "";
+        cout << BOLD << MAGENTA << "[2.1] " << RESET << " What is your architecture, you can say 'cancel', to cancel the installation of gitlab runner ((arm32/armhf), arm64, amd64, aarch64, i386, ppc64el, s390x " + armWord + "): ";
         getline(cin, arch);
 	bool hasSpaces = (arch.find(' ') != string::npos);
-	string arm32[] = {"ARM32", "Arm32", "arm32"};
+	string arm32[] = {"ARM32", "Arm32", "arm32", "armhf", "ARMHF", "Armhf"};
 	string arm64[] = {"ARM64", "Arm64", "arm64"};
 	string amd64[] = {"AMD64", "Amd64", "amd64"};
+	string aarch64[] = {"AARCH64", "Arrch64", "aarch64"};
+	string i386[] = {"I386", "i386"};
+	string ppc64el[] = {"PPC64EL", "Ppc64el", "ppc64el"};
+	string s390x[] = {"S390x", "S390X", "s390x"};
+	string arm[] = {"ARM", "Arm", "arm"};
 	string cancel[] = {"CANCEL", "Cancle", "cancle"};
-        if (find(begin(arm32), end(arm32), arch) != end(arm32)) {
-	  string arch = arm32[2];
-	  break;
-	} else if (find(begin(arm64), end(arm64), arch) != end(arm64)) {
-	  string arch = arm64[2];
-	  break;
-	} else if (find(begin(amd64), end(amd64), arch) != end(amd64)) {
-	  string arch = amd64[2];
-	  break;
-        } else if (find(begin(cancel), end(cancel), arch) != end(cancel)) {
-	  string GRIP = "no";
-	  break;
-	}else if (hasSpaces || arch.empty()) {
-	  cout << BOLD << RED << "[ERROR] " << RESET << "pls don't enter spaces or emptyness" << endl;
-        } else {
-	  cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from arm32, arm64 or amd64" << endl;
-	}
+
+        if (find(begin(arm32), end(arm32), arch) != end(arm32)) { string arch = arm32[3]; break; }
+	else if (find(begin(arm64), end(arm64), arch) != end(arm64)) { string arch = arm64[2]; break; }
+	else if (find(begin(i386), end(i386), arch) != end(i386)) { string arch = i386[1]; break; }
+	else if (find(begin(ppc64el), end(ppc64el), arch) != end(ppc64el)) { string arch = ppc64el[2]; break; }
+	else if (find(begin(s390x), end(s390x), arch) != end(s390x)) { string arch = s390x[2]; break; }
+	else if ((osType == 3 && find(begin(arm), end(arm), arch) != end(arm)) || (osType == 4 && find(begin(arm), end(arm), arch) != end(arm))) { string arch = arm[2]; break; }
+	else if (find(begin(aarch64), end(aarch64), arch) != end(aarch64)) { string arch = aarch64[2]; break; } 
+	else if (find(begin(cancel), end(cancel), arch) != end(cancel)) { string GRIP = "no"; break; }
+	else if (hasSpaces || arch.empty()) { cout << BOLD << RED << "[ERROR] " << RESET << "pls don't enter spaces or emptyness" << endl;}
+	else { cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from arm32, arm64, amd64, aarch64, i386, ppc64el or s390x" << endl; }
       }
       break;
     }
@@ -124,7 +132,10 @@ int main() {
     while (true) {
       // gitlab runner installation url
       while (retryal == "yes") {
-        string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/deb/gitlab-runner_" + arch + ".deb";
+        if (osType == 1 || osType == 2) { string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/deb/gitlab-runner_" + arch + ".deb"; string dpkging = "dpkg -i gitlab-runner_" + arch + ".deb"; }
+	else if (osType == 3 || osType == 4) { string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/rpm/gitlab-runner_" + arch + ".rpm"; string dpkging = "rpm -i gitlab-runner_" + arch + ".rpm && rpm -Uvh gitlab-runner_" + arch + ".rpm"; }
+	else if (osType == 404) { cout << BOLD << RED << "[ERROR]" << RESET << "error 404, you are using unknown oprating system to install git lab runner, can't install" << endl; break; }
+	else { cout << BOLD << RED << "[ERROR]" << RESET << "unknown error cant install gitlab runner" << endl; break;}
         // gitlab runner installation through its url and curl lib
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
       
@@ -144,13 +155,12 @@ int main() {
 	curl_easy_cleanup(curl);
 	break;
       
-      while (retryal2 == "yes") {
-        string command = "dpkg -i gitlab-runner_" + arch + ".deb";
-        int result = system(command.c_str());
+      while (retryal2 == "yes") { 
+        int Dpackaging = system(dpkging.c_str());
 
-        if (result == 0) { cout << BOLD << GREEN "[!] " << RESET << "Installation completed successfully." << endl; break; }
+        if (Dpackaging == 0) { cout << BOLD << GREEN "[!] " << RESET << "Installation completed successfully." << endl; break; }
         else { 
-	  cerr << BOLD << RED "[ERROR] " << RESET << "Installation failed with error code: " << result << endl;
+	  cerr << BOLD << RED "[ERROR] " << RESET << "Installation failed with error code: " << Dpackaging << endl;
 	  cout << BOLD << CYAN << "[i] " << RESET << "do you want to retry (yes/no): ";
 	  getline(cin, retryal2);
 	  Switch(retryal2);
@@ -160,7 +170,7 @@ int main() {
 	    else { cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from yes or no" << endl; }
 	  }
 	}
-	curl_easy_cleanup(curl);
+	
       }
       break;
     }
@@ -193,3 +203,37 @@ bool Switch(const string& str) {
     return false; // Return false for an invalid input
   }
 }
+
+// os dector
+int osDection() {
+  ifstream releaseFile("/etc/os-release");
+  if (!releaseFile.is_open()) {
+    cerr << BOLD << RED << "[ERROR]" << RESET << " opening /etc/os-release" << endl;
+    return 404; // Return 404 if the file cannot be opened
+  }
+
+  string line;
+  string distribution;
+
+  while (getline(releaseFile, line)) {
+    if (line.find("ID=") != string::npos) {
+      distribution = line.substr(3); // Extract the value after "ID="
+      break;
+    }
+  }
+
+  transform(distribution.begin(), distribution.end(), distribution.begin(), ::tolower);
+
+  if (distribution == "ubuntu") {
+    return 1; // Return 1 for Ubuntu
+  } else if (distribution == "debian") {
+    return 2; // Return 2 for Debian
+  } else if (distribution == "centos") {
+    return 4; // Return 4 for CentOS
+  } else if (distribution == "rhel" || distribution == "redhat") {
+    return 3; // Return 3 for Red Hat
+  } else {
+    return 404; // Return 404 for other distributions
+  }
+}
+

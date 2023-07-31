@@ -27,7 +27,7 @@ jobs:
 
     - name: Configure CMake ninja
       run: |
-        sudo apt install ninja-build -y
+        sudo apt install ninja-build libcurl4-openssl-dev -y
         rm -rf build
         mkdir build
         cd build
