@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm> // For std::find
+#include <curl/curl.h> // for curl
 
 using std::cout;
 using std::endl;
@@ -9,6 +10,7 @@ using std::string;
 using std::find;
 using std::begin;
 using std::end;
+using std::cerr;
 
 // The global necessary variables
 
@@ -27,11 +29,24 @@ string no[] = { "no", "No", "NO", "n", "N" };
 #define RESET "\033[0;0m"
 
 // Function prototypes
+
+// choice validator
 bool Switch(const string& str);
+// curl
+size_t WriteCallback(void* contents, size_t size, size_t nmemb, string* response);
 
 int main() {
+  // initilizing curl
+  CURL* curl = curl_easy_init();
+  if (!curl) { cerr << "Failed to initialize libcurl" << endl; return 1; }
+
+  // curl necessary variables
+  CURLcode res = curl_easy_perform(curl);
 
   // all the variables used
+
+  // necessary for curl
+  string response;
 
   // the name section
   string name;
@@ -39,10 +54,16 @@ int main() {
   // gitlab runner section
   string arch;
   string GRIP; // Gitlab Runner Installation Permission
+  
   // from arch secrtion of gitlab runner
+  bool validation;
   string arm32;
   string arm64;
   string amd64;  
+
+  // gitlab runner installation command exicution section
+  string retryal = "yes";
+  string retryal2 = "yes";
 
   // Asking for permissions
 
@@ -58,10 +79,10 @@ int main() {
     if (nameLength >= 2 && nameLength <= 25 && !hasSpace) {
       break; // Exit the loop if the name is valid
     } else {
-      std::cout << RED << "[ERROR]" << RESET << "Invalid name length. Please try again." << std::endl;
+      cout << RED << "[ERROR]" << RESET << "Invalid name length. Please try again." << endl;
     }
   }
-  bool validation;
+  
   // Installation permission of GitLab Runner and Validation of the chosen option
   while (true) {
     cout << BOLD << MAGENTA << "[2]" << RESET << "Do you want to install GitLab Runner? (yes/no): ";
@@ -93,12 +114,64 @@ int main() {
       break;
     }
   }
+  
   // Execution of the instructions according to the given permissions
+  if (find(begin(yes), end(yes), GRIP) != end(yes)) {
+    while (true) {
+      // gitlab runner installation url
+      while (retryal == "yes") {
+        string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/deb/gitlab-runner_" + arch + ".deb";
+        // gitlab runner installation through its url and curl lib
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+      
+        // checking if it is installed or not
+        if (res != CURLE_OK) { 
+	  cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << endl;
+	  cout << BOLD << CYAN << "[i] " << RESET << "do you want to retry? (yes/no): ";
+	  getline(cin, retryal);
+	  Switch(retryal);
+	  while (true) {
+	    if (find(begin(yes), end(yes), retryal) != end(yes)) { string retryal = "yes"; break;}
+	    else if (find(begin(no), end(no), retryal) != end(no)) { string retryal = "no"; break; }
+	    else { cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from yes or no" << endl; }
+	  }
+	}
+        else { cout << BOLD << GREEN << "[!] " << RESET << "Download completed successfully." << endl; } }
+	curl_easy_cleanup(curl);
+	break;
+      
+      while (retryal2 == "yes") {
+        string command = "dpkg -i gitlab-runner_" + arch + ".deb";
+        int result = system(command.c_str());
+
+        if (result == 0) { cout << BOLD << GREEN "[!] " << RESET << "Installation completed successfully." << endl; break; }
+        else { 
+	  cerr << BOLD << RED "[ERROR] " << RESET << "Installation failed with error code: " << result << endl;
+	  cout << BOLD << CYAN << "[i] " << RESET << "do you want to retry (yes/no): ";
+	  getline(cin, retryal2);
+	  Switch(retryal2);
+	  while (true) {
+	    if (find(begin(yes), end(yes), retryal2) != end(yes)) {string retryal2 = "yes"; break;}
+	    else if (find(begin(no), end(no), retryal2) != end(no)) { string retryal2 = "no"; break; }
+	    else { cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from yes or no" << endl; }
+	  }
+	}
+	curl_easy_cleanup(curl);
+      }
+      break;
+    }
+  }
 
   return 0;
 }
 
 // Function definitions
+// the curl function
+size_t WriteCallback(void* contents, size_t size, size_t nmemb, string* response) {
+  size_t totalSize = size * nmemb;
+  response->append((char*)contents, totalSize);
+  return totalSize;
+}
 
 // Choice validator
 bool Switch(const string& str) {
