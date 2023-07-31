@@ -90,12 +90,13 @@ int main() {
     bool validation = Switch(GRIP);
     if (validation) {
       while (true) {
-        cout << BOLD << MAGENTA << "[2.1] " << RESET << " What is your architecture (arm32, arm64, amd64): ";
+        cout << BOLD << MAGENTA << "[2.1] " << RESET << " What is your architecture, you can say 'cancel', to cancel the installation of gitlab runner (arm32, arm64, amd64): ";
         getline(cin, arch);
 	bool hasSpaces = (arch.find(' ') != string::npos);
 	string arm32[] = {"ARM32", "Arm32", "arm32"};
 	string arm64[] = {"ARM64", "Arm64", "arm64"};
 	string amd64[] = {"AMD64", "Amd64", "amd64"};
+	string cancel[] = {"CANCEL", "Cancle", "cancle"};
         if (find(begin(arm32), end(arm32), arch) != end(arm32)) {
 	  string arch = arm32[2];
 	  break;
@@ -105,7 +106,10 @@ int main() {
 	} else if (find(begin(amd64), end(amd64), arch) != end(amd64)) {
 	  string arch = amd64[2];
 	  break;
-        } else if (hasSpaces || arch.empty()) {
+        } else if (find(begin(cancel), end(cancel), arch) != end(cancel)) {
+	  string GRIP = "no";
+	  break;
+	}else if (hasSpaces || arch.empty()) {
 	  cout << BOLD << RED << "[ERROR] " << RESET << "pls don't enter spaces or emptyness" << endl;
         } else {
 	  cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from arm32, arm64 or amd64" << endl;
