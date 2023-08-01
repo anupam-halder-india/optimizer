@@ -73,7 +73,7 @@ jobs:
             const runStatus = context.payload.workflow_run.conclusion;
             return runStatus !== 'success';
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_ADMIN_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.THE_GITHUB_ADMIN_TOKEN }}
 
       - name: Create Artifact Directory
         if: steps.check-failure.outputs.result == 'true'
