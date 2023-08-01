@@ -1,4 +1,4 @@
-name: deartification
+name: deartifactification
 on:
   schedule:
     - cron: '0 0 * * *' # Run every day at midnight (UTC time)
