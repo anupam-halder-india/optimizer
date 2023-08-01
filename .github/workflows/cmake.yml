@@ -91,15 +91,3 @@ jobs:
         with:
           name: failure-artifact
           path: ${{ steps.generate-artifact-name.outputs.stdout }}
-
-  deartifactification:
-    name: Delete Artifact on Success
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Delete Artifacts
-        if: always()
-        run: |
-          echo "Deleting artifacts..."
-          find artifacts -type f -mmin +1440 -delete
-        shell: bash

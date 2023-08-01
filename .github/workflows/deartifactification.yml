@@ -1,0 +1,17 @@
+name: deartification
+on:
+  schedule:
+    - cron: '0 0 * * *' # Run every day at midnight (UTC time)
+
+jobs:
+  remove_artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Remove old artifact
+        run: |
+          curl -X DELETE \
+            -H "Authorization: token ${{ secrets.THE_GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/anupam-halder-india/optimizer/artifacts/YOUR_ARTIFACT_NAME"
