@@ -14,9 +14,12 @@ COPY . .
 # making necessary functions
 # empty for now
 
-# finally building the oroject inside container
+# finally building the project inside container
 RUN rm -rf build \
     && mkdir build \
     && cd build \
     && cmake -GNinja .. -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin \
     && ninja
+
+# testing the project
+RUN ctest
