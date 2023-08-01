@@ -13,5 +13,5 @@ jobs:
       - name: Remove old artifact
         run: |
           curl -X DELETE \
-            -H "Authorization: token ${{ secrets.THE_GITHUB_TOKEN }}" \
+            -H "Authorization: token ${{ secrets.THE_GITHUB_ADMIN_TOKEN }}" \
             "https://api.github.com/repos/anupam-halder-india/optimizer/artifacts/YOUR_ARTIFACT_NAME"
