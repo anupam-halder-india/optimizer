@@ -10,7 +10,6 @@ on:
       - '.github/*'
       - '!.github/workflows/*'
       - 'build'
-      - 'Dockerfile'
       - '.devcontainer/*'
 
   pull_request:
@@ -73,6 +72,8 @@ jobs:
           script: |
             const runStatus = context.payload.workflow_run.conclusion;
             return runStatus !== 'success';
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_ADMIN_TOKEN }}
 
       - name: Create Artifact Directory
         if: steps.check-failure.outputs.result == 'true'
@@ -97,7 +98,7 @@ jobs:
           name: failure-artifact
           path: ${{ steps.generate-artifact-name.outputs.stdout }}
 
-  delete-artifact:
+  deartification:
     name: Delete Artifact on Success
     runs-on: ubuntu-latest
 
