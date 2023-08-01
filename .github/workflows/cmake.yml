@@ -17,10 +17,12 @@ on:
   workflow_dispatch:
   repository_dispatch:
 
+env:
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=false
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    using: 'node16'
     steps:
     - name: checkout
       uses: actions/checkout@v3
