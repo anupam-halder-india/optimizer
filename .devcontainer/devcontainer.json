@@ -9,5 +9,5 @@
     "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
   ],
   "forwardPorts": [3000],
-  "postCreateCommand": "apt install ninja-build g++ cmake && mkdir build && cmake -GNinja -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin build && cmake --build build"
+  "postCreateCommand": "apt install ninja-build g++ cmake && mkdir build && cmake -GNinja -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin build && cmake --build build && ctest"
 }

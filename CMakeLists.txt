@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 3.10)
 # Project name
 project(optimizer)
 
+# for caching
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Locate the cpp files
 add_executable(optimizer src/main.cpp)
 

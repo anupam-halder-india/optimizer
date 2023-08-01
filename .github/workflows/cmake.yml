@@ -33,23 +33,56 @@ jobs:
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
- 
-    - name: Configure CMake ninja
+
+    - name: get-cmake
+      uses: lukka/get-cmake@latest
+      with:
+        cmakeVersion: latestrc
+        ninjaVersion: latest
+
+    - name: Restore CMake Cache
+      id: restore-cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          build/CMakeCache.txt
+          build/CMakeFiles
+        key: ${{ runner.os }}-cmake-cache-${{ hashFiles('CMakeLists.txt') }}
+      if: steps.cache.outputs.cache-hit == 'true'
+
+    - name: Configure and bulding CMake ninja
       run: |
-        sudo apt install ninja-build libcurl4-openssl-dev -y
+        sudo apt install libcurl4-openssl-dev -y
         rm -rf build
         mkdir build
         cd build
-        cmake -GNinja .. -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
-
-    - name: Build
-      run: cmake --build build
+        cmake -GNinja .. -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bi
+        cmake --build .
+      env:
+        CMAKE_PREFIX_PATH: /usr/local
+      
+    - name: Save CMake Cache
+      if: always()
+      uses: actions/cache@v2
+      with:
+        path: |
+          build/CMakeCache.txt
+          ./CMakeFiles
+          key: ${{ runner.os }}-cmake-cache-${{ hashFiles('CMakeLists.txt') }}
 
 #   - name: Test
 #     working-directory: ${{github.workspace}}/build
        # Execute tests defined by the CMake configuration.
        # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
 #     run: ctest
+
+    - name: Restore Docker Cache
+      id: restore-cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.docker
+        key: ${{ runner.os }}-docker-${{ hashFiles('Dockerfile') }}
+      if: steps.cache.outputs.cache-hit == 'true'
 
     - name: Docker containerization
       uses: docker/build-push-action@v4
@@ -58,6 +91,13 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/optimizer:latest
+
+    - name: Save Docker Cache
+      if: always()
+      uses: actions/cache@v2
+      with:
+        path: ~/.docker
+        key: ${{ runner.os }}-docker-${{ hashFiles('Dockerfile') }}
 
   artifactification:
     name: Create Artifact on Failure
@@ -84,6 +124,14 @@ jobs:
           artifact_name=$(cat artifact_name.txt)
           echo "This is the content of the artifact" > "$artifact_name"
         shell: bash
+
+      - name: Cache Artifacts
+        id: cache-artifacts
+        uses: actions/cache@v2
+        with:
+          path: artifacts
+          key: ${{ runner.os }}-artifacts-${{ github.run_id }}
+        if: always()
 
       - name: Upload Artifact
         if: steps.check-failure.outputs.result == 'true'
