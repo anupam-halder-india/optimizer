@@ -40,14 +40,15 @@ jobs:
         cmakeVersion: latestrc
         ninjaVersion: latest
 
-    - name: Restore CMake Cache
+    - name: Restore action Cache
       id: restore-cache
       uses: actions/cache@v2
       with:
         path: |
           build/CMakeCache.txt
           build/CMakeFiles
-        key: ${{ runner.os }}-cmake-cache-${{ hashFiles('CMakeLists.txt') }}
+          artifacts/
+        key: ${{ runner.os }}-action-cache-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('**/*.cpp') }}-${{ hashFiles('**/**/*.cpp') }}-${{ hashFiles('**/*.h') }}-${{ hashFiles('**/**/*.h') }}-${{ hashFiles('Dockerfile') }}-${{ github.run_id }}
       if: steps.cache.outputs.cache-hit == 'true'
 
     - name: Configure and bulding CMake ninja
@@ -61,28 +62,11 @@ jobs:
       env:
         CMAKE_PREFIX_PATH: /usr/local
       
-    - name: Save CMake Cache
-      if: always()
-      uses: actions/cache@v2
-      with:
-        path: |
-          build/CMakeCache.txt
-          ./CMakeFiles
-          key: ${{ runner.os }}-cmake-cache-${{ hashFiles('CMakeLists.txt') }}
-
 #   - name: Test
 #     working-directory: ${{github.workspace}}/build
        # Execute tests defined by the CMake configuration.
        # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
 #     run: ctest
-
-    - name: Restore Docker Cache
-      id: restore-cache
-      uses: actions/cache@v2
-      with:
-        path: ~/.docker
-        key: ${{ runner.os }}-docker-${{ hashFiles('Dockerfile') }}
-      if: steps.cache.outputs.cache-hit == 'true'
 
     - name: Docker containerization
       uses: docker/build-push-action@v4
@@ -92,50 +76,39 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/optimizer:latest
 
-    - name: Save Docker Cache
+    - name: Check if workflow run failed
+      id: check-failure
+      run: |
+        if [ "${{ job.status }}" != "success" ]; then
+          echo "Workflow run failed."
+          echo "artifacts/${{ github.workflow }}-artifact-${{ github.run_number }}" > action-artifact.txt
+        else
+          echo "Workflow run was successful."
+        fi
+      shell: bash
+
+    - name: Creat the artifacts folder
+      run: mkdir artifacts
+
+    - name: Create Artifact File
+      if: steps.check-failure.outputs.result == 'true'
+      run: |
+        artifact_name=$(cat artifact_name.txt)
+        echo "This is the content of the artifact" > "$artifact_name"
+      shell: bash
+
+    - name: Upload Artifact
+      if: steps.check-failure.outputs.result == 'true'
+      uses: actions/upload-artifact@v2
+      with:
+        name: failure-artifact
+        path: ${{ steps.generate-artifact-name.outputs.stdout }}
+    - name: Save Action Cache
       if: always()
       uses: actions/cache@v2
       with:
-        path: ~/.docker
-        key: ${{ runner.os }}-docker-${{ hashFiles('Dockerfile') }}
-
-  artifactification:
-    name: Create Artifact on Failure
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check if workflow run failed
-        id: check-failure
-        run: |
-          if [ "${{ job.status }}" != "success" ]; then
-            echo "Workflow run failed."
-            echo "artifacts/${{ github.workflow }}-artifact-${{ github.run_number }}" > action-artifact.txt
-          else
-            echo "Workflow run was successful."
-          fi
-        shell: bash
-
-      - name: Creat the artifacts folder
-        run: mkdir artifacts
-
-      - name: Create Artifact File
-        if: steps.check-failure.outputs.result == 'true'
-        run: |
-          artifact_name=$(cat artifact_name.txt)
-          echo "This is the content of the artifact" > "$artifact_name"
-        shell: bash
-
-      - name: Cache Artifacts
-        id: cache-artifacts
-        uses: actions/cache@v2
-        with:
-          path: artifacts
-          key: ${{ runner.os }}-artifacts-${{ github.run_id }}
-        if: always()
-
-      - name: Upload Artifact
-        if: steps.check-failure.outputs.result == 'true'
-        uses: actions/upload-artifact@v2
-        with:
-          name: failure-artifact
-          path: ${{ steps.generate-artifact-name.outputs.stdout }}
+        path: |
+          build/CMakeCache.txt
+          build/CMakeFiles
+          artifacts
+        key: ${{ runner.os }}-action-cache-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('**/*.cpp') }}-${{ hashFiles('**/**/*.cpp') }}-${{ hashFiles('**/*.h') }}-${{ hashFiles('**/**/*.h') }}-${{ hashFiles('Dockerfile') }}-${{ github.run_id }}
