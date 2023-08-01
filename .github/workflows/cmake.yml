@@ -67,22 +67,18 @@ jobs:
     steps:
       - name: Check if workflow run failed
         id: check-failure
-        uses: actions/github-script@v4
-        with:
-          script: |
-            const runStatus = context.payload.workflow_run.conclusion;
-            return runStatus !== 'success';
-        env:
-          GITHUB_TOKEN: ${{ secrets.THE_GITHUB_ADMIN_TOKEN }}
+        run: |
+          if [ "${{ job.status }}" != "success" ]; then
+            echo "Workflow run failed."
+            echo "artifacts/${{ github.workflow }}-artifact-${{ github.run_number }}" > action-artifact.txt
+          else
+            echo "Workflow run was successful."
+          fi
+        shell: bash
 
       - name: Create Artifact Directory
         if: steps.check-failure.outputs.result == 'true'
         run: mkdir -p artifacts
-
-      - name: Generate Artifact Name
-        if: steps.check-failure.outputs.result == 'true'
-        id: generate-artifact-name
-        run: echo "artifacts/${{ github.workflow }}-artifact-${{ github.run_number }}" >> artifact_name.txt
 
       - name: Create Artifact File
         if: steps.check-failure.outputs.result == 'true'
@@ -98,7 +94,7 @@ jobs:
           name: failure-artifact
           path: ${{ steps.generate-artifact-name.outputs.stdout }}
 
-  deartification:
+  deartifactification:
     name: Delete Artifact on Success
     runs-on: ubuntu-latest
 
