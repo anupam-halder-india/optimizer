@@ -30,7 +30,6 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-        registry: cloud.docker.com
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
@@ -75,10 +74,6 @@ jobs:
             echo "Workflow run was successful."
           fi
         shell: bash
-
-      - name: Create Artifact Directory
-        if: steps.check-failure.outputs.result == 'true'
-        run: mkdir -p artifacts
 
       - name: Create Artifact File
         if: steps.check-failure.outputs.result == 'true'
