@@ -142,7 +142,7 @@ jobs:
 
     - name: Upload Artifact
       if: steps.check-failure.outputs.result == 'true'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: failure-artifact
         path: ${{ steps.generate-artifact-name.outputs.stdout }}
