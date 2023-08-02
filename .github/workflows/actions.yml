@@ -18,15 +18,40 @@ on:
   repository_dispatch:
 
 env:
-  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: false
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
 
 jobs:
-  build:
+  configrations:
     runs-on: ubuntu-latest
     steps:
-    - name: checkout
+    - name: setting up action chechout
       uses: actions/checkout@v3
 
+    - name: Check for source code changes
+      id: checking-changes
+      run: |
+        git diff --exit-code --name-only origin/main..HEAD | grep -E "^(src|includes|CMakLists.txt)/" > changed_files.txt
+        if [ -s changed_files.txt ]; then
+          echo "Changes detected in src and includes folders"
+          echo "::set-output name=changes::true"
+        else
+          echo "No changes in src and includes folders"
+          echo "::set-output name=changes::false"
+        fi
+
+  node:
+    runs-on: ubuntu-latest
+    needs: configrations
+    steps:
+    - name: Use Node.js ${{ matrix.node-version }} for caching
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+
+  docker:
+    run-on: ubuntu-lates
+    needs: configrations
+    steps:
     - name: Login to Docker Hub
       uses: docker/login-action@v2
       with:
@@ -36,13 +61,29 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
-    - name: get-cmake
+  cmake:
+    run-on: ubuntu-latest
+    needs: configrations
+    steps:
+    - name: Setting up CMake
       uses: lukka/get-cmake@latest
       with:
         cmakeVersion: latestrc
         ninjaVersion: latest
 
-    - name: Restore action Cache
+  condition:
+    run-on: ubuntu-latest
+    needs: configrations
+    if: steps.checking-changes.outputs.changes == 'false'
+    setps:
+      name: the condition
+      run: echo ""
+      
+  bulding:
+    run-on: ubuntu-latest
+    needs: [cmake, node, docker, configrations, condition]
+    steps:
+    - name: caching start
       id: restore-cache
       uses: actions/cache@v2
       with:
@@ -105,6 +146,7 @@ jobs:
       with:
         name: failure-artifact
         path: ${{ steps.generate-artifact-name.outputs.stdout }}
+
     - name: Save Action Cache
       if: always()
       uses: actions/cache@v2
