@@ -1,4 +1,4 @@
-name: cmake actions
+name: CMake
 
 on:
   push:
@@ -49,7 +49,7 @@ jobs:
         node-version: '18'
 
   docker:
-    run-on: ubuntu-lates
+    runs-on: ubuntu-lates
     needs: configrations
     steps:
     - name: Login to Docker Hub
@@ -62,7 +62,7 @@ jobs:
       uses: docker/setup-buildx-action@v2
 
   cmake:
-    run-on: ubuntu-latest
+    runs-on: ubuntu-latest
     needs: configrations
     steps:
     - name: Setting up CMake
@@ -72,15 +72,15 @@ jobs:
         ninjaVersion: latest
 
   condition:
-    run-on: ubuntu-latest
+    runs-on: ubuntu-latest
     needs: configrations 
-    setps:
+    steps:
     - name: the condition
       if: steps.checking-changes.outputs.changes == 'false'
       run: echo ""
       
   bulding:
-    run-on: ubuntu-latest
+    runs-on: ubuntu-latest
     needs: [cmake, node, docker, configrations, condition]
     steps:
     - name: caching start
@@ -99,9 +99,8 @@ jobs:
         sudo apt install libcurl4-openssl-dev -y
         rm -rf build
         mkdir build
-        cd build
-        cmake -GNinja .. -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bi
-        cmake --build .
+        cmake -GNinja ${{github.workspace}}/build -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
+        cmake --build build
       env:
         CMAKE_PREFIX_PATH: /usr/local
       
