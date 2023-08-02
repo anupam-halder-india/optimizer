@@ -85,7 +85,7 @@ jobs:
     steps:
     - name: caching start
       id: restore-cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           build/CMakeCache.txt
@@ -149,7 +149,7 @@ jobs:
 
     - name: Save Action Cache
       if: always()
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           build/CMakeCache.txt
