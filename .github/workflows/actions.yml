@@ -30,7 +30,7 @@ jobs:
     - name: Check for source code changes
       id: checking-changes
       run: |
-        git diff --exit-code --name-only origin/master..HEAD | grep -E "^(src|CMakLists.txt)$" > changed_files.txt
+        git diff --exit-code --name-only github/master..HEAD | grep -E "^(src|CMakLists.txt)$" > changed_files.txt
         if [ -s changed_files.txt ]; then
           echo "Changes detected in src and includes folders"
           echo "::set-output name=changes::true"
