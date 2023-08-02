@@ -75,7 +75,7 @@ jobs:
     run-on: ubuntu-latest
     needs: configrations 
     setps:
-      name: the condition
+    - name: the condition
       if: steps.checking-changes.outputs.changes == 'false'
       run: echo ""
       
