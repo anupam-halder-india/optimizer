@@ -73,10 +73,10 @@ jobs:
 
   condition:
     run-on: ubuntu-latest
-    needs: configrations
-    if: steps.checking-changes.outputs.changes == 'false'
+    needs: configrations 
     setps:
       name: the condition
+      if: steps.checking-changes.outputs.changes == 'false'
       run: echo ""
       
   bulding:
