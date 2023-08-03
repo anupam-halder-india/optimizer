@@ -20,70 +20,70 @@ on:
 env:
   ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
 
-jobs:
+jobs: 
   configrations:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    runs-on: ${{ matrix.os }}
     steps:
     - name: setting up action chechout
       uses: actions/checkout@v3
 
     - name: Check for source code changes
       id: checking-changes
+      shell: bash
       run: |
-        git diff --exit-code --name-only github/master..HEAD | grep -E "^(src|CMakeLists.txt)$" > changed_files.txt
-        if [ -s changed_files.txt ]; then
-          echo "Changes detected in src and includes folders"
+        if git status --porcelain | grep -E "^(M|A|D) (src/|CMakeLists.txt$)"; then
+          echo "Changes detected in src and CMakeLists.txt"
           echo "::set-output name=changes::true"
         else
-          echo "No changes in src and includes folders"
+          echo "No changes in src and CMakeLists.txt"
           echo "::set-output name=changes::false"
         fi
 
   node:
-    runs-on: ubuntu-latest
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
     steps:
-    - name: Use Node.js ${{ matrix.node-version }} for caching
+    - name: Use Node.js 18 for caching
+      if: steps.checking-changes.outputs.changes == 'false'
       uses: actions/setup-node@v2
       with:
         node-version: '18'
 
   docker:
-    runs-on: ubuntu-lates
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
     steps:
     - name: Login to Docker Hub
+      if: steps.checking-changes.outputs.changes == 'false'
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Set up Docker Buildx
+      if: steps.checking-changes.outputs.changes == 'false'
       uses: docker/setup-buildx-action@v2
 
   cmake:
-    runs-on: ubuntu-latest
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
     steps:
     - name: Setting up CMake
+      if: steps.checking-changes.outputs.changes == 'false'
       uses: lukka/get-cmake@latest
       with:
         cmakeVersion: latestrc
         ninjaVersion: latest
-
-  condition:
-    runs-on: ubuntu-latest
-    needs: configrations 
-    steps:
-    - name: the condition
-      if: steps.checking-changes.outputs.changes == 'false'
-      run: echo ""
       
   bulding:
-    runs-on: ubuntu-latest
-    needs: [cmake, node, docker, configrations, condition]
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    needs: [cmake, node, docker, configrations]
     steps:
     - name: caching start
+      if: steps.checking-changes.outputs.changes == 'false'
       id: restore-cache
       uses: actions/cache@v2
       with:
@@ -95,6 +95,8 @@ jobs:
       if: steps.cache.outputs.cache-hit == 'true'
 
     - name: Configure and bulding CMake ninja
+      if: steps.checking-changes.outputs.changes == 'false'
+      shell: bash
       run: |
         sudo apt install libcurl4-openssl-dev -y
         rm -rf build
@@ -105,12 +107,15 @@ jobs:
         CMAKE_PREFIX_PATH: /usr/local
       
 #   - name: Test
+#     if: steps.checking-changes.outputs.changes == 'false'
 #     working-directory: ${{github.workspace}}/build
+#     shell: bash
        # Execute tests defined by the CMake configuration.
        # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
 #     run: ctest
 
     - name: Docker containerization
+      if: steps.checking-changes.outputs.changes == 'false'
       uses: docker/build-push-action@v4
       with:
         context: .
@@ -119,6 +124,7 @@ jobs:
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/optimizer:latest
 
     - name: Check if workflow run failed
+      if: steps.checking-changes.outputs.changes == 'false'
       id: check-failure
       run: |
         if [ "${{ job.status }}" != "success" ]; then
@@ -130,23 +136,26 @@ jobs:
       shell: bash
 
     - name: Creat the artifacts folder
+      if: steps.checking-changes.outputs.changes == 'false'
+      shell: bash
       run: mkdir artifacts
 
     - name: Create Artifact File
+      if: steps.checking-changes.outputs.changes == 'false'
       if: steps.check-failure.outputs.result == 'true'
+      shell: bash
       run: |
         artifact_name=$(cat artifact_name.txt)
         echo "This is the content of the artifact" > "$artifact_name"
-      shell: bash
 
     - name: Upload Artifact
-      if: steps.check-failure.outputs.result == 'true'
       uses: actions/upload-artifact@v2
       with:
         name: failure-artifact
         path: ${{ steps.generate-artifact-name.outputs.stdout }}
 
     - name: Save Action Cache
+      if: steps.checking-changes.outputs.changes == 'false'
       if: always()
       uses: actions/cache@v2
       with:
