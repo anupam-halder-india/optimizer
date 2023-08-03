@@ -36,10 +36,10 @@ jobs:
       run: |
         if git status --porcelain | grep -E "^(M|A|D) (src/|CMakeLists.txt$)"; then
           echo "Changes detected in src and CMakeLists.txt"
-          echo "::set-output name=changes::true"
+          echo "changes=true >> $GITHUB_STATE"
         else
           echo "No changes in src and CMakeLists.txt"
-          echo "::set-output name=changes::false"
+          echo "changes=false >> $GITHUB_OUTPUT"
         fi
 
   node:
