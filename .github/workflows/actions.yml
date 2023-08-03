@@ -38,6 +38,7 @@ jobs:
 
     - name: Check if triggered by schedule
       id: check-schedule
+      shell: bash
       run: |
         if [[ "${{ github.event_name }}" == "schedule" ]]; then
           echo "Action triggered by schedule, skipping the run."
