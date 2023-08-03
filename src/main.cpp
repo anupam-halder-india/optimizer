@@ -13,6 +13,7 @@ using std::begin;
 using std::end;
 using std::cerr;
 using std::ifstream;
+using std::ios;
 
 // The global necessary variables
 
@@ -174,7 +175,10 @@ int main() {
       break;
     }
   }
-  
+//ofstream bashrcFile("~/.bashrc", std::ios::app);
+//if (bashrcFile.is_open()) {
+  // bashrcFile << "" <<
+//}
   return 0;
 }
 
