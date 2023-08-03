@@ -11,6 +11,8 @@ on:
       - '!.github/workflows/*'
       - 'build'
       - '.devcontainer/*'
+      - 'github/**/*' 
+      - 'github/**/**/*' 
 
   pull_request:
     branches: [ "master" ]
