@@ -68,7 +68,7 @@ jobs:
     steps:
     - name: Use Node.js 18 for caching
       if: steps.checking-changes.outputs.changes == 'true' && steps.check-schedule.outputs.skip_run == 'false'
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: '18'
 
