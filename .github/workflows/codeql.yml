@@ -68,7 +68,7 @@ jobs:
         sudo apt install libcurl4-openssl-dev -y
         rm -rf build
         mkdir build
-        cmake -GNinja ${{ github workspace }}/build -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
+        cmake -GNinja ${{ github.workspace }}/build -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
         cmake --build build
 
     # ℹ️ Command-line programs to run using the OS shell.
