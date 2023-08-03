@@ -28,6 +28,7 @@ jobs:
 
     outputs:
       runs-on: ${{ matrix.os }}
+      setup-jobs: [node, docker, cmake]
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -82,9 +83,9 @@ jobs:
         cmakeVersion: latestrc
         ninjaVersion: latest
       
-  bulding:
+  build:
     runs-on: ${{ needs.configrations.outputs.runs-on }}
-    needs: [cmake, node, docker, configrations]
+    needs: [configrations, cmake]
     steps:
     - name: caching start
       if: steps.checking-changes.outputs.changes == 'false' && steps.cache.outputs.cache-hit == 'true'
@@ -108,15 +109,11 @@ jobs:
         cmake --build build
       env:
         CMAKE_PREFIX_PATH: /usr/local
-      
-#   - name: Test
-#     if: steps.checking-changes.outputs.changes == 'false'
-#     working-directory: ${{github.workspace}}/build
-#     shell: bash
-       # Execute tests defined by the CMake configuration.
-       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-#     run: ctest
 
+  docker-containerization:
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    needs: [configrations, docker, build]
+    steps:
     - name: Docker containerization
       if: steps.checking-changes.outputs.changes == 'false'
       uses: docker/build-push-action@v4
@@ -126,6 +123,10 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/optimizer:latest
 
+  artifactrization:
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    needs: [configrations, node, build]
+    steps:
     - name: Check if workflow run failed
       if: steps.checking-changes.outputs.changes == 'false'
       id: check-failure
@@ -166,3 +167,16 @@ jobs:
           build/CMakeFiles
           artifacts
         key: ${{ runner.os }}-action-cache-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('**/*.cpp') }}-${{ hashFiles('**/**/*.cpp') }}-${{ hashFiles('**/*.h') }}-${{ hashFiles('**/**/*.h') }}-${{ hashFiles('Dockerfile') }}-${{ github.run_id }}
+
+# testing:
+#   runs-on: ${{ needs.configrations.outputs.runs-on }}
+#   needs: [configrations, cmake, build]
+#   steps:
+#   - name: Test
+#     if: steps.checking-changes.outputs.changes == 'false'
+#     working-directory: ${{github.workspace}}/build
+#     shell: bash
+       # Execute tests defined by the CMake configuration.
+       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+#     run: ctest
+
