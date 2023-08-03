@@ -65,7 +65,7 @@ jobs:
     # If this step fails, then you should remove it and run the build manually (see below)
     - name: build
       run: |
-        sudo apt install libcurl4-openssl-dev -y
+        sudo apt install libcurl4-openssl-dev -y ninja-build
         rm -rf build
         mkdir build
         cd build
