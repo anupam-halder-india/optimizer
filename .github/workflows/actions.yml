@@ -209,7 +209,7 @@ jobs:
     #   - https://gh.io/supported-runners-and-hardware-resources
     #   - https://gh.io/using-larger-runners
     # Consider using larger runners for possible analysis time improvements.
-    needs: [configration, build, test]
+    needs: [configrations, build] # add 'testing' when you finish building up the test
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     permissions:
       actions: read
