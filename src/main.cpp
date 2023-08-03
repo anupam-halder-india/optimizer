@@ -170,12 +170,11 @@ int main() {
 	    else { cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from yes or no" << endl; }
 	  }
 	}
-	
       }
       break;
     }
   }
-
+  
   return 0;
 }
 

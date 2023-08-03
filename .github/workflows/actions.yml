@@ -120,8 +120,9 @@ jobs:
         sudo apt install libcurl4-openssl-dev -y
         rm -rf build
         mkdir build
-        cmake -GNinja ${{github.workspace}}/build -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
-        cmake --build build
+        cd build
+        cmake -GNinja .. -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
+        cmake --build .
       env:
         CMAKE_PREFIX_PATH: /usr/local
 
@@ -193,9 +194,11 @@ jobs:
     # Autobuild attempts to build any compiled languages (C/C++, C#, Go, Java, or Swift).
     # If this step fails, then you should remove it and run the build manually (see below)
 
-    - name: Autobuild
+    - name: build
       if: steps.checking-changes.outputs.changes == 'true' && steps.check-schedule.outputs.skip_run == 'true'
-      uses: github/codeql-action/autobuild@v2
+      run: |
+        sudo apt install libcurl4-openssl-dev -y                   rm -rf build                                               mkdir build                                                cd build                                                   cmake -GNinja .. -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
+        cmake --build .
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
