@@ -186,6 +186,7 @@ jobs:
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     steps:
     - name: Remove old artifact
+      shell: bash
       run: |
         curl -X DELETE \
           -H "Authorization: token ${{ secrets.THE_GITHUB_ADMIN_TOKEN }}" \
