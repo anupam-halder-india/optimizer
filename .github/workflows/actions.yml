@@ -105,7 +105,7 @@ jobs:
     - name: caching start
       if: steps.checking-changes.outputs.changes == 'true' && steps.cache.outputs.cache-hit == 'true' && steps.check-schedule.outputs.skip_run == 'false'
       id: restore-cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           build/CMakeCache.txt
@@ -140,7 +140,7 @@ jobs:
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/optimizer:latest
     - name: Save Action Cache
       if: steps.checking-changes.outputs.changes == 'true' && steps.check-schedule.outputs.skip_run == 'false'
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           build/CMakeCache.txt
