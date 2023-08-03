@@ -1,8 +1,8 @@
 # 🚀 Optimizer 🚀
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![GitHub Issues](https://img.shields.io/github/issues/your-username/optimizer)](https://github.com/your-username/optimizer/issues)
-[![GitHub Stars](https://img.shields.io/github/stars/your-username/optimizer)](https://github.com/your-username/optimizer/stargazers)
+[![GitHub Issues](https://img.shields.io/github/issues/anupam-halder-india/optimizer)](https://github.com/anupam-halder-india/optimizer/issues)
+[![GitHub Stars](https://img.shields.io/github/stars/your-username/optimizer)](https://github.com/anupam-halder-india/optimizer/stargazers)
 
 > A powerful and efficient tool to optimize your life!
 
@@ -29,6 +29,3 @@ Follow these simple steps to get Optimizer up and running on your local machine:
 ## License 📜
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Contact 📧
-
