@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![GitHub Issues](https://img.shields.io/github/issues/anupam-halder-india/optimizer)](https://github.com/anupam-halder-india/optimizer/issues)
-[![GitHub Stars](https://img.shields.io/github/stars/your-username/optimizer)](https://github.com/anupam-halder-india/optimizer/stargazers)
+[![GitHub Stars](https://img.shields.io/github/stars/anupam-halder-india/optimizer)](https://github.com/anupam-halder-india/optimizer/stargazers)
 
 > A powerful and efficient tool to optimize your life!
 
