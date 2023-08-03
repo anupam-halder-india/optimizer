@@ -28,7 +28,6 @@ jobs:
 
     outputs:
       runs-on: ${{ matrix.os }}
-      setup-jobs: [node, docker, cmake]
 
     runs-on: ${{ matrix.os }}
     steps:
