@@ -129,7 +129,7 @@ jobs:
       if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
       shell: bash
       run: |
-        sudo apt install libcurl4-openssl-dev -y
+        apt install libcurl4-openssl-dev -y
         rm -rf build
         mkdir build
         cd build
@@ -209,7 +209,11 @@ jobs:
     - name: build
       if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'true'
       run: |
-        sudo apt install libcurl4-openssl-dev -y                   rm -rf build                                               mkdir build                                                cd build                                                   cmake -GNinja .. -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
+        apt install libcurl4-openssl-dev -y
+        rm -rf build
+        mkdir build
+        cd build 
+        cmake -GNinja .. -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
         cmake --build .
 
     # ℹ️ Command-line programs to run using the OS shell.
