@@ -1,4 +1,4 @@
-name: CMake
+name: Action
 
 on:
   push:
@@ -42,12 +42,12 @@ jobs:
       id: check-schedule
       shell: bash
       run: |
-        if [[ "${{ github.event_name }}" == "schedule" ]]; then
+        if [[ "${{ github.Actions }}" == "schedule" ]]; then
           echo "Action triggered by schedule, skipping the run."
-          echo "skip_run=true >> $GITHUB_STATE"
+          echo "skip_run=true" >> $GITHUB_ENV
         else
           echo "Action not triggered by schedule, proceeding with the run."
-          echo "skip_run=false >> $GITHUB_OUTPUT"
+          echo "skip_run=false" >> $GITHUB_ENV
         fi
 
     - name: Check for source code changes
@@ -62,14 +62,14 @@ jobs:
           # Check if the variable contains any content
           if [ -n "$changes" ]; then
             echo "Changes detected in src and CMakeLists.txt"
-            echo "changes=true" >> $GITHUB_STATE
+            echo "changes=true" >> $GITHUB_ENV
           else
             echo "No changes in src and CMakeLists.txt"
-            echo "changes=false" >> $GITHUB_OUTPUT
+            echo "changes=false" >> $GITHUB_ENV
           fi
         else
           echo "No changes in src and CMakeLists.txt"
-          echo "changes=false" >> $GITHUB_OUTPUT
+          echo "changes=false" >> $GITHUB_ENV
         fi
  
 
@@ -78,7 +78,7 @@ jobs:
     needs: configrations
     steps:
     - name: Use Node.js 18 for caching
-      if: steps.checking-changes.outputs.changes == 'true' && steps.check-schedule.outputs.skip_run == 'false'
+      if: env.changes == 'true' && steps.check-schedule.outputs.skip_run == 'false'
       uses: actions/setup-node@v3
       with:
         node-version: '18'
@@ -88,14 +88,14 @@ jobs:
     needs: configrations
     steps:
     - name: Login to Docker Hub
-      if: steps.checking-changes.outputs.changes == 'true' && steps.check-schedule.outputs.skip_run == 'false'
+      if: env.changes == 'true' && env.skip_run == 'false'
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Set up Docker Buildx
-      if: steps.checking-changes.outputs.changes == 'true' && steps.check-schedule.outputs.skip_run == 'false'
+      if: env.changes == 'true' && env.skip_run == 'false'
       uses: docker/setup-buildx-action@v2
 
   cmake:
@@ -103,7 +103,7 @@ jobs:
     needs: configrations
     steps:
     - name: Setting up CMake
-      if: steps.checking-changes.outputs.changes == 'true' && steps.check-schedule.outputs.skip_run == 'false'
+      if: env.changes == 'true' && env.skip_run == 'false'
       uses: lukka/get-cmake@latest
       with:
         cmakeVersion: latestrc
@@ -114,7 +114,7 @@ jobs:
     needs: [configrations, cmake]
     steps:
     - name: caching start
-      if: steps.checking-changes.outputs.changes == 'true' && steps.cache.outputs.cache-hit == 'true' && steps.check-schedule.outputs.skip_run == 'false'
+      if: env.changes == 'true' && steps.cache.outputs.cache-hit == 'true' && env.skip_run == 'false'
       id: restore-cache
       uses: actions/cache@v3
       with:
@@ -125,7 +125,7 @@ jobs:
         key: ${{ runner.os }}-action-cache-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('**/*.cpp') }}-${{ hashFiles('**/**/*.cpp') }}-${{ hashFiles('**/*.h') }}-${{ hashFiles('**/**/*.h') }}-${{ hashFiles('Dockerfile') }}-${{ github.run_id }} 
 
     - name: Configure and bulding CMake ninja
-      if: steps.checking-changes.outputs.changes == 'true' && steps.check-schedule.outputs.skip_run == 'false'
+      if: env.changes == 'true' && env.skip_run == 'false'
       shell: bash
       run: |
         sudo apt install libcurl4-openssl-dev -y
@@ -142,7 +142,7 @@ jobs:
     needs: [configrations, docker, build]
     steps:
     - name: Docker containerization
-      if: steps.checking-changes.outputs.changes == 'true' && steps.check-schedule.outputs.skip_run == 'false'
+      if: env.changes == 'true' && env.skip_run == 'false'
       uses: docker/build-push-action@v4
       with:
         context: .
@@ -150,7 +150,7 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/optimizer:latest
     - name: Save Action Cache
-      if: steps.checking-changes.outputs.changes == 'true' && steps.check-schedule.outputs.skip_run == 'false'
+      if: env.changes == 'true' && env.skip_run == 'false'
       uses: actions/cache@v3
       with:
         path: |
@@ -164,7 +164,7 @@ jobs:
 #   needs: [configrations, cmake, build]
 #   steps:
 #   - name: Test
-#     if: steps.checking-changes.outputs.changes == 'true' && steps.check-schedule.outputs.skip_run == 'false'
+#     if: env.changes == 'true' && env.skip_run == 'false'
 #     working-directory: ${{github.workspace}}/build
 #     shell: bash
        # Execute tests defined by the CMake configuration.
@@ -206,7 +206,7 @@ jobs:
     # If this step fails, then you should remove it and run the build manually (see below)
 
     - name: build
-      if: steps.checking-changes.outputs.changes == 'true' && steps.check-schedule.outputs.skip_run == 'true'
+      if: env.changes == 'true' && env.skip_run == 'true'
       run: |
         sudo apt install libcurl4-openssl-dev -y                   rm -rf build                                               mkdir build                                                cd build                                                   cmake -GNinja .. -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
         cmake --build .
