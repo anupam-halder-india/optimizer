@@ -181,7 +181,7 @@ int main() {
 //}
   return 0;
 }
-/////////
+
 // Function definitions
 // the curl function
 size_t WriteCallback(void* contents, size_t size, size_t nmemb, string* response) {
