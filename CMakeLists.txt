@@ -16,5 +16,5 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 # packages
 find_package(CURL REQUIRED)
 
-# Link libraries
+## Link libraries
 target_link_libraries(optimizer PRIVATE ${CURL_LIBRARIES})

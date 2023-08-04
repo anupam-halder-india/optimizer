@@ -14,5 +14,6 @@
 *_log
 *_log_*
 
-# unnecessary folders
+# unnecessary files folders
 build/*
+changed_files.txt
