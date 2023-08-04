@@ -54,7 +54,7 @@ jobs:
       id: checking-changes
       shell: bash
       run: |
-        if git status --porcelain | grep -E "^(M|A|D) (src/|CMakeLists.txt$)"; then
+        if git diff --name-only HEAD^ HEAD | grep -E "^(src/|CMakeLists.txt$)"; > changed_files.txt then
           echo "Changes detected in src and CMakeLists.txt"
           echo "changes=true >> $GITHUB_STATE"
         else
