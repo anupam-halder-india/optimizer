@@ -1,10 +1,10 @@
 # Minimum required version of cmake
 cmake_minimum_required(VERSION 3.10)
 
-# Project name
+# Project Name
 project(optimizer)
 
-# For caching
+# For Caching
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Locate the cpp files
