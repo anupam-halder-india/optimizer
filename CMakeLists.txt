@@ -18,5 +18,3 @@ find_package(CURL REQUIRED)
 
 # Link libraries
 target_link_libraries(optimizer PRIVATE ${CURL_LIBRARIES})
-
-#
