@@ -112,22 +112,11 @@ jobs:
       with:
         cmakeVersion: latestrc
         ninjaVersion: latest
-
-  chocolatey:
-    name: Chocolatey Setup
-    runs-on: windows-latest
-    needs: configrations
-    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
-    steps:
-    - name: Chocolatey Action
-      uses: crazy-max/ghaction-chocolatey@v2.2.0
-      with:
-        args: -y
         
   cloging:
     name: Cloging
     runs-on: ${{ needs.configrations.outputs.runs-on }}
-    needs: [configrations, node, docker, cmake, chocolatey]
+    needs: [configrations, node, docker, cmake]
     if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
     steps:
     - name: Conformation
@@ -152,13 +141,13 @@ jobs:
   build:
     name: Buliding
     runs-on: ${{ needs.configrations.outputs.runs-on }}
-    needs: [configrations, cmake, chocolatey, cloging, start-caching]
+    needs: [configrations, cmake, cloging, start-caching]
     if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
     steps:
     - name: Configure and bulding CMake ninja
       shell: bash
       run: |
-        if [ "$(uname)" == "Linux" ]; then apt install libcurl4-openssl-dev; fi; if [ "$(uname)" == "MINGW64" ]; then chocolate install curl -y; fi
+        if [ "$(uname)" == "Linux" ]; then apt install libcurl4-openssl-dev; fi; if [ "$(uname)" == "MINGW64" ]; then powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && chocolate install curl -y; fi
         rm -rf build
         mkdir build
         cd build
@@ -217,7 +206,7 @@ jobs:
     #   - https://gh.io/supported-runners-and-hardware-resources
     #   - https://gh.io/using-larger-runners
     # Consider using larger runners for possible analysis time improvements.
-    needs: [configrations, chocolatey, cloging, build] # add 'testing' when you finish building up the test
+    needs: [configrations, cloging, build] # add 'testing' when you finish building up the test
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     permissions:
       actions: read
@@ -246,7 +235,7 @@ jobs:
     - name: build
       shell: bash
       run: |
-        if [ "$(uname)" == "Linux" ]; then apt install libcurl4-openssl-dev; fi; if [ "$(uname)" == "MINGW64" ]; then chocolate install curl -y; fi
+        if [ "$(uname)" == "Linux" ]; then apt install libcurl4-openssl-dev; fi; if [ "$(uname)" == "MINGW64" ]; then powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && chocolate install curl -y; fi
         rm -rf build
         mkdir build
         cd build 
