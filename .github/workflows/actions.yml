@@ -119,8 +119,8 @@ jobs:
     needs: configrations
     if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
     steps:
-      - name: Chocolatey Action
-        uses: crazy-max/ghaction-chocolatey@v2.2.0
+    - name: Chocolatey Action
+      uses: crazy-max/ghaction-chocolatey@v2.2.0
 
   start-caching:
     name: Cache start
