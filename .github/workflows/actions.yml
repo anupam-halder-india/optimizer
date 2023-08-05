@@ -88,7 +88,10 @@ jobs:
 
   docker:
     name: Docker Setup
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    runs-on: ${{ metrix.os }}
     needs: configrations
     if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
     steps:
