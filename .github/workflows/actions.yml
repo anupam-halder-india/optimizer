@@ -43,7 +43,7 @@ jobs:
         repository: ${{ github.repository }}
         path: ${{ github.workspace }}
         clean: true
-        fetch-depth: '1'
+        fetch-depth: '0'
         token: ${{ SECRETS.THE_GITHUB_ADMIN_TOKEN }}
         sparse-checkout: .
 
