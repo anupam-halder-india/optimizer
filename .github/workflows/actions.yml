@@ -154,6 +154,7 @@ jobs:
           mkdir build
         fi
         cd build
+        chmod +x CMakeLists.txt
         cmake -GNinja .. -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
         cmake --build .
 
