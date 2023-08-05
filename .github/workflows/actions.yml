@@ -151,7 +151,7 @@ jobs:
       shell: bash
       run: |
         if [ "$(uname)" == "Linux" ]; then apt install libcurl4-openssl-dev; fi; if [ "$(uname)" == "MINGW64" ]; then powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && chocolate install curl -y; fi
-        if [ -e build/ ]; then mkdir build fi
+        if [ -e build/ ]; then mkdir build; fi
         cd build
         cmake -GNinja .. -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
         cmake --build .
@@ -239,7 +239,7 @@ jobs:
       run: |
         if [ "$(uname)" == "Linux" ]; then apt install libcurl4-openssl-dev; fi; if [ "$(uname)" == "MINGW64" ]; then powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && chocolate install curl -y; fi
         rm -rf build
-        mkdir build
+        if [ -e build/ ]; then mkdir build; fi
         cd build 
         cmake -GNinja .. -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
         cmake --build .
