@@ -9,7 +9,6 @@ on:
       - '*ignore'
       - '.github/*'
       - '!.github/workflows/*'
-      - 'build'
       - '.devcontainer/*'
       - 'github/**/*' 
       - 'github/**/**/*' 
