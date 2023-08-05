@@ -159,7 +159,7 @@ jobs:
     name: Containerization
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
-    needs: [configrations, docker, buil]
+    needs: [configrations, docker, build]
     steps:
     - name: Docker containerization
       uses: docker/build-push-action@v4
