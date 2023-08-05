@@ -131,7 +131,7 @@ jobs:
     if: needs.configrations.outputs.changes == 'true' && ne
 eds.configrations.outputs.skip_run == 'false'
     steps:
-      name: Conformation
+    - name: Conformation
       run: echo "the clog is running sucessfully"
 
   start-caching:
