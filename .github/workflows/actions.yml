@@ -1,4 +1,4 @@
-name: CMake
+name: Actions
 
 on:
   push:
@@ -26,6 +26,7 @@ env:
 
 jobs: 
   configrations:
+    name: Configrations
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
@@ -75,58 +76,65 @@ jobs:
         fi
 
   node:
+    name: Node
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
+    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
     steps:
     - name: Use Node.js 18 for caching
-      if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
       uses: actions/setup-node@v3
       with:
         node-version: '18'
 
   docker:
+    name: Docker Setup
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
+    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
     steps:
     - name: Login to Docker Hub
-      if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Set up Docker Buildx
-      if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request' 
       uses: docker/setup-buildx-action@v2
 
   cmake:
+    name: CMake Setup
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
+    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
     steps:
     - name: Setting up CMake
-      if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
       uses: lukka/get-cmake@latest
       with:
         cmakeVersion: latestrc
         ninjaVersion: latest
-      
-  build:
+
+  start-caching:
+    name: Cache start
     runs-on: ${{ needs.configrations.outputs.runs-on }}
-    needs: [configrations, cmake]
+    needs: configrations
+    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
     steps:
     - name: caching start
-      if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && steps.cache.outputs.cache-hit == 'true'
       id: restore-cache
       uses: actions/cache@v3
       with:
         path: |
           build/CMakeCache.txt
           build/CMakeFiles
-          artifacts/
-        key: ${{ runner.os }}-action-cache-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('**/*.cpp') }}-${{ hashFiles('**/**/*.cpp') }}-${{ hashFiles('**/*.h') }}-${{ hashFiles('**/**/*.h') }}-${{ hashFiles('Dockerfile') }}-${{ github.run_id }} 
+        key: ${{ runner.os }}-action-cache-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('**/*.cpp') }}-${{ hashFiles('**/**/*.cpp') }}-${{ hashFiles('**/*.h') }}-${{ hashFiles('**/**/*.h') }}-${{ hashFiles('Dockerfile') }}-${{ github.run_id }}
 
+  build:
+    name: Buliding
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    needs: [configrations, cmake]
+    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
+    steps:
     - name: Configure and bulding CMake ninja
-      if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
       shell: bash
       run: |
         apt install libcurl4-openssl-dev -y
@@ -139,19 +147,26 @@ jobs:
         CMAKE_PREFIX_PATH: /usr/local
 
   containerization:
+    name: Containerization
     runs-on: ${{ needs.configrations.outputs.runs-on }}
+    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
     needs: [configrations, docker, build]
     steps:
     - name: Docker containerization
-      if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
       uses: docker/build-push-action@v4
       with:
         context: .
         file: ./Dockerfile
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/optimizer:latest
+
+  end-caching:
+    name: Cache Ending
+    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
+    needs: [configrations, start-caching]
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    steps:
     - name: Save Action Cache
-      if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
       uses: actions/cache@v3
       with:
         path: |
@@ -161,6 +176,7 @@ jobs:
         key: ${{ runner.os }}-action-cache-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('**/*.cpp') }}-${{ hashFiles('**/**/*.cpp') }}-${{ hashFiles('**/*.h') }}-${{ hashFiles('**/**/*.h') }}-${{ hashFiles('Dockerfile') }}-${{ github.run_id }}
 
 # testing:
+#   name: Test
 #   runs-on: ${{ needs.configrations.outputs.runs-on }}
 #   needs: [configrations, cmake, build]
 #   steps:
@@ -174,6 +190,7 @@ jobs:
 
   anylize:
     name: Anylize
+    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'true'
     # Runner size impacts CodeQL analysis time. To learn more, please see:
     #   - https://gh.io/recommended-hardware-resources-for-running-codeql
     #   - https://gh.io/supported-runners-and-hardware-resources
@@ -197,8 +214,7 @@ jobs:
         # queries: security-extended,security-and-quality
 
     steps:
-    - name: Initialize CodeQL
-      if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'true'
+    - name: Initialize CodeQL 
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.languages }}
@@ -207,7 +223,7 @@ jobs:
     # If this step fails, then you should remove it and run the build manually (see below)
 
     - name: build
-      if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'true'
+      shell: bash
       run: |
         apt install libcurl4-openssl-dev -y
         rm -rf build
@@ -219,15 +235,7 @@ jobs:
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
 
-    #   If the Autobuild fails above, remove it and uncomment the following three lines.
-    #   modify them (or add more) to build your code if your project, please refer to the EXAMPLE below for guidance.
-
-    # - run: |
-    #     echo "Run, Build Application using script"
-    #     ./location_of_script_within_repo/buildscript.sh
-
     - name: Perform CodeQL Analysis
-      if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'true'
       uses: github/codeql-action/analyze@v2
       with:
         category: "/language:${{matrix.language}}"
