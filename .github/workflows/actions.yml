@@ -128,8 +128,7 @@ jobs:
     name: Cloging
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: [configrations, node, docker, cmake, chocolatey]
-    if: needs.configrations.outputs.changes == 'true' && ne
-eds.configrations.outputs.skip_run == 'false'
+    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
     steps:
     - name: Conformation
       shell: bash
