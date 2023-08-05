@@ -113,6 +113,15 @@ jobs:
         cmakeVersion: latestrc
         ninjaVersion: latest
 
+  chocolatey:
+    name: Chocolatey Setup
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    needs: configrations
+    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
+    steps:
+      - name: Chocolatey Action
+        uses: crazy-max/ghaction-chocolatey@v2.2.0
+
   start-caching:
     name: Cache start
     runs-on: ${{ needs.configrations.outputs.runs-on }}
@@ -131,13 +140,13 @@ jobs:
   build:
     name: Buliding
     runs-on: ${{ needs.configrations.outputs.runs-on }}
-    needs: [configrations, cmake]
+    needs: [configrations, cmake, start-caching]
     if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
     steps:
     - name: Configure and bulding CMake ninja
       shell: bash
       run: |
-        apt install libcurl4-openssl-dev -y
+        choco install curl
         rm -rf build
         mkdir build
         cd build
@@ -150,7 +159,7 @@ jobs:
     name: Containerization
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
-    needs: [configrations, docker, build]
+    needs: [configrations, docker, build, containerization]
     steps:
     - name: Docker containerization
       uses: docker/build-push-action@v4
@@ -163,7 +172,7 @@ jobs:
   end-caching:
     name: Cache Ending
     if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
-    needs: [configrations, start-caching]
+    needs: [configrations, start-caching, build]
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     steps:
     - name: Save Action Cache
@@ -225,7 +234,7 @@ jobs:
     - name: build
       shell: bash
       run: |
-        apt install libcurl4-openssl-dev -y
+        choco install curl
         rm -rf build
         mkdir build
         cd build 
