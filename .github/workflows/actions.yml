@@ -39,6 +39,12 @@ jobs:
     steps:
     - name: setting up action chechout
       uses: actions/checkout@v3
+      with: 
+        path: ${{ github.workspace }}
+        clean: true
+        fetch-depth: '1'
+        token: ${{ SECRETS.THE_GITHUB_ADMIN_TOKEN }}
+        sparse-checkout: .
 
     - name: Check if triggered by schedule
       id: check-schedule
@@ -87,10 +93,7 @@ jobs:
 
   docker:
     name: Docker Setup
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
     if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
     steps:
@@ -150,11 +153,8 @@ jobs:
       shell: bash
       run: |
         if [ "$(uname)" == "Linux" ]; then apt install libcurl4-openssl-dev; fi; if [ "$(uname)" == "MINGW64" ]; then powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && chocolate install curl -y; fi
-        if [ ! -d "build" ]; then
-          mkdir build
-        fi
+        if [ ! -d "build" ]; then mkdir build; fi
         cd build
-        chmod +x CMakeLists.txt
         cmake -GNinja .. -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
         cmake --build .
 
@@ -238,9 +238,7 @@ jobs:
       shell: bash
       run: |
         if [ "$(uname)" == "Linux" ]; then apt install libcurl4-openssl-dev; fi; if [ "$(uname)" == "MINGW64" ]; then powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && chocolate install curl -y; fi
-        if [ ! -d "build" ]; then
-          mkdir build
-        fi
+        if [ ! -d "build" ]; then mkdir build; fi
         cd build
         cmake -GNinja .. -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
         cmake --build .
