@@ -40,6 +40,7 @@ jobs:
     - name: setting up action chechout
       uses: actions/checkout@v3
       with: 
+        repository: ${{ github.repository }}
         path: ${{ github.workspace }}
         clean: true
         fetch-depth: '1'
@@ -92,8 +93,11 @@ jobs:
         node-version: '18'
 
   docker:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
     name: Docker Setup
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    runs-on: ${{ metrix.os }}
     needs: configrations
     if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
     steps:
