@@ -125,7 +125,7 @@ jobs:
   start-caching:
     name: Cache start
     runs-on: ${{ needs.configrations.outputs.runs-on }}
-    needs: configrations
+    needs: [configrations, node]
     if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
     steps:
     - name: caching start
@@ -140,7 +140,7 @@ jobs:
   build:
     name: Buliding
     runs-on: ${{ needs.configrations.outputs.runs-on }}
-    needs: [configrations, cmake, start-caching]
+    needs: [configrations, cmake, chocolatey, start-caching]
     if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
     steps:
     - name: Configure and bulding CMake ninja
@@ -172,7 +172,7 @@ jobs:
   end-caching:
     name: Cache Ending
     if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
-    needs: [configrations, start-caching, build]
+    needs: [configrations, node, start-caching, build]
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     steps:
     - name: Save Action Cache
@@ -205,7 +205,7 @@ jobs:
     #   - https://gh.io/supported-runners-and-hardware-resources
     #   - https://gh.io/using-larger-runners
     # Consider using larger runners for possible analysis time improvements.
-    needs: [configrations, build] # add 'testing' when you finish building up the test
+    needs: [configrations, chocolatey, build] # add 'testing' when you finish building up the test
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     permissions:
       actions: read
