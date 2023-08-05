@@ -126,13 +126,14 @@ jobs:
 
   cloging:
     name: Cloging
-    needs: [configrations, node, docker, cmake, chocolatey]
     runs-on: ${{ needs.configrations.outputs.runs-on }}
+    needs: [configrations, node, docker, cmake, chocolatey]
     if: needs.configrations.outputs.changes == 'true' && ne
 eds.configrations.outputs.skip_run == 'false'
     steps:
     - name: Conformation
-      run: echo "the clog is running sucessfully"
+      shell: bash
+      run: echo the clog is running sucessfully
 
   start-caching:
     name: Cache start
