@@ -115,7 +115,7 @@ jobs:
 
   chocolatey:
     name: Chocolatey Setup
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    runs-on: windows-latest
     needs: configrations
     if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
     steps:
@@ -123,7 +123,7 @@ jobs:
       uses: crazy-max/ghaction-chocolatey@v2.2.0
       with:
         args: -y
-
+        
   cloging:
     name: Cloging
     runs-on: ${{ needs.configrations.outputs.runs-on }}
@@ -158,7 +158,7 @@ jobs:
     - name: Configure and bulding CMake ninja
       shell: bash
       run: |
-        choco install curl
+        if [ "$(uname)" == "Linux" ]; then apt install libcurl4-openssl-dev; fi; if [ "$(uname)" == "MINGW64" ]; then chocolate install curl -y; fi
         rm -rf build
         mkdir build
         cd build
@@ -246,7 +246,7 @@ jobs:
     - name: build
       shell: bash
       run: |
-        choco install curl
+        if [ "$(uname)" == "Linux" ]; then apt install libcurl4-openssl-dev; fi; if [ "$(uname)" == "MINGW64" ]; then chocolate install curl -y; fi
         rm -rf build
         mkdir build
         cd build 
