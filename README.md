@@ -10,14 +10,6 @@
 
 (in progress)
 
-## Features 🌟
-
-- 📅 **Time Management**: Efficiently plan your day, week, or month with ease.
-- 📝 **Task Organizer**: Keep track of all your tasks and to-dos effortlessly.
-- 🚦 **Productivity Boost**: Find ways to increase productivity and stay focused.
-- 🧠 **Decision-making Support**: Get smart suggestions for better decision-making.
-- 📊 **Data Analytics**: Analyze your progress and trends to enhance performance.
-
 ## Installation 🛠️
 
 Follow these simple steps to get Optimizer up and running on your local machine:
