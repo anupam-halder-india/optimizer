@@ -132,6 +132,23 @@ jobs:
       shell: bash
       run: echo the clog is running sucessfully
 
+  linting:
+    name: Linting
+    permissions:
+      contents: read
+      packages: read
+      statuses: write
+    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
+    needs: [configrations, cloging]
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    steps: 
+      - name: Lint Code Base
+        uses: github/super-linter@v5
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          DEFAULT_BRANCH: master
+          GITHUB_TOKEN: ${{ secrets.THE_GITHUB_ADMIN_TOKEN }}
+
   start-caching:
     name: Cache start
     runs-on: ${{ needs.configrations.outputs.runs-on }}
