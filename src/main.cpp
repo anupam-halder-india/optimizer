@@ -1,8 +1,34 @@
+/*
+
+MIT License
+
+Copyright (c) 2023 Anupam Halder
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+*/
+
 #include <iostream>
 #include <string>
-#include <algorithm> // For std::find
-#include <curl/curl.h> // for curl
-#include <fstream> // for the os detction
+#include <algorithm>  // For std::find
+#include <curl/curl.h>  // for curl
+#include <fstream>  // for the os detction
 
 using std::cout;
 using std::endl;
@@ -34,7 +60,7 @@ string no[] = { "no", "No", "NO", "n", "N" };
 // Function prototypes
 
 // choice validator
-bool Switch(const string& str);
+int Switch(const string& str);
 // curl
 size_t WriteCallback(void* contents, size_t size, size_t nmemb, string* response);
 // os dector
@@ -59,17 +85,17 @@ int main() {
 
   // gitlab runner section
   string arch;
-  string GRIP; // Gitlab Runner Installation Permission
-  
+  string GRIP;  // Gitlab Runner Installation Permission
+  int wrapper;
+
   // from arch secrtion of gitlab runner
-  bool validation;
   string arm32;
   string arm64;
-  string amd64;  
+  string amd64;
 
   // gitlab runner installation command exicution section
   string url;
-  string dpkging; 
+  string dpkging;
   string retryal = "yes";
   string retryal2 = "yes";
 
@@ -85,7 +111,7 @@ int main() {
     // Check the length of the name
     int nameLength = name.length();
     if (nameLength >= 2 && nameLength <= 25 && !hasSpace) {
-      break; // Exit the loop if the name is valid
+      break;  // Exit the loop if the name is valid
     } else {
       cout << RED << "[ERROR]" << RESET << "Invalid name length. Please try again." << endl;
     }
@@ -93,10 +119,10 @@ int main() {
   
   // Installation permission of GitLab Runner and Validation of the chosen option
   while (true) {
-    cout << BOLD << MAGENTA << "[2]" << RESET << "Do you want to install GitLab Runner? (yes/no): ";
+    cout << BOLD << MAGENTA << "[2] " << RESET << "Do you want to install GitLab Runner? (yes/no): ";
     getline(cin, GRIP);
-    bool validation = Switch(GRIP);
-    if (validation) {
+    wrapper = Switch(GRIP);
+    if (wrapper == 1) {
       while (true) {
 	string armWord; 
 	if (osType == 3) { string armWord = "arm"; } else string armWord = "";
@@ -125,11 +151,12 @@ int main() {
 	else { cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from arm32, arm64, amd64, aarch64, i386, ppc64el or s390x" << endl; }
       }
       break;
-    }
+    } else if (wrapper == 2) { break; }
+    else {cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from yes or no" << endl;}
   }
   
   // Execution of the instructions according to the given permissions
-  if (find(begin(yes), end(yes), GRIP) != end(yes)) {
+  if (wrapper == 1) {
     while (true) {
       // gitlab runner installation url
       while (retryal == "yes") {
@@ -175,10 +202,10 @@ int main() {
       break;
     }
   }
-//ofstream bashrcFile("~/.bashrc", std::ios::app);
-//if (bashrcFile.is_open()) {
+// ofstream bashrcFile("~/.bashrc", std::ios::app);
+// if (bashrcFile.is_open()) {
   // bashrcFile << "" <<
-//}
+// }
   return 0;
 }
 
@@ -191,19 +218,19 @@ size_t WriteCallback(void* contents, size_t size, size_t nmemb, string* response
 }
 
 // Choice validator
-bool Switch(const string& str) {
+int Switch(const string& str) {
   // Check if the input matches any of the elements in the global 'yes' or 'no'
   bool hasSpaces = (str.find(' ') != string::npos);
   if (find(begin(yes), end(yes), str) != end(yes)) {
-    return true; // Return true for a valid input
+    return 1;  // Return true for a valid input
   } else if (find(begin(no), end(no), str) != end(no)) {
-    return true; // Return true for a valid input
+    return 2;  // Return true for a valid input
   } else if (hasSpaces || str.empty()) {
     cout << BOLD << RED << "[ERROR] " << RESET << "pls don't enter spaces or emptyness" << endl;
-    return false;
+    return 3;
   } else {
     cout << BOLD << RED << "[ERROR]" << RESET << "Please choose from 'yes' or 'no'." << endl;
-    return false; // Return false for an invalid input
+    return 4;  // Return false for an invalid input
   }
 }
 
@@ -212,7 +239,7 @@ int osDection() {
   ifstream releaseFile("/etc/os-release");
   if (!releaseFile.is_open()) {
     cerr << BOLD << RED << "[ERROR]" << RESET << " opening /etc/os-release" << endl;
-    return 404; // Return 404 if the file cannot be opened
+    return 404;  // Return 404 if the file cannot be opened
   }
 
   string line;
@@ -220,7 +247,7 @@ int osDection() {
 
   while (getline(releaseFile, line)) {
     if (line.find("ID=") != string::npos) {
-      distribution = line.substr(3); // Extract the value after "ID="
+      distribution = line.substr(3);  // Extract the value after "ID="
       break;
     }
   }
@@ -228,15 +255,15 @@ int osDection() {
   transform(distribution.begin(), distribution.end(), distribution.begin(), ::tolower);
 
   if (distribution == "ubuntu") {
-    return 1; // Return 1 for Ubuntu
+    return 1;  // Return 1 for Ubuntu
   } else if (distribution == "debian") {
-    return 2; // Return 2 for Debian
+    return 2;  // Return 2 for Debian
   } else if (distribution == "centos") {
-    return 4; // Return 4 for CentOS
+    return 4;  // Return 4 for CentOS
   } else if (distribution == "rhel" || distribution == "redhat") {
-    return 3; // Return 3 for Red Hat
+    return 3;  // Return 3 for Red Hat
   } else {
-    return 404; // Return 404 for other distributions
+    return 404;  // Return 404 for other distributions
   }
 }
 

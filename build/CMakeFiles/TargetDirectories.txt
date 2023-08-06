@@ -1,3 +1,0 @@
-/root/optimizer/build/CMakeFiles/optimizer.dir
-/root/optimizer/build/CMakeFiles/edit_cache.dir
-/root/optimizer/build/CMakeFiles/rebuild_cache.dir

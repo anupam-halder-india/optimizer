@@ -152,15 +152,18 @@ jobs:
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: [configrations, cmake, cloging, start-caching]
     if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
+    outputs:
+      build-script: ${{ steps.build-steps.run }}
     steps:
     - name: Configure and bulding CMake ninja
       shell: bash
+      id: build-steps
       run: |
         if [ "$(uname)" == "Linux" ]; then apt install libcurl4-openssl-dev; fi; if [ "$(uname)" == "MINGW64" ]; then powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && chocolate install curl -y; fi
-        if [ ! -d "build" ]; then mkdir build; fi
+        mkdir build
         cd build
-        cmake -GNinja .. -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
-        cmake --build .
+        cmake ..
+        ninja cpplint
 
   containerization:
     name: Containerization
@@ -238,14 +241,9 @@ jobs:
     # Autobuild attempts to build any compiled languages (C/C++, C#, Go, Java, or Swift).
     # If this step fails, then you should remove it and run the build manually (see below)
 
-    - name: build
+    - name: Analysis Build
       shell: bash
-      run: |
-        if [ "$(uname)" == "Linux" ]; then apt install libcurl4-openssl-dev; fi; if [ "$(uname)" == "MINGW64" ]; then powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && chocolate install curl -y; fi
-        if [ ! -d "build" ]; then mkdir build; fi
-        cd build
-        cmake -GNinja .. -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
-        cmake --build .
+      run: ${{ needs.build.outputs.build-script }}
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
