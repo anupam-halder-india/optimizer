@@ -47,18 +47,6 @@ jobs:
         token: ${{ SECRETS.THE_GITHUB_ADMIN_TOKEN }}
         sparse-checkout: .
 
-    - name: Check if triggered by schedule
-      id: check-schedule
-      shell: bash
-      run: |
-        if [[ "${{ github.event_name }}" == "schedule" ]]; then
-          echo "Action triggered by schedule, skipping the run."
-          echo "skip_run=true" >> $GITHUB_OUTPUT
-        else
-          echo "Action not triggered by schedule, proceeding with the run."
-          echo "skip_run=false" >> $GITHUB_OUTPUT
-        fi
-
     - name: Source Code changes detection
       uses: dorny/paths-filter@v2
       id: changes
@@ -67,11 +55,22 @@ jobs:
           files:
             - 'src/**'
 
+  branch-deletion:
+    name: marged branch deletion
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    needs: configrations
+    if: github.event_name == "pull_request" && github.event.action == "closed" 
+    steps:
+    - name: branch deletion
+      uses: SvanBoxel/delete-merged-branch@main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   node:
     name: Node
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
-    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
+    if: needs.configrations.outputs.changes == 'true' && github.event_name != "schedule"
     steps:
     - name: Use Node.js 18 for caching
       uses: actions/setup-node@v3
@@ -85,7 +84,7 @@ jobs:
     name: Docker Setup
     runs-on: ${{ matrix.os }}
     needs: configrations
-    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
+    if: needs.configrations.outputs.changes == 'true' && github.event_name != "schedule" && github.event_name != 'pull_request'
     steps:
     - name: Login to Docker Hub
       uses: docker/login-action@v2
@@ -100,7 +99,7 @@ jobs:
     name: CMake Setup
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
-    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
+    if: needs.configrations.outputs.changes == 'true' && github.event_name != "schedule"
     steps:
     - name: Setting up CMake
       uses: lukka/get-cmake@latest
@@ -112,7 +111,7 @@ jobs:
     name: Cloging
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: [configrations, node, docker, cmake]
-    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
+    if: needs.configrations.outputs.changes == 'true' && github.event_name != "schedule"
     steps:
     - name: Conformation
       shell: bash
@@ -124,7 +123,7 @@ jobs:
       contents: read
       packages: read
       statuses: write
-    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
+    if: needs.configrations.outputs.changes == 'true' && github.event_name  != "schedule" 
     needs: [configrations, cloging]
     runs-on: ubuntu-latest
     steps: 
@@ -139,7 +138,7 @@ jobs:
     name: Cache start
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: [configrations, node, cloging]
-    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
+    if: needs.configrations.outputs.changes == 'true' && github.event_name != "schedule" && github.event_name != 'pull_request'
     steps:
     - name: caching start
       id: restore-cache
@@ -154,7 +153,7 @@ jobs:
     name: Buliding
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: [configrations, cmake, cloging, start-caching]
-    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
+    if: needs.configrations.outputs.changes == 'true' && github.event_name != "schedule"
     outputs:
       build-script: ${{ steps.build-steps.run }}
     steps:
@@ -171,7 +170,7 @@ jobs:
   containerization:
     name: Containerization
     runs-on: ${{ needs.configrations.outputs.runs-on }}
-    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
+    if: needs.configrations.outputs.changes == 'true' && github.event_name != "schedule" && github.event_name != 'pull_request'
     needs: [configrations, docker, cloging, build]
     steps:
     - name: Docker containerization
@@ -184,7 +183,7 @@ jobs:
 
   end-caching:
     name: Cache Ending
-    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
+    if: needs.configrations.outputs.changes == 'true' && github.event_name != "schedule" && github.event_name != 'pull_request'
     needs: [configrations, node, cloging, start-caching, build]
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     steps:
@@ -203,7 +202,7 @@ jobs:
 #   needs: [configrations, cmake, cloging, build]
 #   steps:
 #   - name: Test
-#     if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false'
+#     if: needs.configrations.outputs.changes == 'true' && github.event_name != "schedule"
 #     working-directory: ${{github.workspace}}/build
 #     shell: bash
        # Execute tests defined by the CMake configuration.
@@ -212,7 +211,7 @@ jobs:
 
   anylize:
     name: Anylize
-    if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'true'
+    if: needs.configrations.outputs.changes == 'true' && github.event_name == "schedule"
     # Runner size impacts CodeQL analysis time. To learn more, please see:
     #   - https://gh.io/recommended-hardware-resources-for-running-codeql
     #   - https://gh.io/supported-runners-and-hardware-resources
