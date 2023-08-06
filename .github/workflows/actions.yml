@@ -108,19 +108,6 @@ jobs:
         cmakeVersion: latestrc
         ninjaVersion: latest
         
-  automerge:
-    name: Automerge
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macOS-latest]
-    runs-on: ${{ matrix.os }}
-    needs: configrations
-    steps: 
-      - uses: ahmadnassri/action-dependabot-auto-merge@v2
-        with:
-          github-token: ${{ secrets.THE_GITHUB_ADMIN_TOKEN }}
-          target: all
-
   cloging:
     name: Cloging
     runs-on: ${{ needs.configrations.outputs.runs-on }}
@@ -137,12 +124,9 @@ jobs:
       contents: read
       packages: read
       statuses: write
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macOS-latest]
     if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
     needs: [configrations, cloging]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps: 
       - name: Lint Code Base
         uses: github/super-linter@v5
