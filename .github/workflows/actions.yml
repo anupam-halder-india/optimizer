@@ -108,6 +108,16 @@ jobs:
         cmakeVersion: latestrc
         ninjaVersion: latest
         
+  automerge:
+    name: Automerge
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    needs: configrations
+    steps: 
+      - uses: ahmadnassri/action-dependabot-auto-merge@v2
+        with:
+          github-token: ${{ secrets.THE_GITHUB_ADMIN_TOKEN }}
+          target: all
+
   cloging:
     name: Cloging
     runs-on: ${{ needs.configrations.outputs.runs-on }}
