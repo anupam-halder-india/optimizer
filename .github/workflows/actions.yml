@@ -77,6 +77,17 @@ jobs:
       with:
         node-version: '18'
 
+  python:
+    name: Python
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule'
+    needs: configrations
+    steps:
+    - name: Installing Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 'x'
+
   docker:
     strategy:
       matrix:
@@ -110,7 +121,7 @@ jobs:
   cloging:
     name: Cloging
     runs-on: ${{ needs.configrations.outputs.runs-on }}
-    needs: [configrations, node, docker, cmake]
+    needs: [configrations, node, python, docker, cmake]
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule' 
     steps:
     - name: Conformation
@@ -152,7 +163,7 @@ jobs:
   build:
     name: Buliding
     runs-on: ${{ needs.configrations.outputs.runs-on }}
-    needs: [configrations, cmake, cloging, start-caching]
+    needs: [configrations, python, cmake, cloging, start-caching]
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule' 
     outputs:
       build-script: ${{ steps.build-steps.run }}
@@ -162,6 +173,7 @@ jobs:
       id: build-steps
       run: |
         if [ "$(uname)" == "Linux" ]; then apt install libcurl4-openssl-dev; fi; if [ "$(uname)" == "MINGW64" ]; then powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && chocolate install curl -y; fi
+        pip install cpplint
         mkdir build
         cd build
         cmake ..
