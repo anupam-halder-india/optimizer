@@ -110,7 +110,10 @@ jobs:
         
   automerge:
     name: Automerge
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest]
+    runs-on: ${{ matrix.os }}
     needs: configrations
     steps: 
       - uses: ahmadnassri/action-dependabot-auto-merge@v2
