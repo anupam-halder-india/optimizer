@@ -32,7 +32,7 @@ jobs:
 
     outputs:
       runs-on: ${{ matrix.os }}
-      changes: ${{ steps.checking-changes.outputs.changes }}
+      changes: ${{ steps.changes.outputs.files }}
       skip_run: ${{ steps.check-schedule.outputs.skip_run }}
 
     runs-on: ${{ matrix.os }}
@@ -59,27 +59,13 @@ jobs:
           echo "skip_run=false" >> $GITHUB_OUTPUT
         fi
 
-    - name: Check for source code changes
-      id: checking-changes
-      shell: bash
-      run: |
-        git rev-parse --verify HEAD^ >/dev/null 2>&1 && git diff --name-only HEAD^ HEAD | grep -E "^(src/|CMakeLists.txt$)" > changed_files.txt || git ls-tree -r HEAD --name-only | grep -E "^(src/|CMakeLists.txt$)" > changed_files.txt
-
-        if [ -s "changed_files.txt" ]; then
-          # Read the content of the file into a variable
-          changes=$(cat "changed_files.txt")
-          # Check if the variable contains any content
-          if [ -n "$changes" ]; then
-            echo "Changes detected in src and CMakeLists.txt"
-            echo "changes=true" >> $GITHUB_OUTPUT
-          else
-            echo "No changes in src and CMakeLists.txt"
-            echo "changes=false" >> $GITHUB_OUTPUT
-          fi
-        else
-          echo "No changes in src and CMakeLists.txt"
-          echo "changes=false" >> $GITHUB_OUTPUT
-        fi
+    - name: Source Code changes detection
+      uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: |
+          files:
+            - 'src/**'
 
   node:
     name: Node
@@ -138,9 +124,12 @@ jobs:
       contents: read
       packages: read
       statuses: write
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest]
     if: needs.configrations.outputs.changes == 'true' && needs.configrations.outputs.skip_run == 'false' && github.event_name != 'pull_request'
     needs: [configrations, cloging]
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    runs-on: ${{ matrix.os }}
     steps: 
       - name: Lint Code Base
         uses: github/super-linter@v5
