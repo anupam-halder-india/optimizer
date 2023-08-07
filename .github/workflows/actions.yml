@@ -4,14 +4,14 @@ on:
   push:
     branches: [ "master" ]
     paths-ignore:
-      - '*.md' 
+      - '*.md'
       - '*.MD'
       - '*ignore'
       - '.github/*'
       - '!.github/workflows/*'
       - '.devcontainer/*'
-      - 'github/**/*' 
-      - 'github/**/**/*' 
+      - 'github/**/*'
+      - 'github/**/**/*'
 
   pull_request:
     branches: [ "master" ]
@@ -23,7 +23,7 @@ on:
 env:
   ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
 
-jobs: 
+jobs:
   configrations:
     name: Configrations
     strategy:
@@ -39,7 +39,7 @@ jobs:
     steps:
     - name: setting up action chechout
       uses: actions/checkout@v3
-      with: 
+      with:
         repository: ${{ github.repository }}
         path: ${{ github.workspace }}
         clean: true
@@ -110,19 +110,19 @@ jobs:
     name: CMake Setup
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
-    if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule' 
+    if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule'
     steps:
     - name: Setting up CMake
       uses: lukka/get-cmake@latest
       with:
         cmakeVersion: latestrc
         ninjaVersion: latest
-        
+
   cloging:
     name: Cloging
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: [configrations, node, python, docker, cmake]
-    if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule' 
+    if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule'
     steps:
     - name: Conformation
       shell: bash
@@ -134,10 +134,10 @@ jobs:
       contents: read
       packages: read
       statuses: write
-    if: needs.configrations.outputs.changes == 'true' && github.event_name  != 'schedule' 
+    if: needs.configrations.outputs.changes == 'true' && github.event_name  != 'schedule'
     needs: [configrations, cloging]
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - name: Lint Code Base
         uses: github/super-linter@v5
         env:
