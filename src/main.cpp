@@ -44,8 +44,8 @@ using std::ios;
 // The global necessary variables
 
 // necessary booleans
-string yes[] = { "yes", "Yes", "YES", "y", "Y" };
-string no[] = { "no", "No", "NO", "n", "N" };
+const string yes[] = { "yes", "Yes", "YES", "y", "Y" };
+const string no[] = { "no", "No", "NO", "n", "N" };
 
 // colours
 #define RED "\033[31m"
@@ -65,7 +65,7 @@ int Switch(const string& str);
 size_t WriteCallback(void* contents, size_t size, size_t nmemb, string* response);
 // os dector
 int osDection();
-int osType = osDection();
+const int osType = osDection();
 
 int main() {
   // initilizing curl
