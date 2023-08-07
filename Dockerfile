@@ -6,7 +6,7 @@ WORKDIR /optimizer
 
 # setting up the oprarating system by updating its repos and istalling nacessary packages
 RUN apt-get update -y && apt-get install cmake make g++ ninja-build libcurl4-openssl-dev -y \
-    && apt-get clear \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # copying everything from the project to the container
