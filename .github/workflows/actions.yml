@@ -81,6 +81,7 @@ jobs:
     name: Python
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
+    
     steps:
     - name: Installing Python
       uses: actions/setup-python@v2
@@ -128,7 +129,7 @@ jobs:
       run: echo the clog is running sucessfully
 
   test-conversion:
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' || ( github.event_name == 'pull_request' && needs.configrations.outputs.changes == 'true' )
     needs: [configrations, python]
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     steps:
