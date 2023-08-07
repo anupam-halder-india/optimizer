@@ -147,7 +147,7 @@ jobs:
       contents: read
       packages: read
       statuses: write
-    if: needs.configrations.outputs.changes == 'true' && github.event_name  != 'schedule'
+   # if: needs.configrations.outputs.changes == 'true' && github.event_name  != 'schedule'
     needs: configrations
     runs-on: ubuntu-latest
     steps:
