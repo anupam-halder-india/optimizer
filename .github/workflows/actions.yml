@@ -130,15 +130,13 @@ jobs:
 
   test-conversion:
     if: github.event_name != 'pull_request'
-    needs: configrations
+    needs: [configrations, python]
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     steps:
     - name: Report test-coverage to DeepSource
+      shell: bash
       run: |
-        # Install the CLI
-        curl https://deepsource.io/cli | sh
-
-        # Send the report to DeepSource
+        if [ $(uname) = MINGW64 ]; then pip install deepsource; else curl https://deepsource.io/cli | sh; fi
         ./bin/deepsource report --analyzer test-coverage --key cxx --Value-file ./coverage.info
 
   linting:
