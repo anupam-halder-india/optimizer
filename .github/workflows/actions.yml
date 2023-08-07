@@ -29,11 +29,15 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
-
+        trx: [ubuntu-latest, windows-latest]
+        lix: [ubuntu-latest, macOS-latest]
+ 
     outputs:
       runs-on: ${{ matrix.os }}
       changes: ${{ steps.changes.outputs.files }}
       skip_run: ${{ steps.check-schedule.outputs.skip_run }}
+      trex: ${{ matric.trx }}
+      linx: ${{ matrix.lix }}
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -81,7 +85,7 @@ jobs:
     name: Python
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
-    
+   # if: (github.event_name == "pull_request" && needs.configurations.outputs.changes == 'true') || (github.event_name != "pull_request" && github.event_name != 'schedule' && needs.configrations.outputs.changes == 'true')
     steps:
     - name: Installing Python
       uses: actions/setup-python@v2
@@ -89,11 +93,7 @@ jobs:
         python-version: 'x'
 
   docker:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    name: Docker Setup
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ needs.configrations.outputs.trex }}
     needs: configrations
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule' && github.event_name != 'pull_request'
     steps:
@@ -131,7 +131,7 @@ jobs:
   test-conversion:
     if: github.event_name != 'pull_request' || ( github.event_name == 'pull_request' && needs.configrations.outputs.changes == 'true' )
     needs: [configrations, python]
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    runs-on: ${{ needs.configrations.outputs.linx }}
     steps:
     - name: Report test-coverage to DeepSource
       shell: bash
@@ -146,7 +146,7 @@ jobs:
       packages: read
       statuses: write
     if: needs.configrations.outputs.changes == 'true' && github.event_name  != 'schedule'
-    needs: [configrations, cloging]
+    needs: configrations
     runs-on: ubuntu-latest
     steps:
       - name: Lint Code Base
