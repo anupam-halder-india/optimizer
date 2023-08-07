@@ -36,7 +36,7 @@ jobs:
       runs-on: ${{ matrix.os }}
       changes: ${{ steps.changes.outputs.files }}
       skip_run: ${{ steps.check-schedule.outputs.skip_run }}
-      trex: ${{ matric.trx }}
+      trex: ${{ matrix.trx }}
       linx: ${{ matrix.lix }}
 
     runs-on: ${{ matrix.os }}
