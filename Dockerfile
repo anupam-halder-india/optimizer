@@ -5,8 +5,8 @@ FROM ubuntu:latest
 WORKDIR /optimizer
 
 # setting up the oprarating system by updating its repos and istalling nacessary packages
-RUN apt update -y && apt dist-upgrade -y && apt upgrade -y
-RUN apt install cmake make g++ ninja-build libcurl4-openssl-dev -y
+RUN apt-get update -y && apt dist-upgrade -y && apt upgrade -y
+RUN apt-get install cmake make g++ ninja-build libcurl4-openssl-dev -y
 
 # copying everything from the project to the container
 COPY . .
