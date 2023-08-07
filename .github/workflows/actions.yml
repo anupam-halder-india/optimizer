@@ -164,7 +164,7 @@ jobs:
     name: Buliding
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: [configrations, python, cmake, cloging, start-caching]
-    if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule' 
+    if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule'
     outputs:
       build-script: ${{ steps.build-steps.run }}
     steps:
@@ -223,7 +223,7 @@ jobs:
 
   anylize:
     name: Anylize
-    if: needs.configrations.outputs.changes == 'true' && github.event_name == 'schedule' 
+    if: needs.configrations.outputs.changes == 'true' && github.event_name == 'schedule'
     # Runner size impacts CodeQL analysis time. To learn more, please see:
     #   - https://gh.io/recommended-hardware-resources-for-running-codeql
     #   - https://gh.io/supported-runners-and-hardware-resources
@@ -247,7 +247,7 @@ jobs:
         # queries: security-extended,security-and-quality
 
     steps:
-    - name: Initialize CodeQL 
+    - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.languages }}
