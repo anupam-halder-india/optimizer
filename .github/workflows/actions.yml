@@ -80,7 +80,6 @@ jobs:
   python:
     name: Python
     runs-on: ${{ needs.configrations.outputs.runs-on }}
-    if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule'
     needs: configrations
     steps:
     - name: Installing Python
