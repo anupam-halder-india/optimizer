@@ -47,7 +47,7 @@ jobs:
       uses: actions/checkout@v3
       with:
         token: ${{ secrets.THE_GITHUB_ADMIN_TOKEN }}
-        
+
     - name: Source Code changes detection
       uses: dorny/paths-filter@v2
       id: changes
