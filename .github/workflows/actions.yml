@@ -45,6 +45,8 @@ jobs:
     steps:
     - name: setting up action chechout
       uses: actions/checkout@v3
+      with:
+        ssh-key: ${{ secrets.SSH_DEPLOYMENT_KEY }}
 
     - name: Source Code changes detection
       uses: dorny/paths-filter@v2
