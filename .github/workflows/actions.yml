@@ -138,7 +138,7 @@ jobs:
     - name: Report test-coverage to DeepSource
       shell: bash
       run: |
-        echo "DEEPSOURCE_DSN=${{ secrets.DEEPSOURCE_DSN }}" >> $GITHUB_ENV
+        DEEPSOURCE_DSN=${{ secrets.DEEPSOURCE_DSN }}
         curl https://deepsource.io/cli | sh
         ./bin/deepsource report --analyzer test-coverage --key cxx --value-file ./coverage.info
 
@@ -155,7 +155,6 @@ jobs:
       - name: Lint Code Base
         uses: github/super-linter@v5
         env:
-          VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.THE_GITHUB_ADMIN_TOKEN }}
 
