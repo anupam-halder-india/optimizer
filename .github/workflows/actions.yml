@@ -39,20 +39,15 @@ jobs:
       skip_run: ${{ steps.check-schedule.outputs.skip_run }}
       trex: ${{ matrix.trx }}
       linx: ${{ matrix.lix }}
-      languages: ${{ matrix.languages }} 
+      languages: ${{ matrix.languages }}
 
     runs-on: ${{ matrix.os }}
     steps:
     - name: setting up action chechout
       uses: actions/checkout@v3
       with:
-        repository: ${{ github.repository }}
-        path: ${{ github.workspace }}
-        clean: true
-        fetch-depth: '1'
         token: ${{ secrets.THE_GITHUB_ADMIN_TOKEN }}
-        sparse-checkout: .
-
+        
     - name: Source Code changes detection
       uses: dorny/paths-filter@v2
       id: changes
