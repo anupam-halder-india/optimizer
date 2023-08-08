@@ -29,8 +29,12 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
-        trx: ["${{ matrix.os[0] }}", "${{ matrix.os[1] }}"]
-        lix: ["${{ matrix.os[0] }}", "${{ matrix.os[2] }}"]
+        trx: 
+        - "${{ matrix.os[0] }}"
+        - "${{ matrix.os[1] }}"
+        lix: 
+        - "${{ matrix.os[0] }}"
+        - "${{ matrix.os[2] }}"
         languages: ['cpp']
 
     outputs:
