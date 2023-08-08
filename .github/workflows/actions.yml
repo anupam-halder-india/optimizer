@@ -22,6 +22,11 @@ on:
 
 env:
   ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
+  DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
+  DEFAULT_BRANCH: master
+  GITHUB_TOKEN: ${{ secrets.THE_GITHUB_ADMIN_TOKEN }}
+
+permissions: write-all
 
 jobs:
   configrations:
@@ -137,24 +142,15 @@ jobs:
         if [ -d .git ]; then git init; fi
         curl https://deepsource.io/cli | sh
         ./bin/deepsource report --analyzer test-coverage --key cxx --value-file ./coverage.info
-      env:
-        DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
 
   linting:
     name: Linting
-    permissions:
-      contents: read
-      packages: read
-      statuses: write
     if: (github.event_name == 'pull_request' && needs.configurations.outputs.changes == 'true') || (github.event_name != 'pull_request' && github.event_name != 'schedule' && needs.configrations.outputs.changes == 'true')
     needs: [configrations, cloging]
     runs-on: ubuntu-latest
     steps:
-      - name: Lint Code Base
-        uses: github/super-linter@v5
-        env:
-          DEFAULT_BRANCH: master
-          GITHUB_TOKEN: ${{ secrets.THE_GITHUB_ADMIN_TOKEN }}
+    - name: Lint Code Base
+      uses: github/super-linter@v5
 
   start-caching:
     name: Cache start
@@ -242,10 +238,6 @@ jobs:
     # Consider using larger runners for possible analysis time improvements.
     needs: [configrations, cloging, build] # add 'testing' when you finish building up the test
     runs-on: ${{ needs.configrations.outputs.runs-on }}
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
 
     steps:
     - name: Initialize CodeQL
