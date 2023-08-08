@@ -43,10 +43,8 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
-    - name: setting up action chechout
+    - name: setting up action checkout
       uses: actions/checkout@v3
-      with:
-        ssh-key: ${{ secrets.THE_GITHUB_ADMIN_TOKEN }}
 
     - name: Source Code changes detection
       uses: dorny/paths-filter@v2
@@ -60,7 +58,7 @@ jobs:
     name: marged branch deletion
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+ #   if: github.event_name == 'pull_request' && github.event.action == 'closed'
     steps:
     - name: branch deletion
       uses: SvanBoxel/delete-merged-branch@main
