@@ -87,7 +87,7 @@ jobs:
     name: Python
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
-    if: (github.event_name == 'pull_request' && needs.configurations.outputs.changes == 'true') || (github.event_name != 'pull_request' || github.event_name != 'schedule' || needs.configrations.outputs.changes == 'true')
+    if: (github.event_name == 'pull_request' && needs.configurations.outputs.changes == 'true') || (github.event_name != 'pull_request' && github.event_name != 'schedule' && needs.configrations.outputs.changes == 'true')
     steps:
     - name: Installing Python
       uses: actions/setup-python@v4
