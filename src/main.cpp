@@ -29,6 +29,7 @@ SOFTWARE.
 #include <algorithm>  // For std::find
 #include <curl/curl.h>  // for curl
 #include <fstream>  // for the os detction
+#include <unistd.h>  // for exec()
 
 using std::cout;
 using std::endl;
@@ -184,20 +185,8 @@ int main() {
 	break;
       
       while (retryal2 == "yes") { 
-        int Dpackaging = system(dpkging.c_str());
-
-        if (Dpackaging == 0) { cout << BOLD << GREEN "[!] " << RESET << "Installation completed successfully." << endl; break; }
-        else { 
-	  cerr << BOLD << RED "[ERROR] " << RESET << "Installation failed with error code: " << Dpackaging << endl;
-	  cout << BOLD << CYAN << "[i] " << RESET << "do you want to retry (yes/no): ";
-	  getline(cin, retryal2);
-	  Switch(retryal2);
-	  while (true) {
-	    if (find(begin(yes), end(yes), retryal2) != end(yes)) {string retryal2 = "yes"; break;}
-	    else if (find(begin(no), end(no), retryal2) != end(no)) { string retryal2 = "no"; break; }
-	    else { cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from yes or no" << endl; }
-	  }
-	}
+        const char* Dpkging = dpkging.c_str(); 
+        if (execl("/bin/sh", "sh", "-c", Dpkging, (char*)NULL) == -1) { cerr << BOLD << RED << "[ERROR] " << RESET << "Failed to execute command." << endl; return 1; }
       }
       break;
     }

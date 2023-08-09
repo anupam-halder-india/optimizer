@@ -20,6 +20,11 @@ Follow these simple steps to get Optimizer up and running on your local machine:
 (in progress)
 ```
 
+## commands to remember
+```bash
+cmake .. -GNinja -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
+```
+
 ## License 📜
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

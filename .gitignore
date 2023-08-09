@@ -13,7 +13,3 @@
 *.log.*
 *_log
 *_log_*
-
-# unnecessary files folders
-build
-changed_files.txt
