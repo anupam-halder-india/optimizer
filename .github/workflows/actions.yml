@@ -54,6 +54,7 @@ jobs:
 
     - name: Before commit hash
       id: before-commit-hash
+      shell: bash
       run: |
         echo "BEFORE_COMMIT_HASH=${{ github.event.before }}" >> $GITHUB_OUTPUT
         BEFORE_COMMIT_HASH=${{ github.event.before }}
