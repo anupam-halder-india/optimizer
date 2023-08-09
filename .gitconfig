@@ -1,0 +1,9 @@
+[alias]
+  am = commit -am
+  amn = --amend -m
+  br = branch
+  ck = checkout
+  st = status
+  ci = commit
+  sw = switch
+  ad = add

@@ -24,6 +24,9 @@ Follow these simple steps to get Optimizer up and running on your local machine:
 ```bash
 cmake .. -GNinja -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
 ```
+```bash
+git config --global includeIf.gitdir:~/optimizer/.path ~/optimizer/.gitconfig
+```
 
 ## License 📜
 
