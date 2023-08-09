@@ -157,19 +157,22 @@ int main() {
   }
   
   // Execution of the instructions according to the given permissions
-  if (wrapper == 1) {
+  if (wrapper == 1) { 
+    const char* dpkgCommand;
+    const char* dpkgArgs[4];
     while (true) {
       // gitlab runner installation url
       while (retryal == "yes") {
-        if (osType == 1 || osType == 2) { string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/deb/gitlab-runner_" + arch + ".deb"; string dpkging = "dpkg -i gitlab-runner_" + arch + ".deb"; }
-	else if (osType == 3 || osType == 4) { string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/rpm/gitlab-runner_" + arch + ".rpm"; string dpkging = "rpm -i gitlab-runner_" + arch + ".rpm && rpm -Uvh gitlab-runner_" + arch + ".rpm"; }
+        if (osType == 1 || osType == 2) { string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/deb/gitlab-runner_" + arch + ".deb"; string dpkging = "gitlab-runner_" + arch + ".deb"; dpkgCommand = "/usr/bin/dpkg"; dpkgArgs[0] = dpkgCommand; dpkgArgs[1] = "-Uvh"; dpkgArgs[2] = dpkging.c_str(); dpkgArgs[3] = nullptr; }
+	else if (osType == 3 || osType == 4) { string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/rpm/gitlab-runner_" + arch + ".rpm"; string dpkging = "rpm -i gitlab-runner_" + arch + ".rpm && rpm -Uvh gitlab-runner_" + arch + ".rpm"; dpkgCommand = "/bin/rpm"; dpkgArgs[0] = dpkgCommand; dpkgArgs[1] = "-Uvh"; dpkgArgs[2] = dpkging.c_str(); dpkgArgs[3] = nullptr; }
 	else if (osType == 404) { cout << BOLD << RED << "[ERROR]" << RESET << "error 404, you are using unknown oprating system to install git lab runner, can't install" << endl; break; }
 	else { cout << BOLD << RED << "[ERROR]" << RESET << "unknown error cant install gitlab runner" << endl; break;}
+      }
         // gitlab runner installation through its url and curl lib
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
       
         // checking if it is installed or not
-        if (res != CURLE_OK) { 
+        if (res != CURLE_OK) {
 	  cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << endl;
 	  cout << BOLD << CYAN << "[i] " << RESET << "do you want to retry? (yes/no): ";
 	  getline(cin, retryal);
@@ -180,13 +183,23 @@ int main() {
 	    else { cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from yes or no" << endl; }
 	  }
 	}
-        else { cout << BOLD << GREEN << "[!] " << RESET << "Download completed successfully." << endl; } }
-	curl_easy_cleanup(curl);
-	break;
-      
-      while (retryal2 == "yes") { 
-        const char* Dpkging = dpkging.c_str(); 
-        if (execl("/bin/sh", "sh", "-c", Dpkging, (char*)NULL) == -1) { cerr << BOLD << RED << "[ERROR] " << RESET << "Failed to execute command." << endl; return 1; }
+        else { 
+	  cout << BOLD << GREEN << "[!] " << RESET << "Download completed successfully." << endl;
+	  cout << BOLD << CYAN << "[i] " << RESET << "Doing installation..." << endl;
+	}
+      curl_easy_cleanup(curl);
+      while (retryal2 == "yes") {
+        if (execv(dpkgCommand, (char* const*)dpkgArgs) == -1) {
+	  while (true) {
+	    cerr << BOLD << RED << "[ERROR] " << RESET << "Failed to execute dpkg command." << endl;
+	    cout << BOLD << CYAN << "[?] " << RESET << "Do you want to retry (yes/no): ";
+	    getline(cin, retryal2);
+	    if (find(begin(yes), end(yes), retryal2) != end(yes)) {string retryal2 = "yes"; break;}
+	    else if (find(begin(no), end(no), retryal2) != end(no)) { string retryal2 = "no"; break; }
+	    else { cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from yes or no" << endl; }
+	  }
+	}
+	else { cout << BOLD << GREEN << "[!] " << RESET << "Download installation successfully." << endl; break; }
       }
       break;
     }
