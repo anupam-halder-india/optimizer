@@ -45,11 +45,19 @@ jobs:
       trex: ${{ matrix.trx }}
       linx: ${{ matrix.lix }}
       languages: ${{ matrix.languages }}
+      BFCH: ${{ steps.before-commit-hash.outputs.BEFORE_COMMIT_HASH }}
 
     runs-on: ${{ matrix.os }}
     steps:
     - name: setting up action checkout
       uses: actions/checkout@v3
+
+    - name: Before commit hash
+      id: before-commit-hash
+      run: |
+        echo "BEFORE_COMMIT_HASH=${{ github.event.before }}" >> $GITHUB_OUTPUT
+        BEFORE_COMMIT_HASH=${{ github.event.before }}
+        echo "Before commit hash: $BEFORE_COMMIT_HASH"
 
     - name: Source Code changes detection
       uses: dorny/paths-filter@v2
