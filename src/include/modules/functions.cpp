@@ -1,0 +1,78 @@
+#include <iostream>
+#include <string>
+#include <algorithm>  // For std::find
+#include <curl/curl.h>  // for curl
+#include <fstream>  // for the os detction
+#include "../imports.hpp"
+
+// Function definitions
+// the curl function
+size_t WriteCallback(void* contents, size_t size, size_t nmemb, string* response) {
+  size_t totalSize = size * nmemb;
+  response->append((char*)contents, totalSize);
+  return totalSize;
+}
+
+// Choice validator
+int Switch(const string& str) {
+  // Check if the input matches any of the elements in the global 'yes' or 'no'
+  bool hasSpaces = (str.find(' ') != string::npos);
+  if (find(begin(yes), end(yes), str) != end(yes)) {
+    return 1;  // Return true for a valid input
+  } else if (find(begin(no), end(no), str) != end(no)) {
+    return 2;  // Return true for a valid input
+  } else if (hasSpaces || str.empty()) {
+    cout << BOLD << RED << "[ERROR] " << RESET << "pls don't enter spaces or emptyness" << endl;
+    return 3;
+  } else {
+    cout << BOLD << RED << "[ERROR]" << RESET << "Please choose from 'yes' or 'no'." << endl;
+    return 4;  // Return false for an invalid input
+  }
+}
+
+// os dector
+int osDection() {
+  ifstream releaseFile("/etc/os-release");
+  if (!releaseFile.is_open()) {
+    cerr << BOLD << RED << "[ERROR]" << RESET << " opening /etc/os-release" << endl;
+    return 404;  // Return 404 if the file cannot be opened
+  }
+
+  string line;
+  string distribution;
+
+  while (getline(releaseFile, line)) {
+    if (line.find("ID=") != string::npos) {
+      distribution = line.substr(3);  // Extract the value after "ID="
+      break;
+    }
+  }
+
+  transform(distribution.begin(), distribution.end(), distribution.begin(), ::tolower);
+
+  if (distribution == "ubuntu") {
+    return 1;  // Return 1 for Ubuntu
+  } else if (distribution == "debian") {
+    return 2;  // Return 2 for Debian
+  } else if (distribution == "centos") {
+    return 4;  // Return 4 for CentOS
+  } else if (distribution == "rhel" || distribution == "redhat") {
+    return 3;  // Return 3 for Red Hat
+  } else {
+    return 404;  // Return 404 for other distributions
+  }
+}
+
+// arch type
+int archType(string& arch, string& GRIP) {
+    if (find(begin(arm32), end(arm32), arch) != end(arm32)) { string arch = arm32[3]; return 0; }
+    else if (find(begin(arm64), end(arm64), arch) != end(arm64)) { string arch = arm64[2]; return 1; }
+    else if (find(begin(i386), end(i386), arch) != end(i386)) { string arch = i386[1]; return 2; }
+    else if (find(begin(ppc64el), end(ppc64el), arch) != end(ppc64el)) { string arch = ppc64el[2]; return 3; }
+    else if (find(begin(s390x), end(s390x), arch) != end(s390x)) { string arch = s390x[2]; return 4; }
+    else if ((osType == 3 && find(begin(arm), end(arm), arch) != end(arm)) || (osType == 4 && find(begin(arm), end(arm), arch) != end(arm))) { string arch = arm[2]; return 5; }
+    else if (find(begin(aarch64), end(aarch64), arch) != end(aarch64)) { string arch = aarch64[2]; return 6; }
+    else if (find(begin(cancel), end(cancel), arch) != end(cancel)) { string GRIP = "no"; return 7; }
+    else if (hasSpaces || arch.empty()) { cout << BOLD << RED << "[ERROR] " << RESET << "pls don't enter spaces or emptyness" << endl; return 8; }
+    else { cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from arm32, arm64, amd64, aarch64, i386, ppc64el, or s390x" << endl; return 9; }
+}

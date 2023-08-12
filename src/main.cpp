@@ -63,22 +63,13 @@ int main() {
     cout << BOLD << MAGENTA << "[2] " << RESET << "Do you want to install GitLab Runner? (yes/no): ";
     getline(cin, GRIP);
     wrapper = Switch(GRIP);
-    if (wrapper == 1) {
-      while (true) {
+    if (wrapper == 1) { 
+      while (arch == "8" || arch == "9") {
 	string armWord; 
 	if (osType == 3) { string armWord = "arm"; } else string armWord = "";
         cout << BOLD << MAGENTA << "[2.1] " << RESET << " What is your architecture, you can say 'cancel', to cancel the installation of gitlab runner ((arm32/armhf), arm64, amd64, aarch64, i386, ppc64el, s390x " + armWord + "): ";
         getline(cin, arch);
-        if (find(begin(arm32), end(arm32), arch) != end(arm32)) { string arch = arm32[3]; break; }
-	else if (find(begin(arm64), end(arm64), arch) != end(arm64)) { string arch = arm64[2]; break; }
-	else if (find(begin(i386), end(i386), arch) != end(i386)) { string arch = i386[1]; break; }
-	else if (find(begin(ppc64el), end(ppc64el), arch) != end(ppc64el)) { string arch = ppc64el[2]; break; }
-	else if (find(begin(s390x), end(s390x), arch) != end(s390x)) { string arch = s390x[2]; break; }
-	else if ((osType == 3 && find(begin(arm), end(arm), arch) != end(arm)) || (osType == 4 && find(begin(arm), end(arm), arch) != end(arm))) { string arch = arm[2]; break; }
-	else if (find(begin(aarch64), end(aarch64), arch) != end(aarch64)) { string arch = aarch64[2]; break; } 
-	else if (find(begin(cancel), end(cancel), arch) != end(cancel)) { string GRIP = "no"; break; }
-	else if (hasSpaces || arch.empty()) { cout << BOLD << RED << "[ERROR] " << RESET << "pls don't enter spaces or emptyness" << endl;}
-	else { cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from arm32, arm64, amd64, aarch64, i386, ppc64el or s390x" << endl; }
+        arch = archType(arch, GRIP);
       }
       break;
     } else if (wrapper == 2) { break; }
