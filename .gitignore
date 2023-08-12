@@ -13,3 +13,6 @@
 *.log.*
 *_log
 *_log_*
+
+# Unnecessary files
+build
