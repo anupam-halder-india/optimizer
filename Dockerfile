@@ -20,7 +20,7 @@ RUN rm -rf build \
     && mkdir build \
     && cd build \
     && cmake -GNinja .. -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin \
-    && ninja
+    && ninja cpplint
 
 # testing the project
 # RUN ctest
