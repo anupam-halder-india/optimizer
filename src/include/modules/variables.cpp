@@ -1,8 +1,8 @@
 #include "../imports.hpp"
 #include "../functions.hpp"
 
-const string yes[5] = {"yes", "Yes", "YES", "y", "Y"};
-const string no[5] = {"no", "No", "NO", "n", "N"};
+const StringArray<5> yes = {"yes", "Yes", "YES", "y", "Y"};
+const StringArray<5> no = {"no", "No", "NO", "n", "N"};
 const bool hasSpaces = (name.find(' ') != string::npos);
 
 const string response;
@@ -13,15 +13,15 @@ string arch;
 string GRIP;
 int wrapper = 0;
 
-const string arm32[6] = {"ARM32", "Arm32", "arm32", "armhf", "ARMHF", "Armhf"};
-const string arm64[3] = {"ARM64", "Arm64", "arm64"};
-const string amd64[3] = {"AMD64", "Amd64", "amd64"};
-const string aarch64[3] = {"AARCH64", "Arrch64", "aarch64"};
-const string i386[2] = {"I386", "i386"};
-const string ppc64el[3] = {"PPC64EL", "Ppc64el", "ppc64el"};
-const string s390x[3] = {"S390x", "S390X", "s390x"};
-const string arm[3] = {"ARM", "Arm", "arm"};
-const string cancel[3] = {"CANCEL", "Cancle", "cancle"};
+const StringArray<6> arm32 = {"ARM32", "Arm32", "arm32", "armhf", "ARMHF", "Armhf"};
+const StringArray<3> arm64 = {"ARM64", "Arm64", "arm64"};
+const StringArray<3> amd64 = {"AMD64", "Amd64", "amd64"};
+const StringArray<3> aarch64 = {"AARCH64", "Arrch64", "aarch64"};
+const StringArray<2> i386 = {"I386", "i386"};
+const StringArray<3> ppc64el = {"PPC64EL", "Ppc64el", "ppc64el"};
+const StringArray<3> s390x = {"S390x", "S390X", "s390x"};
+const StringArray<3> arm = {"ARM", "Arm", "arm"};
+const StringArray<3> cancel = {"CANCEL", "Cancle", "cancle"};
 
 const string url;
 const string dpkging;

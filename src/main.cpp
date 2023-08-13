@@ -29,6 +29,7 @@ SOFTWARE.
 #include <algorithm>  // For std::find
 #include <curl/curl.h>  // for curl
 #include <fstream>  // for the os detction
+#include <array>
 #include "include/imports.hpp"
 #include "include/functions.hpp"
 

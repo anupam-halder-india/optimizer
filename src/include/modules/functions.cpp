@@ -3,6 +3,7 @@
 #include <algorithm>  // For std::find
 #include <curl/curl.h>  // for curl
 #include <fstream>  // for the os detction
+#include <array>
 #include "../imports.hpp"
 
 // Function definitions

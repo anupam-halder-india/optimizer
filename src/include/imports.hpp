@@ -7,6 +7,8 @@
 #include <fstream>   // For file input/output
 #include <stdexcept>
 
+template <std::size_t N>
+using StringArray = std::array<std::string, N>;
 using std::cout;
 using std::endl;
 using std::string;
@@ -17,6 +19,7 @@ using std::cerr;
 using std::ifstream;
 using std::ios;
 using std::cin;
+using std::array;
 
 // Colours
 #define RED "\033[31m"
@@ -29,8 +32,8 @@ using std::cin;
 #define RESET "\033[0;0m"
 
 // Necessary booleans
-extern const string yes[5];
-extern const string no[5];
+extern const StringArray<5> yes;
+extern const StringArray<5> no;
 extern const int osType;
 extern const bool hasSpaces;
 
@@ -46,15 +49,15 @@ extern string GRIP; // GitLab Runner Installation Permission
 extern int wrapper;
 
 // From Arch section of GitLab Runner
-extern const string arm32[6];
-extern const string arm64[3];
-extern const string amd64[3];
-extern const string aarch64[3];
-extern const string i386[2];
-extern const string ppc64el[3];
-extern const string s390x[3];
-extern const string arm[3];
-extern const string cancel[3];
+extern const StringArray<6> arm32;
+extern const StringArray<3> arm64;
+extern const StringArray<3> amd64;
+extern const StringArray<3> aarch64;
+extern const StringArray<2> i386;
+extern const StringArray<3> ppc64el;
+extern const StringArray<3> s390x;
+extern const StringArray<3> arm;
+extern const StringArray<3> cancel;
 
 // GitLab Runner installation command execution section
 extern const string url;
