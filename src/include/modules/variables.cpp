@@ -1,3 +1,8 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <fstream>
+#include <array>
 #include "../imports.hpp"
 #include "../functions.hpp"
 

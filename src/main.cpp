@@ -32,6 +32,7 @@ SOFTWARE.
 #include <array>
 #include "include/imports.hpp"
 #include "include/functions.hpp"
+#include "include/modules/StrDect.inl"
 
 int main() {
   // initilizing curl
@@ -107,8 +108,9 @@ int main() {
 	  getline(cin, retryal2);
 	  Switch(retryal2);
 	  while (true) {
-	    if (find(begin(yes), end(yes), retryal2) != end(yes)) {string retryal2 = "yes"; break;}
-	    else if (find(begin(no), end(no), retryal2) != end(no)) { string retryal2 = "no"; break; }
+            // make a function of this
+	    if (StrDect(yes, retryal2)) {string retryal2 = "yes"; break;}
+	    else if (StrDect(no, retryal2)) { string retryal2 = "no"; break; }
 	    else { cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from yes or no" << endl; }
 	  }
 	}

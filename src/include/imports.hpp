@@ -7,8 +7,6 @@
 #include <fstream>   // For file input/output
 #include <stdexcept>
 
-template <std::size_t N>
-using StringArray = std::array<std::string, N>;
 using std::cout;
 using std::endl;
 using std::string;
@@ -20,6 +18,9 @@ using std::ifstream;
 using std::ios;
 using std::cin;
 using std::array;
+
+template <std::size_t N>
+using StringArray = std::array<std::string, N>;
 
 // Colours
 #define RED "\033[31m"
