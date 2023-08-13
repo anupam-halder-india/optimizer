@@ -9,7 +9,7 @@ string response;
 int osType = osDection();
 string name;
 
-string arch = "8";
+string arch;
 string GRIP;
 int wrapper;
 

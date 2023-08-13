@@ -38,7 +38,19 @@ int main() {
   if (!curl) { cerr << "Failed to initialize libcurl" << endl; return 1; }
 
   // curl necessary variables
-  CURLcode res = curl_easy_perform(curl);
+  
+
+   // checking if it is installed or not
+   while (true) {
+     CURLcode res = curl_easy_perform(curl);
+     if (res != CURLE_OK) {
+       cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << endl;
+       cout << BOLD << CYAN << "[i] " << RESET << "do you want to retry? (yes/no): ";
+       getline(cin, retryal);
+       int curlWrapper = Switch(retryal);
+       if (curlWrapper == 2) { break; } else { cout << BOLD << GREEN << "[!] " << RESET << "Download completed successfully." << endl; }
+     }
+   }
 
   // all the variables used
 
@@ -64,16 +76,13 @@ int main() {
     getline(cin, GRIP);
     wrapper = Switch(GRIP);
     if (wrapper == 1) { 
-      while (arch == "8" || arch == "9") {
-	string armWord; 
-	if (osType == 3) { string armWord = "arm"; } else string armWord = "";
-        cout << BOLD << MAGENTA << "[2.1] " << RESET << " What is your architecture, you can say 'cancel', to cancel the installation of gitlab runner ((arm32/armhf), arm64, amd64, aarch64, i386, ppc64el, s390x " + armWord + "): ";
-        getline(cin, arch);
-        arch = archType(arch, GRIP);
-      }
+      string armWord;
+      if (osType == 3) { string armWord = "arm"; } else string armWord = "";
+      cout << BOLD << MAGENTA << "[2.1] " << RESET << " What is your architecture, you can say 'cancel', to cancel the installation of gitlab runner ((arm32/armhf), arm64, amd64, aarch64, i386, ppc64el, s390x " + armWord + "): ";
+      getline(cin, arch);
+      archType(arch, GRIP);
       break;
-    } else if (wrapper == 2) { break; }
-    else {cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from yes or no" << endl;}
+    } else { break; }
   }
   
   // Execution of the instructions according to the given permissions
@@ -87,23 +96,9 @@ int main() {
 	else { cout << BOLD << RED << "[ERROR]" << RESET << "unknown error cant install gitlab runner" << endl; break;}
         // gitlab runner installation through its url and curl lib
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-      
-        // checking if it is installed or not
-        if (res != CURLE_OK) { 
-	  cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << endl;
-	  cout << BOLD << CYAN << "[i] " << RESET << "do you want to retry? (yes/no): ";
-	  getline(cin, retryal);
-	  Switch(retryal);
-	  while (true) {
-	    if (find(begin(yes), end(yes), retryal) != end(yes)) { string retryal = "yes"; break;}
-	    else if (find(begin(no), end(no), retryal) != end(no)) { string retryal = "no"; break; }
-	    else { cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from yes or no" << endl; }
-	  }
-	}
-        else { cout << BOLD << GREEN << "[!] " << RESET << "Download completed successfully." << endl; } }
 	curl_easy_cleanup(curl);
 	break;
-      
+      }
       while (retryal2 == "yes") { 
         int Dpackaging = system(dpkging.c_str());
 
