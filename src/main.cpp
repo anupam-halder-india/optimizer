@@ -47,8 +47,8 @@ int main() {
        cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << endl;
        cout << BOLD << CYAN << "[i] " << RESET << "do you want to retry? (yes/no): ";
        getline(cin, retryal);
-       int curlWrapper = Switch(retryal);
-       if (curlWrapper == 2) { break; } else { cout << BOLD << GREEN << "[!] " << RESET << "Download completed successfully." << endl; }
+       int wrapper = Switch(retryal);
+       if (wrapper == 2) { break; } else { cout << BOLD << GREEN << "[!] " << RESET << "Download completed successfully." << endl; }
      }
    }
 
@@ -90,13 +90,10 @@ int main() {
     while (true) {
       // gitlab runner installation url
       while (retryal == "yes") {
-        if (osType == 1 || osType == 2) { string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/deb/gitlab-runner_" + arch + ".deb"; string dpkging = "dpkg -i gitlab-runner_" + arch + ".deb"; }
-	else if (osType == 3 || osType == 4) { string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/rpm/gitlab-runner_" + arch + ".rpm"; string dpkging = "rpm -i gitlab-runner_" + arch + ".rpm && rpm -Uvh gitlab-runner_" + arch + ".rpm"; }
-	else if (osType == 404) { cout << BOLD << RED << "[ERROR]" << RESET << "error 404, you are using unknown oprating system to install git lab runner, can't install" << endl; break; }
-	else { cout << BOLD << RED << "[ERROR]" << RESET << "unknown error cant install gitlab runner" << endl; break;}
-        // gitlab runner installation through its url and curl lib
-        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-	curl_easy_cleanup(curl);
+        if (osType == 1 || osType == 2) { string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/deb/gitlab-runner_" + arch + ".deb"; string dpkging = "dpkg -i gitlab-runner_" + arch + ".deb"; curl_easy_setopt(curl, CURLOPT_URL, url.c_str()); curl_easy_cleanup(curl); }
+	else if (osType == 3 || osType == 4) { string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/rpm/gitlab-runner_" + arch + ".rpm"; string dpkging = "rpm -i gitlab-runner_" + arch + ".rpm && rpm -Uvh gitlab-runner_" + arch + ".rpm"; curl_easy_setopt(curl, CURLOPT_URL, url.c_str()); curl_easy_cleanup(curl); }
+	else if (osType == 404) { cout << BOLD << RED << "[ERROR]" << RESET << "error 404, you are using unknown oprating system to install git lab runner, can't install" << endl; retryal = "no"; break; }
+	else { cout << BOLD << RED << "[ERROR]" << RESET << "unknown error cant install gitlab runner" << endl; retryal = "no"; break;}
 	break;
       }
       while (retryal2 == "yes") { 

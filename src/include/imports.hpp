@@ -31,11 +31,11 @@ using std::cin;
 // Necessary booleans
 extern const string yes[5];
 extern const string no[5];
-extern int osType;
-extern bool hasSpaces;
+extern const int osType;
+extern const bool hasSpaces;
 
 // Necessary for curl
-extern string response;
+extern const string response;
 
 // The name section
 extern string name;
@@ -46,19 +46,19 @@ extern string GRIP; // GitLab Runner Installation Permission
 extern int wrapper;
 
 // From Arch section of GitLab Runner
-extern string arm32[6];
-extern string arm64[3];
-extern string amd64[3];
-extern string aarch64[3];
-extern string i386[2];
-extern string ppc64el[3];
-extern string s390x[3];
-extern string arm[3];
-extern string cancel[3];
+extern const string arm32[6];
+extern const string arm64[3];
+extern const string amd64[3];
+extern const string aarch64[3];
+extern const string i386[2];
+extern const string ppc64el[3];
+extern const string s390x[3];
+extern const string arm[3];
+extern const string cancel[3];
 
 // GitLab Runner installation command execution section
-extern string url;
-extern string dpkging;
+extern const string url;
+extern const string dpkging;
 extern string retryal;
 extern string retryal2;
 
