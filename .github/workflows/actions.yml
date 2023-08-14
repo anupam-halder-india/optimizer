@@ -131,7 +131,7 @@ jobs:
 
   cloging:
     name: Cloging
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    runs-on: ${{ needs.configrations.outputs.linx }}
     needs: [configrations, node, python, docker, cmake]
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule'
     steps:
@@ -154,7 +154,7 @@ jobs:
         cd $GITHUB_WORKSPACE
         if [ -d .git ]; then git init; fi
         curl https://deepsource.io/cli | sh
-        ./bin/deepsource report --analyzer test-coverage --key cxx --value-file ./coverage.info
+        ./bin/deepsource report --analyzer test-coverage --key ${{ secrets.DEEPSOURCE_DSN }} --value-file ./coverage.info
 
   linting:
     name: Linting
@@ -182,7 +182,7 @@ jobs:
 
   build:
     name: Buliding
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    runs-on: ${{ needs.configrations.outputs.linx }}
     needs: [configrations, python, cmake, cloging, linting, start-caching]
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule'
     outputs:
@@ -196,7 +196,7 @@ jobs:
       shell: bash
       id: build-steps
       run: |
-        if [ "$(uname)" == "Linux" ]; then apt-get install libcurl4-openssl-dev; fi; if [ "$(uname)" == "MINGW64" ]; then powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && chocolate install curl -y; fi
+        apt-get install libcurl4-openssl-dev librpm-dev libapt-pkg-dev
         pip install cpplint
         cd build && rm -rf *
         cmake .. -GNinja
@@ -256,7 +256,7 @@ jobs:
     #   - https://gh.io/using-larger-runners
     # Consider using larger runners for possible analysis time improvements.
     needs: [configrations, cloging, build] # add 'testing' when you finish building up the test
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    runs-on: ${{ needs.configrations.outputs.linx }}
 
     steps:
     - name: Initialize CodeQL
