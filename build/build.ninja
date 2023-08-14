@@ -46,21 +46,21 @@ build cmake_object_order_depends_target_optimizer: phony || CMakeFiles/optimizer
 
 build CMakeFiles/optimizer.dir/src/main.cpp.o: CXX_COMPILER__optimizer_ /root/optimizer/src/main.cpp || cmake_object_order_depends_target_optimizer
   DEP_FILE = CMakeFiles/optimizer.dir/src/main.cpp.o.d
-  FLAGS = -g -O0 -Wall -fprofile-arcs -std=c++11 -ftest-coverage -Werror -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
+  FLAGS = -g -O0 -Wall -fprofile-arcs -std=c++11 -ftest-coverage -DCMAKE_BUILD_TYPE=Debug -Werror --coverage -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
   INCLUDES = -I/usr/include/apt-pkg -I/usr/include/rpm
   OBJECT_DIR = CMakeFiles/optimizer.dir
   OBJECT_FILE_DIR = CMakeFiles/optimizer.dir/src
 
 build CMakeFiles/optimizer.dir/src/include/modules/functions.cpp.o: CXX_COMPILER__optimizer_ /root/optimizer/src/include/modules/functions.cpp || cmake_object_order_depends_target_optimizer
   DEP_FILE = CMakeFiles/optimizer.dir/src/include/modules/functions.cpp.o.d
-  FLAGS = -g -O0 -Wall -fprofile-arcs -std=c++11 -ftest-coverage -Werror -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
+  FLAGS = -g -O0 -Wall -fprofile-arcs -std=c++11 -ftest-coverage -DCMAKE_BUILD_TYPE=Debug -Werror --coverage -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
   INCLUDES = -I/usr/include/apt-pkg -I/usr/include/rpm
   OBJECT_DIR = CMakeFiles/optimizer.dir
   OBJECT_FILE_DIR = CMakeFiles/optimizer.dir/src/include/modules
 
 build CMakeFiles/optimizer.dir/src/include/modules/variables.cpp.o: CXX_COMPILER__optimizer_ /root/optimizer/src/include/modules/variables.cpp || cmake_object_order_depends_target_optimizer
   DEP_FILE = CMakeFiles/optimizer.dir/src/include/modules/variables.cpp.o.d
-  FLAGS = -g -O0 -Wall -fprofile-arcs -std=c++11 -ftest-coverage -Werror -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
+  FLAGS = -g -O0 -Wall -fprofile-arcs -std=c++11 -ftest-coverage -DCMAKE_BUILD_TYPE=Debug -Werror --coverage -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
   INCLUDES = -I/usr/include/apt-pkg -I/usr/include/rpm
   OBJECT_DIR = CMakeFiles/optimizer.dir
   OBJECT_FILE_DIR = CMakeFiles/optimizer.dir/src/include/modules
@@ -74,7 +74,7 @@ build CMakeFiles/optimizer.dir/src/include/modules/variables.cpp.o: CXX_COMPILER
 # Link the executable ../bin/optimizer
 
 build ../bin/optimizer: CXX_EXECUTABLE_LINKER__optimizer_ CMakeFiles/optimizer.dir/src/main.cpp.o CMakeFiles/optimizer.dir/src/include/modules/functions.cpp.o CMakeFiles/optimizer.dir/src/include/modules/variables.cpp.o | /usr/lib/arm-linux-gnueabihf/libcurl.so
-  FLAGS = -g -O0 -Wall -fprofile-arcs -std=c++11 -ftest-coverage -Werror -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
+  FLAGS = -g -O0 -Wall -fprofile-arcs -std=c++11 -ftest-coverage -DCMAKE_BUILD_TYPE=Debug -Werror --coverage -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin
   LINK_FLAGS = -fprofile-arcs -ftest-coverage
   LINK_LIBRARIES = /usr/lib/arm-linux-gnueabihf/libcurl.so
   OBJECT_DIR = CMakeFiles/optimizer.dir

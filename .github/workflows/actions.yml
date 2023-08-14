@@ -140,7 +140,7 @@ jobs:
       run: echo the clog is running sucessfully
 
   test-conversion:
-   # if: github.event_name != 'pull_request' || ( github.event_name == 'pull_request' && needs.configrations.outputs.changes == 'true' ) || (github.event_name != 'pull_request' && needs.configrations.outputs.changes == 'true')
+    if: github.event_name != 'pull_request' || ( github.event_name == 'pull_request' && needs.configrations.outputs.changes == 'true' ) || (github.event_name != 'pull_request' && needs.configrations.outputs.changes == 'true')
     needs: configrations
     runs-on: ${{ needs.configrations.outputs.linx }}
     steps:
@@ -151,6 +151,9 @@ jobs:
     - name: Report test-coverage to DeepSource
       shell: bash
       run: |
+        cd build
+        cmake  ..
+        ninja cpplint
         cd $GITHUB_WORKSPACE
         if [ -d .git ]; then git init; fi
         curl https://deepsource.io/cli | sh
@@ -188,6 +191,10 @@ jobs:
     outputs:
       build-script: ${{ steps.build-steps.run }}
     steps:
+
+    - name: setting up action checkout
+      uses: actions/checkout@v3
+
     - name: Configure and bulding CMake ninja
       shell: bash
       id: build-steps
@@ -233,6 +240,9 @@ jobs:
 #   runs-on: ${{ needs.configrations.outputs.runs-on }}
 #   needs: [configrations, cmake, cloging, build]
 #   steps:
+#   - name: setting up action checkout
+#     uses: actions/checkout@v3
+
 #   - name: Test
 #     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule'
 #     working-directory: ${{github.workspace}}/build

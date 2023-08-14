@@ -1,8 +1,8 @@
 # Minimum required version of cmake
 cmake_minimum_required(VERSION 3.22.1)
 
-SET(CMAKE_CXX_FLAGS "-g -O0 -Wall -fprofile-arcs -std=c++11 -ftest-coverage -Werror -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin")
-SET(CMAKE_C_FLAGS "-g -O0 -Wall -W -fprofile-arcs -ftest-coverage -std=c++11 -Werror -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin")
+SET(CMAKE_CXX_FLAGS "-g -O0 -Wall -fprofile-arcs -std=c++11 -ftest-coverage -DCMAKE_BUILD_TYPE=Debug -Werror --coverage -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin")
+SET(CMAKE_C_FLAGS "-g -O0 -Wall -W -fprofile-arcs -ftest-coverage -std=c++11 -DCMAKE_BUILD_TYPE=Debug --coverage -Werror -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin")
 SET(CMAKE_EXE_LINKER_FLAGS "-fprofile-arcs -ftest-coverage")
 
 # Project Name
