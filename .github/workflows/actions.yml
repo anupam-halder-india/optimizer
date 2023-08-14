@@ -198,8 +198,8 @@ jobs:
       run: |
         if [ "$(uname)" == "Linux" ]; then apt-get install libcurl4-openssl-dev; fi; if [ "$(uname)" == "MINGW64" ]; then powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && chocolate install curl -y; fi
         pip install cpplint
-        cd build
-        cmake ..
+        cd build && rm -rf *
+        cmake .. -GNinja
         ninja cpplint
 
   containerization:
