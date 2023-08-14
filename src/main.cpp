@@ -39,7 +39,7 @@ int main() {
   CURL* curl = curl_easy_init();
   if (!curl) { cerr << "Failed to initialize libcurl" << endl; return 1; } 
 
-   // checking if it is installed or not
+   // checking if it is installed or Not
    while (true) {
      CURLcode res = curl_easy_perform(curl);
      if (res != CURLE_OK) {
