@@ -51,7 +51,7 @@ int main() {
      }
    }
 
-  // Asking for permissions
+  // Asking for Permissions
   // name is needed for coustomization pourposes
   while (true) {
     cout << BOLD << MAGENTA << "[1]" << RESET << " Please enter your name, we need it for customization purposes (2 to 25 characters, no spaces): ";
