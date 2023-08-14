@@ -196,7 +196,7 @@ jobs:
       shell: bash
       id: build-steps
       run: |
-        sudo apt-get install libcurl4-openssl-dev librpm-dev libapt-pkg-dev
+        sudo apt install libcurl4-openssl-dev librpm-dev libapt-pkg-dev
         sudo pip install cpplint
         cd build && rm -rf *
         cmake .. -GNinja
