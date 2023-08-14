@@ -154,7 +154,7 @@ jobs:
         cd $GITHUB_WORKSPACE
         if [ -d .git ]; then git init; fi
         curl https://deepsource.io/cli | sh
-        ./bin/deepsource report --analyzer test-coverage --key ${{ secrets.DEEPSOURCE_DSN }} --value-file ./coverage.info
+        ./bin/deepsource report --analyzer test-coverage --key cxx --value-file ./coverage.info
 
   linting:
     name: Linting
@@ -196,8 +196,8 @@ jobs:
       shell: bash
       id: build-steps
       run: |
-        apt-get install libcurl4-openssl-dev librpm-dev libapt-pkg-dev
-        pip install cpplint
+        sudo apt-get install libcurl4-openssl-dev librpm-dev libapt-pkg-dev
+        sudo pip install cpplint
         cd build && rm -rf *
         cmake .. -GNinja
         ninja cpplint
