@@ -144,6 +144,10 @@ jobs:
     needs: configrations
     runs-on: ${{ needs.configrations.outputs.linx }}
     steps:
+
+    - name: setting up action checkout
+      uses: actions/checkout@v3
+
     - name: Report test-coverage to DeepSource
       shell: bash
       run: |
