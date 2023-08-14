@@ -51,8 +51,6 @@ int main() {
      }
    }
 
-  // all the variables used
-
   // Asking for permissions
 
   // name for coustomization pourposes
