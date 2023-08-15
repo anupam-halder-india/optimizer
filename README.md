@@ -34,6 +34,8 @@ To get started ✨ with the Optimizer project 📽️, follow these steps:
 
 4. Run the Optimizer tool: `./bin/optimizer`
 
+warning: this project is still under progress so don't run it untill we issue an release
+
 ## Contributing
 
 We welcome contributions from the community🫂! If you'd like to contribute 📃 to the Optimizer project 📽, please follow these steps:
