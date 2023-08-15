@@ -102,20 +102,16 @@ jobs:
         python-version: 'x'
 
   docker:
+    name: Docker Setup
     runs-on: ${{ needs.configrations.outputs.trex }}
     needs: configrations
-    if: (github.event_name == 'pull_request' && needs.configurations.outputs.changes == 'true') || (github.event_name != 'pull_request' && github.event_name != 'schedule' && needs.configrations.outputs.changes == 'true')
+    if: github.event_name != 'pull_request' || github.event_name != 'schedule' || ((github.event_name == 'pull_request' && github.event.action == 'closed' && needs.configrations.outputs.changes == 'true') || needs.configrations.outputs.changes == 'true')
     steps:
     - name: Login to Docker Hub
-      if: github.event_name != 'pull_request' || github.event_name != 'schedule' || ((github.event_name == 'pull_request' && github.event.action == 'closed' && needs.configrations.outputs.changes == 'true') || needs.configrations.outputs.changes == 'true')
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-    - name: Set up Docker Buildx
-      if: (github.event_name == 'pull_request' && needs.configurations.outputs.changes == 'true') || (github.event_name != 'pull_request' && github.event_name != 'schedule' && needs.configrations.outputs.changes == 'true')
-      uses: docker/setup-buildx-action@v2
 
   cmake:
     name: CMake Setup
@@ -208,6 +204,9 @@ jobs:
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule' && github.event_name != 'pull_request'
     needs: [configrations, docker, cloging, build]
     steps:
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
     - name: Docker containerization
       uses: docker/build-push-action@v4
       with:
