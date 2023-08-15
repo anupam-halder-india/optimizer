@@ -182,7 +182,7 @@ jobs:
 
   build:
     name: Buliding
-    runs-on: ${{ needs.configrations.outputs.linx }}
+    runs-on: ubuntu-latest
     needs: [configrations, python, cmake, cloging, linting, start-caching]
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule'
     outputs:
@@ -256,7 +256,7 @@ jobs:
     #   - https://gh.io/using-larger-runners
     # Consider using larger runners for possible analysis time improvements.
     needs: [configrations, cmake, python, cloging, build] # add 'testing' when you finish building up the test
-    runs-on: ${{ needs.configrations.outputs.linx }}
+    runs-on: ubuntu-latest
 
     steps:
     - name: Initialize CodeQL
