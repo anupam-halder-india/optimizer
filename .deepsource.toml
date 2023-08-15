@@ -1,5 +1,5 @@
 version = 1
 
 [[analyzers]]
-name = "cxx"
+name = "test-coverage"
 enable = true
