@@ -1,10 +1,12 @@
 # 🚀 Optimizer 🚀
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![GitHub Issues](https://img.shields.io/github/issues/anupam-halder-india/optimizer)](https://github.com/anupam-halder-india/optimizer/issues)
-[![GitHub Stars](https://img.shields.io/github/stars/anupam-halder-india/optimizer)](https://github.com/anupam-halder-india/optimizer/stargazers)
 [![CodeFactor](https://www.codefactor.io/repository/github/anupam-halder-india/optimizer/badge)](https://www.codefactor.io/repository/github/anupam-halder-india/optimizer)
+[![GitHub Stars](https://img.shields.io/github/stars/anupam-halder-india/optimizer)](https://github.com/anupam-halder-india/optimizer/stargazers)
+[![GitHub Issues](https://img.shields.io/github/issues/anupam-halder-india/optimizer)](https://github.com/anupam-halder-india/optimizer/issues)
 [![Actions](https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml/badge.svg)](https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml)
+
+[![DeepSource](https://app.deepsource.com/gh/anupam-halder-india/optimizer.svg/?label=active+issues&show_trend=true&token=61aWjabYdeWlZz92L4OhkRHL)](https://app.deepsource.com/gh/anupam-halder-india/optimizer/?ref=repository-badge) 
 
 The Optimizer project is a 🌟 comprehensive tool 🛠️ designed to enhance 🚀 system performance, streamline software settings, and optimize various aspects of your computing 🖥️ environment. Whether you're on Windows, 🐧 Linux, or 📱 Android, this project aims to provide a one-stop solution for fine-tuning your system 💻 and application settings 🎯.
 
@@ -15,9 +17,9 @@ The Optimizer project is a 🌟 comprehensive tool 🛠️ designed to enhance �
 - 🧹 Optimize software settings to achieve optimal performance.
 - 🌐 Customize website optimizations for a faster browsing experience.
 
-## Getting Started
+## Getting Started 🌟
 
-To get started with the Optimizer project, follow these steps:
+To get started ✨ with the Optimizer project 📽️, follow these steps:
 
 1. Clone the repository: `git clone https://github.com/your-username/optimizer.git`
 2. Navigate to the project directory: `cd optimizer`
@@ -34,7 +36,7 @@ To get started with the Optimizer project, follow these steps:
 
 ## Contributing
 
-We welcome contributions from the community! If you'd like to contribute to the Optimizer project, please follow these steps:
+We welcome contributions from the community🫂! If you'd like to contribute 📃 to the Optimizer project 📽, please follow these steps:
 
 1. Fork the repository.
 2. Create a new branch: `git checkout -b feature/your-feature-name`
@@ -45,7 +47,7 @@ We welcome contributions from the community! If you'd like to contribute to the 
 
 ## Documentation
 
-Coming soon! Stay tuned for detailed documentation on how to use and configure the Optimizer project.
+Coming soon! Stay tuned for detailed documentation 📔 on how to use and configure ⚙️ the Optimizer project.
 
 ## License
 
@@ -53,4 +55,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-Let's work together to make your computing experience more optimized and efficient! 🚀
+Let's work together to make your computing experience ✨ more optimized and efficient! 🚀
