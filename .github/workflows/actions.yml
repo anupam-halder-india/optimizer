@@ -129,10 +129,21 @@ jobs:
         cmakeVersion: latestrc
         ninjaVersion: latest
 
+  java:
+    name: Java for apt
+    needs: configrations
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    if: (github.event_name == 'pull_request' && needs.configurations.outputs.changes == 'true') || (github.event_name != 'pull_request' && github.event_name != 'schedule' && needs.configrations.outputs.changes == 'true')
+    steps:
+    - name: Set up Java
+      uses: actions/setup-java@v2
+      with:
+        java-version: 'latest'
+
   cloging:
     name: Cloging
     runs-on: ${{ needs.configrations.outputs.linx }}
-    needs: [configrations, node, python, docker, cmake]
+    needs: [configrations, node, python, docker, cmake, java]
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule'
     steps:
     - name: Conformation
@@ -183,7 +194,7 @@ jobs:
   build:
     name: Buliding
     runs-on: ${{ needs.configrations.outputs.linx }}
-    needs: [configrations, python, cmake, cloging, linting, start-caching]
+    needs: [configrations, python, cmake, java, cloging, linting, start-caching]
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule'
     outputs:
       build-script: ${{ steps.build-steps.run }}
@@ -191,6 +202,11 @@ jobs:
 
     - name: setting up action checkout
       uses: actions/checkout@v3
+
+    - name: Set up Java
+      uses: actions/setup-java@v2
+      with:
+        java-version: 'latest'
 
     - name: Configure and bulding CMake ninja
       shell: bash
@@ -255,7 +271,7 @@ jobs:
     #   - https://gh.io/supported-runners-and-hardware-resources
     #   - https://gh.io/using-larger-runners
     # Consider using larger runners for possible analysis time improvements.
-    needs: [configrations, cloging, build] # add 'testing' when you finish building up the test
+    needs: [configrations, cmake, python, java, cloging, build] # add 'testing' when you finish building up the test
     runs-on: ${{ needs.configrations.outputs.linx }}
 
     steps:
