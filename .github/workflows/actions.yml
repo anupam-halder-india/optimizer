@@ -188,7 +188,7 @@ jobs:
 
   containerization:
     name: Containerization with Docker
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    runs-on: ${{ needs.configrations.outputs.linx }}
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule' && github.event_name != 'pull_request'
     needs: [configrations, cloging, build]
     steps:
