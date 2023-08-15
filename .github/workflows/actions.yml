@@ -183,7 +183,7 @@ jobs:
   build:
     name: Buliding
     runs-on: ${{ needs.configrations.outputs.linx }}
-    needs: [configrations, python, cmake, java, cloging, linting, start-caching]
+    needs: [configrations, python, cmake, cloging, linting, start-caching]
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule'
     outputs:
       build-script: ${{ steps.build-steps.run }}
