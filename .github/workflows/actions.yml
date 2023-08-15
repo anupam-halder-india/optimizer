@@ -192,18 +192,11 @@ jobs:
     - name: setting up action checkout
       uses: actions/checkout@v3
 
-    - name: Set up Java
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'oracle'
-        java-version: '17'
-
-
     - name: Configure and bulding CMake ninja
       shell: bash
       id: build-steps
       run: |
-        sudo apt install libcurl4-openssl-dev librpm-dev libapt-pkg-dev
+        sudo apt-get install libcurl4-openssl-dev librpm-dev libapt-pkg-dev -y
         sudo pip install cpplint
         cd build && rm -rf *
         cmake .. -GNinja
@@ -273,13 +266,6 @@ jobs:
 
     # Autobuild attempts to build any compiled languages (C/C++, C#, Go, Java, or Swift).
     # If this step fails, then you should remove it and run the build manually (see below)
-
-    - name: Set up Java
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'oracle'
-        java-version: '17'
-
 
     - name: Analysis Build
       shell: bash
