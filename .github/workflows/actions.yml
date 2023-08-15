@@ -139,7 +139,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: 'oracle'
-        java-version: 'latest'
+        java-version: '17'
 
   cloging:
     name: Cloging
