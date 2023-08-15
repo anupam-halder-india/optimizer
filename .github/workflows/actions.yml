@@ -204,11 +204,6 @@ jobs:
     - name: setting up action checkout
       uses: actions/checkout@v3
 
-    - name: Set up Java
-      uses: actions/setup-java@v2
-      with:
-        java-version: 'latest'
-
     - name: Configure and bulding CMake ninja
       shell: bash
       id: build-steps
