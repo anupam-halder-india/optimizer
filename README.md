@@ -53,6 +53,4 @@ Coming soon! Stay tuned for detailed documentation 📔 on how to use and config
 
 This project is licensed under the [MIT License](LICENSE).
 
----
-
 Let's work together to make your computing experience ✨ more optimized and efficient! 🚀
