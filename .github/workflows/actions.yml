@@ -191,10 +191,10 @@ jobs:
     runs-on: ${{ needs.configrations.outputs.linx }}
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule' && github.event_name != 'pull_request'
     needs: [configrations, cloging, build]
-    steps:   
+    steps: 
     - name: setting up action checkout
       uses: actions/checkout@v3
-      
+
     - name: Inatalling Docker cli
       run: |
         if [[ "${{ runner.os }}" == "Linux" ]]; then
@@ -269,7 +269,7 @@ jobs:
 
   anylize:
     name: Anylize
-    if: needs.configrations.outputs.changes == 'true' && github.event_name == 'schedule'
+    if: needs.configrations.outputs.changes == 'true' || github.event_name == 'schedule' || (github.event_name == 'pull_request' && needs.configrations.outputs.changes == 'true')
     # Runner size impacts CodeQL analysis time. To learn more, please see:
     #   - https://gh.io/recommended-hardware-resources-for-running-codeql
     #   - https://gh.io/supported-runners-and-hardware-resources
