@@ -1,6 +1,6 @@
-# 🚀 Optimizer 🚀
+<h1 align="center"> 🚀 Optimizer 🚀 </h1>
 
-<p align="center">
+<div align="center">
    <a href="https://github.com/anupam-halder-india/optimizer/search?l=cmake"><img src="https://img.shields.io/badge/CMake-064F8C?style=for-the-badge&logo=cmake&logoColor=white"></a>
    <a href="https://hub.docker.com/repository/docker/anupam656/optimizer/general?editDescription=true#description"><img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"></a>
    <a href="https://github.com/anupam-halder-india/optimizer/search?l=c%2B%2B"><img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white"></a>
@@ -15,7 +15,9 @@
   <a href="https://github.com/anupam-halder-india/optimizer/stargazers"><img src="https://img.shields.io/github/stars/anupam-halder-india/optimizer?style=for-the-badge" alt="GitHub Stars"></a>
   <a href="https://github.com/anupam-halder-india/optimizer/issues"><img src="https://img.shields.io/github/issues/anupam-halder-india/optimizer?style=for-the-badge" alt="GitHub Issues"></a>
   <a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml/badge.svg" alt="Actions"></a>
-</p>
+</div>
+
+<br>
 
 The Optimizer project is a 🌟 comprehensive tool 🛠️ designed to enhance 🚀 system performance, streamline software settings, and optimize various aspects of your computing 🖥️ environment. Whether you're on Windows, 🐧 Linux, or 📱 Android, this project aims to provide a one-stop solution for fine-tuning your system 💻 and application settings 🎯.
 
