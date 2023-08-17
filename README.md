@@ -10,14 +10,14 @@
 
 The Optimizer project is a 🌟 comprehensive tool 🛠️ designed to enhance 🚀 system performance, streamline software settings, and optimize various aspects of your computing 🖥️ environment. Whether you're on Windows, 🐧 Linux, or 📱 Android, this project aims to provide a one-stop solution for fine-tuning your system 💻 and application settings 🎯.
 
-## Features
+## ✨ Features ✨
 
 - 🚀 Boost system performance and responsiveness.
 - ⚙️ Configure optimization settings for Windows, Linux, and Android.
 - 🧹 Optimize software settings to achieve optimal performance.
 - 🌐 Customize website optimizations for a faster browsing experience.
 
-## Getting Started 🌟
+## 🌟 Getting Started 🌟
 
 To get started ✨ with the Optimizer project 📽️, follow these steps:
 
@@ -36,7 +36,7 @@ To get started ✨ with the Optimizer project 📽️, follow these steps:
 
 warning: this project is still under progress so don't run it untill we issue an release
 
-## Contributing
+## 🫂 Contributing
 
 We welcome contributions from the community🫂! If you'd like to contribute 📃 to the Optimizer project 📽, please follow these steps:
 
@@ -47,11 +47,11 @@ We welcome contributions from the community🫂! If you'd like to contribute �
 5. Create a pull request on GitHub.
 
 
-## Documentation
+## 📃 Documentation
 
 Coming soon! Stay tuned for detailed documentation 📔 on how to use and configure ⚙️ the Optimizer project.
 
-## License
+## 🪪 License
 
 This project is licensed under the [MIT License](LICENSE).
 
