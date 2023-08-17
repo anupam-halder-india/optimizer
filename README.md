@@ -5,6 +5,7 @@
    <a href="https://hub.docker.com/repository/docker/anupam656/optimizer/general?editDescription=true#description"><img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"></a>
    <a href="https://github.com/anupam-halder-india/optimizer/search?l=c%2B%2B"><img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white"></a>
    <img src="https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white">
+   <br>
    <a href="https://app.deepsource.com/gh/anupam-halder-india/optimizer/?ref=repository-badge"><img src="https://app.deepsource.com/gh/anupam-halder-india/optimizer.svg/?label=active+issues&show_trend=true&token=61aWjabYdeWlZz92L4OhkRHL" alt="DeepSource"></a>
 
    <br>
