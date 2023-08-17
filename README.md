@@ -1,12 +1,20 @@
 # 🚀 Optimizer 🚀
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![CodeFactor](https://www.codefactor.io/repository/github/anupam-halder-india/optimizer/badge)](https://www.codefactor.io/repository/github/anupam-halder-india/optimizer)
-[![GitHub Stars](https://img.shields.io/github/stars/anupam-halder-india/optimizer)](https://github.com/anupam-halder-india/optimizer/stargazers)
-[![GitHub Issues](https://img.shields.io/github/issues/anupam-halder-india/optimizer)](https://github.com/anupam-halder-india/optimizer/issues)
-[![Actions](https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml/badge.svg)](https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml)
+<p align="center">
+   <a href="https://github.com/anupam-halder-india/optimizer/search?l=cmake"><img src="https://img.shields.io/badge/CMake-064F8C?style=for-the-badge&logo=cmake&logoColor=white"></a>
+   <a href="https://hub.docker.com/repository/docker/anupam656/optimizer/general?editDescription=true#description"><img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"></a>
+   <a href="https://github.com/anupam-halder-india/optimizer/search?l=c%2B%2B"><img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white"></a>
+   <img src="https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white">
+   <a href="https://app.deepsource.com/gh/anupam-halder-india/optimizer/?ref=repository-badge"><img src="https://app.deepsource.com/gh/anupam-halder-india/optimizer.svg/?label=active+issues&show_trend=true&token=61aWjabYdeWlZz92L4OhkRHL" alt="DeepSource"></a>
 
-[![DeepSource](https://app.deepsource.com/gh/anupam-halder-india/optimizer.svg/?label=active+issues&show_trend=true&token=61aWjabYdeWlZz92L4OhkRHL)](https://app.deepsource.com/gh/anupam-halder-india/optimizer/?ref=repository-badge) 
+   <br>
+   <br>
+     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License"></a>
+  <a href="https://www.codefactor.io/repository/github/anupam-halder-india/optimizer"><img src="https://www.codefactor.io/repository/github/anupam-halder-india/optimizer/badge?style=for-the-badge" alt="CodeFactor"></a>
+  <a href="https://github.com/anupam-halder-india/optimizer/stargazers"><img src="https://img.shields.io/github/stars/anupam-halder-india/optimizer?style=for-the-badge" alt="GitHub Stars"></a>
+  <a href="https://github.com/anupam-halder-india/optimizer/issues"><img src="https://img.shields.io/github/issues/anupam-halder-india/optimizer?style=for-the-badge" alt="GitHub Issues"></a>
+  <a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml/badge.svg" alt="Actions"></a>
+</p>
 
 The Optimizer project is a 🌟 comprehensive tool 🛠️ designed to enhance 🚀 system performance, streamline software settings, and optimize various aspects of your computing 🖥️ environment. Whether you're on Windows, 🐧 Linux, or 📱 Android, this project aims to provide a one-stop solution for fine-tuning your system 💻 and application settings 🎯.
 
