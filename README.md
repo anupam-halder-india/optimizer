@@ -1,13 +1,4 @@
-<h1 align="center"> 🚀 Optimizer 🚀 </h1>
-
-<div align="center">
-   <h3>🧑‍💻 programming badges 🏅</h3>
-   <a href="https://github.com/anupam-halder-india/optimizer/search?l=cmake"><img src="https://img.shields.io/badge/CMake-064F8C?style=for-the-badge&logo=cmake&logoColor=white"></a>
-   <a href="https://hub.docker.com/repository/docker/anupam656/optimizer/general?editDescription=true#description"><img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"></a>
-   <a href="https://github.com/anupam-halder-india/optimizer/search?l=c%2B%2B"><img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white"></a>
-   <img src="https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white">
-   <br>
-   <br>
+<h1> 🚀 Optimizer 🚀 </h1>
    <a href="https://app.deepsource.com/gh/anupam-halder-india/optimizer/?ref=repository-badge"><img src="https://app.deepsource.com/gh/anupam-halder-india/optimizer.svg/?label=active+issues&show_trend=true&token=61aWjabYdeWlZz92L4OhkRHL" alt="DeepSource"></a>
    <br>
    <h3> 🫂 community badges 🏅 </h3>
@@ -21,7 +12,6 @@
    </div>
   <br>
   <a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml/badge.svg" alt="Actions"></a>
-</div>
 
 <br>
 
@@ -33,6 +23,12 @@ The Optimizer project is a 🌟 comprehensive tool 🛠️ designed to enhance �
 - ⚙️ Configure optimization settings for Windows, Linux, and Android.
 - 🧹 Optimize software settings to achieve optimal performance.
 - 🌐 Customize website optimizations for a faster browsing experience.
+
+## 🏗️ build with 🏗️
+*  <a href="https://github.com/anupam-halder-india/optimizer/search?l=cmake"><img src="https://img.shields.io/badge/CMake-064F8C?style=for-the-badge&logo=cmake&logoColor=white"></a>
+*  <img src="https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white">
+*  <a href="https://hub.docker.com/repository/docker/anupam656/optimizer/general?editDescription=true#description"><img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"></a>
+*  <a href="https://github.com/anupam-halder-india/optimizer/search?l=c%2B%2B"><img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white"></a>
 
 ## 🌟 Getting Started 🌟
 
@@ -53,7 +49,7 @@ To get started ✨ with the Optimizer project 📽️, follow these steps:
 
 warning: this project is still under progress so don't run it untill we issue an release
 
-## 🫂 Contributing
+## 🫂 Contributing 🫂
 
 We welcome contributions from the community🫂! If you'd like to contribute 📃 to the Optimizer project 📽, please follow these steps:
 
