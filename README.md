@@ -1,6 +1,7 @@
 <h1 align="center"> 🚀 Optimizer 🚀 </h1>
 
 <div align="center">
+   <h3>🧑‍💻 programming badges 🏅</h3>
    <a href="https://github.com/anupam-halder-india/optimizer/search?l=cmake"><img src="https://img.shields.io/badge/CMake-064F8C?style=for-the-badge&logo=cmake&logoColor=white"></a>
    <a href="https://hub.docker.com/repository/docker/anupam656/optimizer/general?editDescription=true#description"><img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"></a>
    <a href="https://github.com/anupam-halder-india/optimizer/search?l=c%2B%2B"><img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white"></a>
@@ -10,6 +11,7 @@
 
    <br>
    <br>
+   <h3> 🫂 community badges 🏅 </h3>
      <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License"></a>
   <a href="https://www.codefactor.io/repository/github/anupam-halder-india/optimizer"><img src="https://www.codefactor.io/repository/github/anupam-halder-india/optimizer/badge?style=for-the-badge" alt="CodeFactor"></a>
   <a href="https://github.com/anupam-halder-india/optimizer/stargazers"><img src="https://img.shields.io/github/stars/anupam-halder-india/optimizer?style=for-the-badge" alt="GitHub Stars"></a>
