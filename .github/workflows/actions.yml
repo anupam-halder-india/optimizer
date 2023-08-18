@@ -49,27 +49,31 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
-    - name: setting up action checkout
-      uses: actions/checkout@v3
+      - name: setting up action checkout
+        uses: actions/checkout@v3
 
-    - name: Before commit hash
-      id: before-commit-hash
-      shell: bash
-      run: |
-        echo "BEFORE_COMMIT_HASH=${{ github.event.before }}" >> $GITHUB_OUTPUT
-        BEFORE_COMMIT_HASH=${{ github.event.before }}
-        echo "Before commit hash: $BEFORE_COMMIT_HASH"
+      - name: Before commit hash
+        id: before-commit-hash
+        shell: bash
+        run: |
+          echo "BEFORE_COMMIT_HASH=${{ github.event.before }}" >> $GITHUB_OUTPUT
+          BEFORE_COMMIT_HASH=${{ github.event.before }}
+          echo "Before commit hash: $BEFORE_COMMIT_HASH"
 
-    - name: Source Code changes detection
-      uses: dorny/paths-filter@v2
-      id: changes
-      with:
-        filters: |
-          files:
-            - 'src/**'
+      - name: Source Code changes detection
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            files:
+              - 'src/**'
+
+      - name: Upload artifact
+        if: failure()
+        uses: actions/upload-pages-artifact@v2
 
   page-build:
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    runs-on: ${{ needs.configrations.outputs.linx }}
     needs: configrations
     if: github.event_name != 'pull_request'
     concurrency:
@@ -104,10 +108,13 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
-
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
+
+      - name: Upload artifact
+        if: failure()
+        uses: actions/upload-pages-artifact@v2
 
   branch-deletion:
     name: marged branch deletion
@@ -120,16 +127,24 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Upload artifact
+      if: failure()
+      uses: actions/upload-pages-artifact@v2
+
   node:
     name: Node
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
     if: (github.event_name == 'pull_request' && needs.configurations.outputs.changes == 'true') || (github.event_name != 'pull_request' && github.event_name != 'schedule' && needs.configrations.outputs.changes == 'true')
     steps:
-    - name: Use Node.js 18 for caching
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
+      - name: Use Node.js 18 for caching
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Upload artifact
+        if: failure()
+        uses: actions/upload-pages-artifact@v2
 
   python:
     name: Python
@@ -137,10 +152,14 @@ jobs:
     needs: configrations
     if: (github.event_name == 'pull_request' && needs.configurations.outputs.changes == 'true') || (github.event_name != 'pull_request' && github.event_name != 'schedule' && needs.configrations.outputs.changes == 'true')
     steps:
-    - name: Installing Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 'x'
+      - name: Installing Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 'x'
+
+      - name: Upload artifact
+        if: failure()
+        uses: actions/upload-pages-artifact@v2
 
   cmake:
     name: CMake Setup
@@ -148,11 +167,15 @@ jobs:
     needs: configrations
     if: (github.event_name == 'pull_request' && needs.configurations.outputs.changes == 'true') || (github.event_name != 'pull_request' && github.event_name != 'schedule' && needs.configrations.outputs.changes == 'true')
     steps:
-    - name: Setting up CMake
-      uses: lukka/get-cmake@latest
-      with:
-        cmakeVersion: latestrc
-        ninjaVersion: latest
+      - name: Setting up CMake
+        uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latestrc
+          ninjaVersion: latest
+
+      - name: Upload artifact
+        if: failure()
+        uses: actions/upload-pages-artifact@v2
 
   cloging:
     name: Cloging
@@ -160,26 +183,33 @@ jobs:
     needs: [configrations, node, python, cmake]
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule'
     steps:
-    - name: Conformation
-      shell: bash
-      run: echo the clog is running sucessfully
+      - name: Conformation
+        shell: bash
+        run: echo the clog is running sucessfully
+
+      - name: Upload artifact
+        if: failure()
+        uses: actions/upload-pages-artifact@v2
 
   test-conversion:
     if: github.event_name != 'pull_request' || ( github.event_name == 'pull_request' && needs.configrations.outputs.changes == 'true' ) || (github.event_name != 'pull_request' && needs.configrations.outputs.changes == 'true')
     needs: configrations
     runs-on: ${{ needs.configrations.outputs.linx }}
     steps:
+      - name: setting up action checkout
+        uses: actions/checkout@v3
 
-    - name: setting up action checkout
-      uses: actions/checkout@v3
+      - name: Report test-coverage to DeepSource
+        shell: bash
+        run: |
+          cd $GITHUB_WORKSPACE
+          if [ -d .git ]; then git init; fi
+          curl https://deepsource.io/cli | sh
+          ./bin/deepsource report --analyzer test-coverage --key cxx --value-file ./coverage.info
 
-    - name: Report test-coverage to DeepSource
-      shell: bash
-      run: |
-        cd $GITHUB_WORKSPACE
-        if [ -d .git ]; then git init; fi
-        curl https://deepsource.io/cli | sh
-        ./bin/deepsource report --analyzer test-coverage --key cxx --value-file ./coverage.info
+      - name: Upload artifact
+        if: failure()
+        uses: actions/upload-pages-artifact@v2
 
   linting:
     name: Linting
@@ -187,8 +217,12 @@ jobs:
     needs: [configrations, cloging]
     runs-on: ubuntu-latest
     steps:
-    - name: Lint Code Base
-      uses: github/super-linter@v5
+      - name: Lint Code Base
+        uses: github/super-linter@v5
+
+      - name: Upload artifact
+        if: failure()
+        uses: actions/upload-pages-artifact@v2
 
   start-caching:
     name: Cache start
@@ -196,14 +230,18 @@ jobs:
     needs: [configrations, node, cloging]
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule' && github.event_name != 'pull_request'
     steps:
-    - name: caching start
-      id: restore-cache
-      uses: actions/cache@v3
-      with:
-        path: |
-          build/CMakeCache.txt
-          build/CMakeFiles
-        key: ${{ runner.os }}-action-cache-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('**/*.cpp') }}-${{ hashFiles('**/**/*.cpp') }}-${{ hashFiles('**/*.h') }}-${{ hashFiles('**/**/*.h') }}-${{ hashFiles('Dockerfile') }}-${{ github.run_id }}
+      - name: caching start
+        id: restore-cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            build/CMakeCache.txt
+            build/CMakeFiles
+          key: ${{ runner.os }}-action-cache-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('**/*.cpp') }}-${{ hashFiles('**/**/*.cpp') }}-${{ hashFiles('**/*.h') }}-${{ hashFiles('**/**/*.h') }}-${{ hashFiles('Dockerfile') }}-${{ github.run_id }}
+
+      - name: Upload artifact
+        if: failure()
+        uses: actions/upload-pages-artifact@v2
 
   build:
     name: Buliding
@@ -213,19 +251,22 @@ jobs:
     outputs:
       build-script: ${{ steps.build-steps.run }}
     steps:
+      - name: setting up action checkout
+        uses: actions/checkout@v3
 
-    - name: setting up action checkout
-      uses: actions/checkout@v3
+      - name: Configure and bulding CMake ninja
+        shell: bash
+        id: build-steps
+        run: |
+          sudo apt-get install libcurl4-openssl-dev librpm-dev libapt-pkg-dev ninja-build -y
+          pip install cpplint
+          cd build && rm -rf *
+          cmake .. -GNinja
+          ninja cpplint
 
-    - name: Configure and bulding CMake ninja
-      shell: bash
-      id: build-steps
-      run: |
-        sudo apt-get install libcurl4-openssl-dev librpm-dev libapt-pkg-dev ninja-build -y
-        pip install cpplint
-        cd build && rm -rf *
-        cmake .. -GNinja
-        ninja cpplint
+      - name: Upload artifact
+        if: failure()
+        uses: actions/upload-pages-artifact@v2
 
   containerization:
     name: Containerization with Docker
@@ -233,49 +274,53 @@ jobs:
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule' && github.event_name != 'pull_request'
     needs: [configrations, cloging, build]
     steps:
-    - name: setting up action checkout
-      uses: actions/checkout@v3
+      - name: setting up action checkout
+        uses: actions/checkout@v3
 
-    - name: Inatalling Docker cli
-      run: |
-        if [[ "${{ runner.os }}" == "Linux" ]]; then
-          sudo apt install ca-certificates curl gnupg
-          sudo install -m 0755 -d /etc/apt/keyrings
-          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-          sudo chmod a+r /etc/apt/keyrings/docker.gpg
-          echo \
-            "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-            "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-            sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-            sudo apt update
-            sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-        elif [[ "${{ runner.os }}" == "macOS" ]]; then
-          brew update
-          brew install --cask docker
-        fi
+      - name: Inatalling Docker cli
+        run: |
+          if [[ "${{ runner.os }}" == "Linux" ]]; then
+            sudo apt install ca-certificates curl gnupg
+            sudo install -m 0755 -d /etc/apt/keyrings
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+            sudo chmod a+r /etc/apt/keyrings/docker.gpg
+            echo \
+              "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+              "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+              sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+              sudo apt update
+              sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+          elif [[ "${{ runner.os }}" == "macOS" ]]; then
+            brew update
+            brew install --cask docker
+          fi
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-    - name: Debug Output
-      run: |
-        ls -R
-        pwd
-        echo "Contents of directory: $(ls)"
+      - name: Debug Output
+        run: |
+          ls -R
+          pwd
+          echo "Contents of directory: $(ls)"
 
-    - name: Docker containerization
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        file: ./Dockerfile
-        push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/optimizer:latest
+      - name: Docker containerization
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/optimizer:latest
+
+      - name: Upload artifact
+        if: failure()
+        uses: actions/upload-pages-artifact@v2
 
   end-caching:
     name: Cache Ending
@@ -283,30 +328,37 @@ jobs:
     needs: [configrations, node, cloging, start-caching, build]
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     steps:
-    - name: Save Action Cache
-      uses: actions/cache@v3
-      with:
-        path: |
-          build/CMakeCache.txt
-          build/CMakeFiles
-          artifacts
-        key: ${{ runner.os }}-action-cache-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('**/*.cpp') }}-${{ hashFiles('**/**/*.cpp') }}-${{ hashFiles('**/*.h') }}-${{ hashFiles('**/**/*.h') }}-${{ hashFiles('Dockerfile') }}-${{ github.run_id }}
+      - name: Save Action Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            build/CMakeCache.txt
+            build/CMakeFiles
+            artifacts
+          key: ${{ runner.os }}-action-cache-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('**/*.cpp') }}-${{ hashFiles('**/**/*.cpp') }}-${{ hashFiles('**/*.h') }}-${{ hashFiles('**/**/*.h') }}-${{ hashFiles('Dockerfile') }}-${{ github.run_id }}
+
+      - name: Upload artifact
+        if: failure()
+        uses: actions/upload-pages-artifact@v2
 
 # testing:
 #   name: Test
 #   runs-on: ${{ needs.configrations.outputs.runs-on }}
 #   needs: [configrations, cmake, cloging, build]
 #   steps:
-#   - name: setting up action checkout
-#     uses: actions/checkout@v3
+#     - name: setting up action checkout
+#       uses: actions/checkout@v3
 
-#   - name: Test
-#     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule'
-#     working-directory: ${{github.workspace}}/build
-#     shell: bash
-       # Execute tests defined by the CMake configuration.
-       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-#     run: ctest
+#     - name: Test
+#       if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule'
+#       working-directory: ${{github.workspace}}/build
+#       shell: bash
+         # Execute tests defined by the CMake configuration.
+         # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+#       run: ctest
+#     - name: Upload artifact
+#       if: failure()
+#       uses: actions/upload-pages-artifact@v2
 
   anylize:
     name: Anylize
@@ -320,25 +372,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: setting up action checkout
-      uses: actions/checkout@v3
+      - name: setting up action checkout
+        uses: actions/checkout@v3
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        languages: ${{ needs.configrations.outputs.languages }}
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ needs.configrations.outputs.languages }}
 
     # Autobuild attempts to build any compiled languages (C/C++, C#, Go, Java, or Swift).
     # If this step fails, then you should remove it and run the build manually (see below)
 
-    - name: Analysis Build
-      shell: bash
-      run: ${{ needs.build.outputs.build-script }}
+      - name: Analysis Build
+        shell: bash
+        run: ${{ needs.build.outputs.build-script }}
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
-      with:
-        category: "/language:${{matrix.language}}"
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "/language:${{matrix.language}}"
+
+      - name: Upload artifact
+        if: failure()
+        uses: actions/upload-pages-artifact@v2
