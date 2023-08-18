@@ -144,36 +144,6 @@ jobs:
         if: failure()
         uses: actions/upload-pages-artifact@v2
 
-  artifact-deletion:
-    name: Artifact Delation
-    needs: configrations
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
-   # if: github.event_name == 'schedule'
-    steps:
-      - name: Delete Artifacts
-        uses: actions/github-script@v4
-        with:
-          script: |
-            const octokit = context.octokit;
-
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const runId = context.runId;
-
-            const artifacts = await octokit.actions.listWorkflowRunArtifacts({
-              owner,
-              repo,
-              run_id: runId
-            });
-
-            for (const artifact of artifacts.data.artifacts) {
-              await octokit.actions.deleteArtifact({
-                owner,
-                repo,
-                artifact_id: artifact.id
-              });
-            }
-
   python:
     name: Python
     runs-on: ${{ needs.configrations.outputs.runs-on }}
