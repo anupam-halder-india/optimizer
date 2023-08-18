@@ -118,7 +118,7 @@ jobs:
     name: marged branch deletion
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+   # if: github.event_name == 'pull_request' && github.event.action == 'closed'
     steps:
     - name: branch deletion
       uses: SvanBoxel/delete-merged-branch@main
