@@ -97,7 +97,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ${{ needs.configrations.outputs.runs-on }}
-    if: github.event_name != "pull_request"
+    if: github.event_name != 'pull_request'
     needs: [configrations, page-build]
     concurrency:
       group: "pages"
@@ -116,7 +116,7 @@ jobs:
 
   delete_artifacts:
     runs-on: ubuntu-latest
-    if: github.event_name == "schedule"
+    if: github.event_name == 'schedule'
     steps:
       - name: Delete artifacts
         uses: actions/github-script@v5
