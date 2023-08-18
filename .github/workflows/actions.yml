@@ -108,7 +108,7 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
 
       - name: Upload artifact
@@ -117,9 +117,9 @@ jobs:
 
       - name: Delete Artifact
         run: |
-          export TOKEN="${{ secrets.GITHUB_TOKEN }}"
-          export WORKFLOW_ID="${{ github.event.workflow.id }}"
-          export ARTIFACT_NAME="github-pages"
+          TOKEN="${{ secrets.GITHUB_TOKEN }}"
+          WORKFLOW_ID="${{ github.event.workflow.id }}"
+          ARTIFACT_NAME="github-pages"
           
           echo "Fetching artifacts for the workflow run..."
           artifacts_response=$(curl -s -H "Authorization: token $TOKEN" \
