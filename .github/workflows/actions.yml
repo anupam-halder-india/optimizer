@@ -97,6 +97,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ${{ needs.configrations.outputs.runs-on }}
+    if: github.event_name != "pull_request"
     needs: [configrations, page-build]
     concurrency:
       group: "pages"
@@ -113,41 +114,39 @@ jobs:
         if: failure()
         uses: actions/upload-pages-artifact@v2
 
-    #  - name: Delete Artifact
-   #     shell: bash
-   #     run: |
-    #      if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
-   #         sudo apt-get update
-   #         sudo apt-get install -y curl
-  #        elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
-  #          brew install curl
-   #       elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-  #          powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"
-  #          choco install curl
-   #       else
-  #          echo "Unsupported OS"
-    #        exit 1
-   #       fi
-          
-    #      TOKEN="${{ secrets.GITHUB_TOKEN }}"
-     #     WORKFLOW_ID="${{ github.event.workflow.id }}"
-     #     ARTIFACT_NAME="github-pages"
-          
-     #     echo "Fetching artifacts for the workflow run..."
-     #     artifacts_response=$(curl -s -H "Authorization: token $TOKEN" \
-     #       "https://api.github.com/repos/${{ github.repository }}/actions/runs/$WORKFLOW_ID/artifacts")
-          
-      #    artifact_id=$(echo "$artifacts_response" | jq -r --arg ARTIFACT_NAME "$ARTIFACT_NAME" \
-     #       '.artifacts[] | select(.name == $ARTIFACT_NAME) | .id')
-          
-      #    if [ -n "$artifact_id" ]; then
-       #     echo "Deleting artifact $ARTIFACT_NAME with ID $artifact_id..."
-      #      delete_response=$(curl -s -X DELETE -H "Authorization: token $TOKEN" \
-      #        "https://api.github.com/repos/${{ github.repository }}/actions/artifacts/$artifact_id")
-     #       echo "$delete_response"
-      #    else
-      #      echo "No artifact with name $ARTIFACT_NAME found."
-       #   fi
+  delete_artifacts:
+    runs-on: ubuntu-latest
+    if: github.event_name == "schedule"
+    steps:
+      - name: Delete artifacts
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const runs = await github.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: context.workflow,
+              status: 'completed',
+            });
+
+            for (const run of runs.data.workflow_runs) {
+              if (run.id !== context.runId) {
+                const artifacts = await github.actions.listWorkflowRunArtifacts({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  run_id: run.id,
+                });
+
+                for (const artifact of artifacts.data.artifacts) {
+                  await github.actions.deleteArtifact({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    artifact_id: artifact.id,
+                  });
+                }
+              }
+            }
 
   branch-deletion:
     name: marged branch deletion
