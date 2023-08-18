@@ -146,8 +146,9 @@ jobs:
 
   artifact-deletion:
     name: Artifact Delation
+    needs: configrations
     runs-on: ${{ needs.configrations.outputs.runs-on }}
-    if: github.event_name == 'schedule'
+   # if: github.event_name == 'schedule'
     steps:
       - name: Delete Artifacts
         uses: actions/github-script@v4
