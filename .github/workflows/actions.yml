@@ -114,40 +114,6 @@ jobs:
         if: failure()
         uses: actions/upload-pages-artifact@v2
 
-  delete_artifacts:
-    runs-on: ubuntu-latest
-    #if: github.event_name == 'schedule'
-    steps:
-      - name: Delete artifacts
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const runs = await github.actions.listWorkflowRuns({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: context.workflow,
-              status: 'completed',
-            });
-
-            for (const run of runs.data.workflow_runs) {
-              if (run.id !== context.runId) {
-                const artifacts = await github.actions.listWorkflowRunArtifacts({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  run_id: run.id,
-                });
-
-                for (const artifact of artifacts.data.artifacts) {
-                  await github.actions.deleteArtifact({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    artifact_id: artifact.id,
-                  });
-                }
-              }
-            }
-
   branch-deletion:
     name: marged branch deletion
     runs-on: ${{ needs.configrations.outputs.runs-on }}
