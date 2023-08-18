@@ -33,7 +33,7 @@ The Optimizer project is a 🌟 comprehensive tool 🛠️ designed to enhance �
 *  <a href="https://hub.docker.com/repository/docker/anupam656/optimizer/general?editDescription=true#description"><img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"></a>
 *  <a href="https://github.com/anupam-halder-india/optimizer/search?l=c%2B%2B"><img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white"></a>
 
-## 🌟 Getting Started 🌟
+## 🌟 Getting Started 🌟 for 🫂 applicarion users 🌟
 
 To get started ✨ with the Optimizer project 📽️, follow these steps:
 
@@ -48,7 +48,11 @@ To get started ✨ with the Optimizer project 📽️, follow these steps:
    ninja cpplint
    ```
 
-4. Run the Optimizer tool: `./bin/optimizer`
+4. Run the Optimizer tool: `./bin/optimizer` (the application, pls run the relese version of it)
+
+# 🌟 Getting started for 🧑‍💻 developers and 🫂 contributers
+
+in progess...
 
 ## 🫂 Contributing 🫂
 
