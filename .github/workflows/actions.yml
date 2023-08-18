@@ -68,6 +68,47 @@ jobs:
           files:
             - 'src/**'
 
+  page-build:
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    needs: configrations
+    if: github.event_name != 'pull_request'
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+      - name: Upload artifact
+        if: failure()
+        uses: actions/upload-pages-artifact@v2
+
+  # Deployment job
+  page-deploy:
+    if: github.event_name != 'pull_request'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    needs: [configrations, page-build]
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
+
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+
   branch-deletion:
     name: marged branch deletion
     runs-on: ${{ needs.configrations.outputs.runs-on }}
