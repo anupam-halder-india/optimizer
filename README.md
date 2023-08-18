@@ -1,4 +1,7 @@
 <h1> 🚀 Optimizer 🚀 </h1>
+
+warning: this project is still under progress so don't run the exicutable files untill we issue an release 
+
    <a href="https://app.deepsource.com/gh/anupam-halder-india/optimizer/?ref=repository-badge"><img src="https://app.deepsource.com/gh/anupam-halder-india/optimizer.svg/?label=active+issues&show_trend=true&token=61aWjabYdeWlZz92L4OhkRHL" alt="DeepSource"></a>
    <br>
    <h3> 🫂 community badges 🏅 </h3>
@@ -46,8 +49,6 @@ To get started ✨ with the Optimizer project 📽️, follow these steps:
    ```
 
 4. Run the Optimizer tool: `./bin/optimizer`
-
-warning: this project is still under progress so don't run it untill we issue an release
 
 ## 🫂 Contributing 🫂
 
