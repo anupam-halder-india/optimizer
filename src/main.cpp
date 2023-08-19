@@ -36,7 +36,8 @@ SOFTWARE.
 
 int main() {
   // Initilizing curl
-  CURL* curl = curl_easy_init();
+  CURL* curl;
+  curl_global_init(CURL_GLOBAL_DEFAULT);
   if (!curl) { cerr << "Failed to initialize libcurl" << endl; return 1; } 
 
    // Checking if, it is installed or not
