@@ -86,8 +86,18 @@ int main() {
     while (true) {
       // gitlab runner installation url
       while (retryal == "yes") {
-        if (osType == 1 || osType == 2) { string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/deb/gitlab-runner_" + arch + ".deb"; string dpkging = "dpkg -i gitlab-runner_" + arch + ".deb"; curl_easy_setopt(curl, CURLOPT_URL, url.c_str()); curl_easy_cleanup(curl); }
-	else if (osType == 3 || osType == 4) { string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/rpm/gitlab-runner_" + arch + ".rpm"; string dpkging = "rpm -i gitlab-runner_" + arch + ".rpm && rpm -Uvh gitlab-runner_" + arch + ".rpm"; curl_easy_setopt(curl, CURLOPT_URL, url.c_str()); curl_easy_cleanup(curl); }
+        if (osType == 1 || osType == 2) {
+	  string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/deb/gitlab-runner_" + arch + ".deb";
+	  string dpkging = "dpkg -i gitlab-runner_" + arch + ".deb";
+	  curl_easy_setopt(curl, CURLOPT_URL, url.c_str()); curl_easy_cleanup(curl);
+	  curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+	}
+	else if (osType == 3 || osType == 4) { 
+	  string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/rpm/gitlab-runner_" + arch + ".rpm";
+	  string dpkging = "rpm -i gitlab-runner_" + arch + ".rpm && rpm -Uvh gitlab-runner_" + arch + ".rpm";
+	  curl_easy_setopt(curl, CURLOPT_URL, url.c_str()); curl_easy_cleanup(curl);
+	  curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+	}
 	else if (osType == 404) { cout << BOLD << RED << "[ERROR]" << RESET << "error 404, you are using unknown oprating system to install git lab runner, can't install" << endl; retryal = "no"; break; }
 	else { cout << BOLD << RED << "[ERROR]" << RESET << "unknown error cant install gitlab runner" << endl; retryal = "no"; break;}
 	break;
