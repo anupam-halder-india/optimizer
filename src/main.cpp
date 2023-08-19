@@ -35,7 +35,7 @@ SOFTWARE.
 #include "include/modules/StrDect.inl"
 
 int main() {
-  // Initilizing curl
+  // Initilizing cURL
   CURL* curl = curl_easy_init();
   if (!curl) { cerr << "Failed to initialize libcurl" << endl; return 1; } 
 
