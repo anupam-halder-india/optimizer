@@ -36,7 +36,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
         trx: [ ubuntu-latest, windows-latest ]
         lix: [ ubuntu-latest, macOS-latest ]
-        languages: ['cpp']
+        languages: 'cpp'
 
     outputs:
       runs-on: ${{ matrix.os }}
@@ -288,7 +288,7 @@ jobs:
 
   anylize:
     name: Anylize
-    timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
+    timeout-minutes: ${{ (needs.configrations.outputs.languages == 'swift' && 120) || 360 }}
     if: needs.configrations.outputs.changes == 'true' || github.event_name == 'schedule' || (github.event_name == 'pull_request' && needs.configrations.outputs.changes == 'true')
     strategy:
       fail-fast: false
@@ -313,7 +313,6 @@ jobs:
     # If this step fails, then you should remove it and run the build manually (see below)
 
       - name: Analysis Build
-        shell: bash
         run: ${{ needs.build.outputs.build-script }}
 
     # ℹ️ Command-line programs to run using the OS shell.
@@ -322,4 +321,4 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
         with:
-          category: "/language:${{needs.configrations.outputs.language}}"
+          category: "/language:${{needs.configrations.outputs.languages}}"
