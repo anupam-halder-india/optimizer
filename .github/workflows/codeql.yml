@@ -72,7 +72,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install libcurl4-openssl-dev librpm-dev libapt-pkg-dev ninja-build -y 
-        pip install cpplint && cd build && cmake .. -GNinja && ninja cpplint
+        pip install cpplint && cd build && rm -rf * && cmake .. -GNinja && ninja cpplint
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
