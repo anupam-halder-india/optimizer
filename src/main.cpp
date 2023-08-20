@@ -66,7 +66,7 @@ int main() {
     }
   }
   
-  // Installation permission of GitLab Runner and Validation of the chosen option
+  // Installation permission of GitLab Runner and choice validator
   while (true) {
     cout << BOLD << MAGENTA << "[2] " << RESET << "Do you want to install GitLab Runner? (yes/no): ";
     getline(cin, GRIP);
