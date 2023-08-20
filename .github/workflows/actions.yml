@@ -279,6 +279,7 @@ jobs:
     #   - https://gh.io/supported-runners-and-hardware-resources
     #   - https://gh.io/using-larger-runners
     # Consider using larger runners for possible analysis time improvements.
+    needs: configrations
     runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
     if: needs.configrations.outputs.changes == 'true' || github.event_name == 'schedule' || (github.event_name == 'pull_request' && needs.configrations.outputs.changes == 'true')
     timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
