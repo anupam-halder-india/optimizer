@@ -13,11 +13,10 @@ warning: this project is still under progress so don't run the exicutable files 
     <a href="https://github.com/anupam-halder-india/optimizer/network/members"><img src="https://img.shields.io/github/forks/anupam-halder-india/optimizer?style=for-the-badge" alt="Forks Badge"/></a>
     <a href="https://github.com/anupam-halder-india/optimizer/pulls"><img src="https://img.shields.io/github/issues-pr/anupam-halder-india/optimizer?style=for-the-badge" alt="Pull Requests Badge"/></a>
    </div>
-  <br>
   <h3>☑️status badges🏅</h3>
   <a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml/badge.svg" alt="Actions"></a>
   <a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/codeql.yml"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/codeql.yml/badge.svg?branch=master" alt="codeql"></a>
-<br>
+<br><br>
 
 The Optimizer project is a 🌟 comprehensive tool 🛠️ designed to enhance 🚀 system performance, streamline software settings, and optimize various aspects of your computing 🖥️ environment. Whether you're on Windows, 🐧 Linux, or 📱 Android, this project aims to provide a one-stop solution for fine-tuning your system 💻 and application settings 🎯.
 
