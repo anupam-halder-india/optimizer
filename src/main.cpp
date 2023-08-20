@@ -39,7 +39,7 @@ int main() {
   CURL* curl = curl_easy_init();
   if (!curl) { cerr << "Failed to initialize libcurl" << endl; return 1; } 
 
-   // Checking if, It is installed or not
+   // Checking if, it is installed or not
    while (true) {
      CURLcode res = curl_easy_perform(curl);
      if (res != CURLE_OK) {
@@ -66,7 +66,7 @@ int main() {
     }
   }
   
-  // Installation permission of GitLab Runner and Validation of the chosen option
+  // Installation permission of GitLab Runner and choice validator
   while (true) {
     cout << BOLD << MAGENTA << "[2] " << RESET << "Do you want to install GitLab Runner? (yes/no): ";
     getline(cin, GRIP);
