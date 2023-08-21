@@ -1,0 +1,34 @@
+# Specify the configuration version
+version = 1
+
+# Enable coverage analysis and cppcpplint check
+[checks]
+  [checks.coverage]
+    enabled = true
+  [checks.cppcpplint]
+    enabled = true
+    [checks.cppcpplint.config]
+      options = "--linelength=100"  # Set maximum line length to 100 for cpplint
+
+# Configure Docker integration
+[docker]
+  enable = true  # Enable Docker integration
+  image = "ubuntu:latest"  # Use the latest Ubuntu Docker image
+  commands = [
+    "apt-get update -y",  # Update package index
+    "apt-get install cmake make g++ ninja-build librpm-dev libapt-pkg-dev libcurl4-openssl-dev python3-pip -y",  # Install necessary packages
+    "apt-get clean",  # Clean up package cache
+    "pip3 install --no-cache-dir cpplint",  # Install cpplint using pip
+    "rm -rf /var/lib/apt/lists/*",  # Remove package lists to reduce image size
+    "mkdir -p build && cd build && cmake .. -G Ninja && ninja cpplint",  # Build and run cpplint using Ninja
+    "deepsource cpplint"  # Run DeepSource cpplint check
+  ]
+
+# Define directories to analyze
+directories = [
+  "src/"  # Analyze the 'src' directory
+]
+
+# Configure Git comparison base
+[git]
+  base = "master"  # Use 'master' as the base branch for comparison
