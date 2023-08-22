@@ -32,10 +32,13 @@ jobs:
 
   # Deployment job
   page-deploy:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    runs-on: ${{ matrix.os }}
     needs: page-build
     concurrency:
       group: "pages"
