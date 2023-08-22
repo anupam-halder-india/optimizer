@@ -9,7 +9,7 @@ on:
       - '!src/*'
       - '!CMakeLists.txt'
       - '!.cpplint'
-      - '!.github/workflows/*'
+      - '!.github/workflows/actions.yml'
       - '*'
       - '!build/'
       - 'build/*'
