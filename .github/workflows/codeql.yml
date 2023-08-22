@@ -14,8 +14,7 @@ name: "CodeQL"
 on:
   push:
     paths-ignore:
-      - './**/*.md'
-      - './**/*.MD'
+      - '**'
       - '!src/*'
       - '!CMakeLists.txt'
       - '!.cpplint'
