@@ -2,10 +2,10 @@ name: page deployment
 
 on:
   push:
-    branch: ["master"]
-  paths-ignore:
-    - '*'
-    - '!*.md'
+    branches: ["master"]
+    paths-ignore:
+      - '*'
+      - '!*.md'
   workflow_dispatch:
   repository_dispatch:
 
