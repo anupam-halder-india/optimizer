@@ -18,14 +18,16 @@ warning: this project is still under progress so don't run the exicutable files 
   <a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/codeql.yml"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/codeql.yml/badge.svg?branch=master" alt="codeql"></a>
 <br><br>
 
-The Optimizer project is a 🌟 comprehensive tool 🛠️ designed to enhance 🚀 system performance, streamline software settings, and optimize various aspects of your computing 🖥️ environment. Whether you're on Windows, 🐧 Linux, or 📱 Android, this project aims to provide a one-stop solution for fine-tuning your system 💻 and application settings 🎯.
+The Optimizer project is a versatile tool that caters to multiple platforms, ensuring that your device's settings are optimized for peak performance. Whether it's activating power options, scheduling tasks, or streamlining software, this project aims to provide an all-encompassing solution for improving your computing experience.
 
-## ✨ Features ✨
+#### ✨ Features ✨
 
 - 🚀 Boost system performance and responsiveness.
 - ⚙️ Configure optimization settings for Windows, Linux, and Android.
 - 🧹 Optimize software settings to achieve optimal performance.
 - 🌐 Customize website optimizations for a faster browsing experience.
+
+The Optimizer project is a comprehensive tool designed to enhance system performance, streamline software settings, and optimize various aspects of your computing environment across different platforms.
 
 ## 🏗️ build with 🏗️
 *  <a href="https://github.com/anupam-halder-india/optimizer/search?l=cmake"><img src="https://img.shields.io/badge/CMake-064F8C?style=for-the-badge&logo=cmake&logoColor=white"></a>
