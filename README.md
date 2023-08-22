@@ -18,6 +18,7 @@ warning: this project is still under progress so don't run the exicutable files 
   <a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/codeql.yml"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/codeql.yml/badge.svg?branch=master" alt="codeql"></a>
 <br><br>
 
+## 👥 introduction 👥
 The Optimizer project is a versatile tool that caters to multiple platforms, ensuring that your device's settings are optimized for peak performance. Whether it's activating power options, scheduling tasks, or streamlining software, this project aims to provide an all-encompassing solution for improving your computing experience.
 
 #### ✨ Features ✨
