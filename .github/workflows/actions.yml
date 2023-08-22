@@ -4,15 +4,17 @@ on:
   push:
     branches: [ "master" ]
     paths-ignore:
-      - '*.md'
-      - '*.MD'
-      - '*ignore'
-      - '.github/*'
+      - '**/*.md'
+      - '**/*.MD'
+      - '!src/*'
+      - '!CMakeLists.txt'
+      - '!.cpplint'
       - '!.github/workflows/*'
-      - '.devcontainer/*'
-      - 'github/**/*'
-      - 'github/**/**/*'
-
+      - '*'
+      - '!build/'
+      - 'build/*'
+      - '!bin/'
+      - '!.deepsource.toml'
   pull_request:
     branches: [ "master" ]
   schedule:

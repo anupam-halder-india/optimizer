@@ -14,10 +14,16 @@ name: "CodeQL"
 on:
   push:
     paths-ignore:
-      - '*.md'
-      - '.github/*'
+      - './**/*.md'
+      - './**/*.MD'
+      - '!src/*'
+      - '!CMakeLists.txt'
+      - '.cpplint'
+      - './*'
       - '!.github/workflow/codeql.yml'
       - 'build/*'
+      - '!build/'
+      - '!bin/'
     branches: [ "master", "Master" ]
   pull_request:
     # The branches below must be a subset of the branches above
