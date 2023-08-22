@@ -1,5 +1,17 @@
 blank_issues_enabled: false
 contact_links:
-  - name: GitHub Community Support
+  - name: optimizer GitHub Community Support
     url: https://github.com/anupam-halder-india/optimizer/discussions
     about: Please ask and answer questions here.
+
+  - name: bug reports
+    url: https://github.com/anupam-halder-india/optimizer/issues/new/choose
+    about: if you are encountring any bugs then pls report here
+
+  - name: Feature request
+    url: https://github.com/anupam-halder-india/optimizer/issues/new/choose
+    about: if you want an new feature them you can submit an request here
+
+  - name: Report a security vulnerability
+    url: https://github.com/anupam-halder-india/optimizer/issues/new/choose
+    about: if you had found a security vulnerability then pls report it here
