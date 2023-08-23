@@ -3,7 +3,8 @@
 warning: this project is still under progress so don't run the exicutable files untill we issue an release 
 
 <a href="https://app.deepsource.com/gh/anupam-halder-india/optimizer/?ref=repository-badge"><img src="https://app.deepsource.com/gh/anupam-halder-india/optimizer.svg/?label=active+issues&show_trend=true&token=61aWjabYdeWlZz92L4OhkRHL" alt="DeepSource"></a>
-   <br>
+<br>
+
 <h3> 🫂 community badges 🏅 </h3>
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License"></a>
 <a href="https://www.codefactor.io/repository/github/anupam-halder-india/optimizer"><img src="https://www.codefactor.io/repository/github/anupam-halder-india/optimizer/badge?style=for-the-badge" alt="CodeFactor"></a>
