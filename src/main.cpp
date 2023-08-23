@@ -112,12 +112,7 @@ int main() {
 	  cout << BOLD << CYAN << "[i] " << RESET << "do you want to retry (yes/no): ";
 	  getline(cin, retryal2);
 	  Switch(retryal2);
-	  while (true) {
-            // make a function of this
-	    if (StrDect(yes, retryal2)) {string retryal2 = "yes"; break;}
-	    else if (StrDect(no, retryal2)) { string retryal2 = "no"; break; }
-	    else { cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from yes or no" << endl; }
-	  }
+	  yesNo(retryal2);
 	}
       }
       break;

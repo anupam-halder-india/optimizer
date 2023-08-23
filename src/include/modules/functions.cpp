@@ -82,3 +82,12 @@ int archType(string& arch, string& GRIP) {
   }
   return 0;
 }
+
+string yesNo(string& str) {
+  while (true) {
+    if (StrDect(yes, str)) { str = "yes"; break;}
+    else if (StrDect(no, str)) { str = "no"; break; }
+    else { cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from yes or no" << endl; }
+  }
+  return str;
+}

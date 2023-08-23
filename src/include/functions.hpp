@@ -15,4 +15,7 @@ int osDection();
 // arch type
 int archType(string& arch, string& GRIP);
 
+// yes or no
+string yesNo(string& str);
+
 #endif
