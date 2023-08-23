@@ -17,6 +17,7 @@ warning: this project is still under progress so don't run the exicutable files 
   <a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml/badge.svg" alt="Actions"></a>
   <a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/codeql.yml"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/codeql.yml/badge.svg?branch=master" alt="codeql"></a>
   <a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/page-deployment.yml"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/page-deployment.yml/badge.svg" alt="Page-deployment"></a>
+  <a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/codespaces/create_codespaces_prebuilds"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/codespaces/create_codespaces_prebuilds/badge.svg" alt="codespace-prebuild"></a>
 <br>
 
 ## 👥 introduction 👥
