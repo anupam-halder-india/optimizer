@@ -15,4 +15,4 @@
 *_log_*
 
 # Unnecessary files
-build/
+build/**

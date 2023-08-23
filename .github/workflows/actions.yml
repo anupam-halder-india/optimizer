@@ -9,8 +9,6 @@ on:
       - '!CMakeLists.txt'
       - '!.cpplint'
       - '!.github/workflows/actions.yml'
-      - '!build/'
-      - 'build/*'
       - '!bin/'
       - '!.deepsource.toml'
   pull_request:

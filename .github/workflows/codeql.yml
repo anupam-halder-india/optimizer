@@ -19,8 +19,6 @@ on:
       - '!CMakeLists.txt'
       - '!.cpplint'
       - '!.github/workflow/codeql.yml'
-      - 'build/*'
-      - '!build/'
       - '!bin/'
     branches: [ "master", "Master" ]
   pull_request:
