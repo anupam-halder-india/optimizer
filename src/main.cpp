@@ -89,7 +89,7 @@ int main() {
   // Execution of the instructions according to the given permissions
   if (wrapper == 1) {
     while (true) {
-      // gitlab runner installation url
+      // Gitlab runner installation url
       while (true) {
         if (osType == 1 || osType == 2) {
 	  string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/deb/gitlab-runner_" + arch + ".deb";
