@@ -5,11 +5,10 @@ on:
     branches: [ "master" ]
     paths-ignore:
       - '**'
-      - '!src/*'
+      - '!src/**'
       - '!CMakeLists.txt'
       - '!.cpplint'
       - '!.github/workflows/actions.yml'
-      - '*'
       - '!build/'
       - 'build/*'
       - '!bin/'

@@ -35,6 +35,7 @@ SOFTWARE.
 #include "include/modules/inlineing.inl"
 
 int main() {
+  string retryal = "yes";
   // Initilizing cURL
   CURL* curl = curl_easy_init();
   if (!curl) { cerr << "Failed to initialize libcurl" << endl; return 1; } 
@@ -68,13 +69,16 @@ int main() {
   }
   
   // Installation permission of GitLab Runner and choice validator
+  string GRIP;
+  string arch;
+  int wrapper = 1;
   while (true) {
     cout << BOLD << MAGENTA << "[2] " << RESET << "Do you want to install GitLab Runner? (yes/no): ";
     getline(cin, GRIP);
     wrapper = Switch(GRIP);
     if (wrapper == 1) { 
       string armWord;
-      if (osType == 3) { string armWord = "arm"; } else string armWord = "";
+      if (osType == 3) { string armWord = "arm"; } else string armWord;
       cout << BOLD << MAGENTA << "[2.1] " << RESET << " What is your architecture, you can say 'cancel', to cancel the installation of gitlab runner ((arm32/armhf), arm64, amd64, aarch64, i386, ppc64el, s390x " + armWord + "): ";
       getline(cin, arch);
       archType(arch, GRIP);
@@ -86,33 +90,37 @@ int main() {
   if (wrapper == 1) {
     while (true) {
       // gitlab runner installation url
-      while (retryal == "yes") {
+      while (true) {
         if (osType == 1 || osType == 2) {
 	  string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/deb/gitlab-runner_" + arch + ".deb";
 	  string dpkging = "dpkg -i gitlab-runner_" + arch + ".deb";
 	  curl_easy_setopt(curl, CURLOPT_URL, url.c_str()); curl_easy_cleanup(curl);
 	  curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
-	}
-	else if (osType == 3 || osType == 4) { 
+	  break;
+	} else if (osType == 3 || osType == 4) { 
 	  string url = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/rpm/gitlab-runner_" + arch + ".rpm";
 	  string dpkging = "rpm -i gitlab-runner_" + arch + ".rpm && rpm -Uvh gitlab-runner_" + arch + ".rpm";
 	  curl_easy_setopt(curl, CURLOPT_URL, url.c_str()); curl_easy_cleanup(curl);
 	  curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+	  break;
+	} else if (osType == 404) {
+	  cout << BOLD << RED << "[ERROR]" << RESET << "error 404, you are using unknown oprating system to install git lab runner, can't install" << endl; retryal = "no";
+	  break; } else {
+	  cout << BOLD << RED << "[ERROR]" << RESET << "unknown error cant install gitlab runner" << endl; retryal = "no"; 
+	  break;
 	}
-	else if (osType == 404) { cout << BOLD << RED << "[ERROR]" << RESET << "error 404, you are using unknown oprating system to install git lab runner, can't install" << endl; retryal = "no"; break; }
-	else { cout << BOLD << RED << "[ERROR]" << RESET << "unknown error cant install gitlab runner" << endl; retryal = "no"; break;}
 	break;
       }
-      while (retryal2 == "yes") { 
+      while (retryal == "yes") { 
         int Dpackaging = system(dpkging.c_str());
 
         if (Dpackaging == 0) { cout << BOLD << GREEN "[!] " << RESET << "Installation completed successfully." << endl; break; }
         else { 
 	  cerr << BOLD << RED "[ERROR] " << RESET << "Installation failed with error code: " << Dpackaging << endl;
 	  cout << BOLD << CYAN << "[i] " << RESET << "do you want to retry (yes/no): ";
-	  getline(cin, retryal2);
-	  Switch(retryal2);
-	  yesNo(retryal2);
+	  getline(cin, retryal);
+	  Switch(retryal);
+	  yesNo(retryal);
 	}
       }
       break;

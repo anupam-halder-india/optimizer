@@ -12,10 +12,6 @@ const StringArray<5> no = {"no", "No", "NO", "n", "N"};
 const string response;
 const int osType = osDection();
 
-string arch;
-string GRIP;
-int wrapper = 0;
-
 const StringArray<6> arm32 = {"ARM32", "Arm32", "arm32", "armhf", "ARMHF", "Armhf"};
 const StringArray<3> arm64 = {"ARM64", "Arm64", "arm64"};
 const StringArray<3> amd64 = {"AMD64", "Amd64", "amd64"};
@@ -28,5 +24,3 @@ const StringArray<3> cancel = {"CANCEL", "Cancle", "cancle"};
 
 const string url;
 const string dpkging;
-string retryal = "yes";
-string retryal2 = "yes";

@@ -40,11 +40,6 @@ extern const int osType;
 // Necessary for curl
 extern const string response;
 
-// GitLab Runner section
-extern string arch;
-extern string GRIP; // GitLab Runner Installation Permission
-extern int wrapper;
-
 // From Arch section of GitLab Runner
 extern const StringArray<6> arm32;
 extern const StringArray<3> arm64;
@@ -59,7 +54,5 @@ extern const StringArray<3> cancel;
 // GitLab Runner installation command execution section
 extern const string url;
 extern const string dpkging;
-extern string retryal;
-extern string retryal2;
 
 #endif

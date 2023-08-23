@@ -15,10 +15,9 @@ on:
   push:
     paths-ignore:
       - '**'
-      - '!src/*'
+      - '!src/**'
       - '!CMakeLists.txt'
       - '!.cpplint'
-      - '*'
       - '!.github/workflow/codeql.yml'
       - 'build/*'
       - '!build/'
