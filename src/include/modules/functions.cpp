@@ -70,12 +70,12 @@ int osDection() {
 int archType(string& arch, string& GRIP) {
   while (true) {
     if (StrDect(arm32, arch)) { arch = arm32[3]; break; }
-    else if (StrDect(arm64, arch)) { string arch = arm64[2]; break; }
-    else if (StrDect(i386, arch)) { string arch = i386[1]; break; }
-    else if (StrDect(ppc64el, arch)) { string arch = ppc64el[2]; break; }
-    else if (StrDect(s390x, arch)) { string arch = s390x[2]; break; }
-    else if ((osType == 3 && StrDect(arm, arch)) || (osType == 4 && StrDect(arm, arch))) { string arch = arm[2]; break; }
-    else if (StrDect(aarch64, arch)) { string arch = aarch64[2]; break; }
+    else if (StrDect(arm64, arch)) { arch = arm64[2]; break; }
+    else if (StrDect(i386, arch)) { arch = i386[1]; break; }
+    else if (StrDect(ppc64el, arch)) { arch = ppc64el[2]; break; }
+    else if (StrDect(s390x, arch)) { arch = s390x[2]; break; }
+    else if ((osType == 3 && StrDect(arm, arch)) || (osType == 4 && StrDect(arm, arch))) { arch = arm[2]; break; }
+    else if (StrDect(aarch64, arch)) { arch = aarch64[2]; break; }
     else if (find(begin(cancel), end(cancel), arch) != end(cancel)) { string GRIP = "no"; break; }
     else if (hasSpaces || arch.empty()) { cout << BOLD << RED << "[ERROR] " << RESET << "pls don't enter spaces or emptyness, retry" << endl; }
     else { cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from arm32, arm64, amd64, aarch64, i386, ppc64el, or s390x, retry" << endl; }
