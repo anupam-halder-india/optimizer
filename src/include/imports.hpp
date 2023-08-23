@@ -36,13 +36,9 @@ using StringArray = std::array<std::string, N>;
 extern const StringArray<5> yes;
 extern const StringArray<5> no;
 extern const int osType;
-extern const bool hasSpaces;
 
 // Necessary for curl
 extern const string response;
-
-// The name section
-extern string name;
 
 // GitLab Runner section
 extern string arch;

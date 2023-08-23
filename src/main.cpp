@@ -32,7 +32,7 @@ SOFTWARE.
 #include <array>
 #include "include/imports.hpp"
 #include "include/functions.hpp"
-#include "include/modules/StrDect.inl"
+#include "include/modules/inlineing.inl"
 
 int main() {
   // Initilizing cURL
@@ -51,15 +51,16 @@ int main() {
      }
    }
 
+  string name;
   // Asking for Permissions
   // Name is needed for coustomization pourposes
   while (true) {
     cout << BOLD << MAGENTA << "[1]" << RESET << " Please enter your name, we need it for customization purposes (2 to 25 characters, no spaces): ";
-    getline(cin, name);
-
+    
+    getline(cin, name); 
     // Check the length of the name
     int nameLength = name.length();
-    if (nameLength >= 2 && nameLength <= 25 && !hasSpaces) {
+    if (nameLength >= 2 && nameLength <= 25 && !hasSpaces(name)) {
       break;  // Exit the loop if the name is valid
     } else {
       cout << RED << "[ERROR]" << RESET << "Invalid name length. Please try again." << endl;

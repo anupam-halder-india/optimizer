@@ -8,11 +8,9 @@
 
 const StringArray<5> yes = {"yes", "Yes", "YES", "y", "Y"};
 const StringArray<5> no = {"no", "No", "NO", "n", "N"};
-const bool hasSpaces = (name.find(' ') != string::npos);
 
 const string response;
 const int osType = osDection();
-string name;
 
 string arch;
 string GRIP;

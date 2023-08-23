@@ -6,7 +6,7 @@
 #include <array>
 #include "../imports.hpp"
 #include "../functions.hpp"
-#include "StrDect.inl"
+#include "inlineing.inl"
 
 // Function definitions
 // the curl function
@@ -24,7 +24,7 @@ int Switch(const string& str) {
       return 1; break;  // Return true for a valid input
     } else if (find(begin(no), end(no), str) != end(no)) {
       return 2;  break;  // Return true for a valid input
-    } else if (hasSpaces || str.empty()) {
+    } else if (hasSpaces(str) || str.empty()) {
       cout << BOLD << RED << "[ERROR] " << RESET << "pls don't enter spaces or emptyness" << endl;
     } else {
       cout << BOLD << RED << "[ERROR]" << RESET << "Please choose from 'yes' or 'no'." << endl;  // Return false for an invalid input
@@ -77,7 +77,7 @@ int archType(string& arch, string& GRIP) {
     else if ((osType == 3 && StrDect(arm, arch)) || (osType == 4 && StrDect(arm, arch))) { arch = arm[2]; break; }
     else if (StrDect(aarch64, arch)) { arch = aarch64[2]; break; }
     else if (find(begin(cancel), end(cancel), arch) != end(cancel)) { string GRIP = "no"; break; }
-    else if (hasSpaces || arch.empty()) { cout << BOLD << RED << "[ERROR] " << RESET << "pls don't enter spaces or emptyness, retry" << endl; }
+    else if (hasSpaces(arch) || arch.empty()) { cout << BOLD << RED << "[ERROR] " << RESET << "pls don't enter spaces or emptyness, retry" << endl; }
     else { cout << BOLD << RED << "[ERROR] " << RESET << "pls choose from arm32, arm64, amd64, aarch64, i386, ppc64el, or s390x, retry" << endl; }
   }
   return 0;
