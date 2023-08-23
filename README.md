@@ -5,19 +5,18 @@ warning: this project is still under progress so don't run the exicutable files 
 <a href="https://app.deepsource.com/gh/anupam-halder-india/optimizer/?ref=repository-badge"><img src="https://app.deepsource.com/gh/anupam-halder-india/optimizer.svg/?label=active+issues&show_trend=true&token=61aWjabYdeWlZz92L4OhkRHL" alt="DeepSource"></a>
    <br>
 <h3> 🫂 community badges 🏅 </h3>
-<div align="left">
-   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License"></a>
-    <a href="https://www.codefactor.io/repository/github/anupam-halder-india/optimizer"><img src="https://www.codefactor.io/repository/github/anupam-halder-india/optimizer/badge?style=for-the-badge" alt="CodeFactor"></a>
-    <a href="https://github.com/anupam-halder-india/optimizer/stargazers"><img src="https://img.shields.io/github/stars/anupam-halder-india/optimizer?style=for-the-badge" alt="GitHub Stars"></a>
-    <a href="https://github.com/anupam-halder-india/optimizer/issues"><img src="https://img.shields.io/github/issues/anupam-halder-india/optimizer?style=for-the-badge" alt="GitHub Issues"></a>
-    <a href="https://github.com/anupam-halder-india/optimizer/network/members"><img src="https://img.shields.io/github/forks/anupam-halder-india/optimizer?style=for-the-badge" alt="Forks Badge"/></a>
-    <a href="https://github.com/anupam-halder-india/optimizer/pulls"><img src="https://img.shields.io/github/issues-pr/anupam-halder-india/optimizer?style=for-the-badge" alt="Pull Requests Badge"/></a>
-   </div>
-  <h3>☑️status badges🏅</h3>
-  <a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml/badge.svg" alt="Actions"></a>
-  <a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/codeql.yml"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/codeql.yml/badge.svg?branch=master" alt="codeql"></a>
-  <a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/page-deployment.yml"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/page-deployment.yml/badge.svg" alt="Page-deployment"></a>
-  <a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/codespaces/create_codespaces_prebuilds"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/codespaces/create_codespaces_prebuilds/badge.svg" alt="codespace-prebuild"></a>
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License"></a>
+<a href="https://www.codefactor.io/repository/github/anupam-halder-india/optimizer"><img src="https://www.codefactor.io/repository/github/anupam-halder-india/optimizer/badge?style=for-the-badge" alt="CodeFactor"></a>
+<a href="https://github.com/anupam-halder-india/optimizer/stargazers"><img src="https://img.shields.io/github/stars/anupam-halder-india/optimizer?style=for-the-badge" alt="GitHub Stars"></a>
+<a href="https://github.com/anupam-halder-india/optimizer/issues"><img src="https://img.shields.io/github/issues/anupam-halder-india/optimizer?style=for-the-badge" alt="GitHub Issues"></a>
+<a href="https://github.com/anupam-halder-india/optimizer/network/members"><img src="https://img.shields.io/github/forks/anupam-halder-india/optimizer?style=for-the-badge" alt="Forks Badge"/></a>
+<a href="https://github.com/anupam-halder-india/optimizer/pulls"><img src="https://img.shields.io/github/issues-pr/anupam-halder-india/optimizer?style=for-the-badge" alt="Pull Requests Badge"/></a>
+
+<h3>☑️status badges🏅</h3>
+<a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml/badge.svg" alt="Actions"></a>
+<a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/codeql.yml"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/codeql.yml/badge.svg?branch=master" alt="codeql"></a>
+<a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/page-deployment.yml"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/page-deployment.yml/badge.svg" alt="Page-deployment"></a>
+<a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/codespaces/create_codespaces_prebuilds"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/codespaces/create_codespaces_prebuilds/badge.svg" alt="codespace-prebuild"></a>
 <br>
 
 ## 👥 introduction 👥
