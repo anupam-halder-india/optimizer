@@ -69,7 +69,7 @@ int osDection() {
 // arch type
 int archType(string& arch, string& GRIP) {
   while (true) {
-    if (StrDect(arm32, arch)) { string arch = arm32[3]; break; }
+    if (StrDect(arm32, arch)) { arch = arm32[3]; break; }
     else if (StrDect(arm64, arch)) { string arch = arm64[2]; break; }
     else if (StrDect(i386, arch)) { string arch = i386[1]; break; }
     else if (StrDect(ppc64el, arch)) { string arch = ppc64el[2]; break; }
