@@ -44,6 +44,9 @@ jobs:
       BFCH: ${{ steps.before-commit-hash.outputs.BEFORE_COMMIT_HASH }}
 
     runs-on: $ {{ matrix.os }}
+    steps:
+      - name: setting up action checkout
+        uses: actions/checkout@v3
 
   configrations:
     name: Configrations
