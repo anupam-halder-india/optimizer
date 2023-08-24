@@ -26,15 +26,15 @@ env:
 
 permissions: write-all
 
+
 jobs:
-  configrations:
-    name: Configrations
+  job-os:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
         trx: [ ubuntu-latest, windows-latest ]
         lix: [ ubuntu-latest, macOS-latest ]
-
+  
     outputs:
       runs-on: ${{ matrix.os }}
       changes: ${{ steps.changes.outputs.files }}
@@ -43,7 +43,12 @@ jobs:
       linx: ${{ matrix.lix }}
       BFCH: ${{ steps.before-commit-hash.outputs.BEFORE_COMMIT_HASH }}
 
-    runs-on: ${{ matrix.os }}
+    runs-on: $ {{ matrix.os }}
+
+  configrations:
+    name: Configrations
+    needs: job-os
+    runs-on: ${{ needs.job-os.outputs.runs-on }}
     steps:
       - name: setting up action checkout
         uses: actions/checkout@v3
@@ -66,7 +71,7 @@ jobs:
 
   branch-deletion:
     name: marged branch deletion
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    runs-on: ${{ needs.job-os.outputs.runs-on }}
     needs: configrations
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     steps:
@@ -77,7 +82,7 @@ jobs:
 
   node:
     name: Node
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    runs-on: ${{ needs.job-os.outputs.runs-on }}
     needs: configrations
     if: (github.event_name == 'pull_request' && needs.configurations.outputs.changes == 'true') || (github.event_name != 'pull_request' && github.event_name != 'schedule' && needs.configrations.outputs.changes == 'true')
     steps:
@@ -88,7 +93,7 @@ jobs:
 
   python:
     name: Python
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    runs-on: ${{ needs.job-os.outputs.runs-on }}
     needs: configrations
     if: (github.event_name == 'pull_request' && needs.configurations.outputs.changes == 'true') || (github.event_name != 'pull_request' && github.event_name != 'schedule' && needs.configrations.outputs.changes == 'true')
     steps:
@@ -99,7 +104,7 @@ jobs:
 
   cmake:
     name: CMake Setup
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    runs-on: ${{ needs.job-os.outputs.runs-on }}
     needs: configrations
     if: (github.event_name == 'pull_request' && needs.configurations.outputs.changes == 'true') || (github.event_name != 'pull_request' && github.event_name != 'schedule' && needs.configrations.outputs.changes == 'true')
     steps:
@@ -108,21 +113,10 @@ jobs:
         with:
           cmakeVersion: latestrc
           ninjaVersion: latest
-
-  Codecove:
-    name: Codecove coverage reports Upload
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
-    needs: configrations
-    if: (github.event_name == 'pull_request' && needs.configurations.outputs.changes == 'true') || (github.event_name != 'pull_request' && github.event_name != 'schedule' && needs.configrations.outputs.changes == 'true')
-    steps:
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
+      
   cloging:
     name: Cloging
-    runs-on: ${{ needs.configrations.outputs.linx }}
+    runs-on: ${{ needs.job-os.outputs.runs-on }}
     needs: [configrations, node, python, cmake]
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule'
     steps:
@@ -141,7 +135,7 @@ jobs:
 
   start-caching:
     name: Cache start
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    runs-on: ${{ needs.job-os.outputs.runs-on }}
     needs: [configrations, node, cloging]
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule' && github.event_name != 'pull_request'
     steps:
@@ -175,7 +169,7 @@ jobs:
 
   containerization:
     name: Containerization with Docker
-    runs-on: ${{ needs.configrations.outputs.linx }}
+    runs-on: ${{ needs.job-os.outputs.linx }}
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule' && github.event_name != 'pull_request'
     needs: [configrations, cloging, build]
     steps:
@@ -217,7 +211,7 @@ jobs:
     name: Cache Ending
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'schedule' && github.event_name != 'pull_request'
     needs: [configrations, node, cloging, start-caching, build]
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    runs-on: ${{ needs.job-os.outputs.runs-on }}
     steps:
       - name: Save Action Cache
         uses: actions/cache@v3
@@ -230,7 +224,7 @@ jobs:
 
 # testing:
 #   name: Test
-#   runs-on: ${{ needs.configrations.outputs.runs-on }}
+#   runs-on: ${{ needs.job-os.outputs.runs-on }}
 #   needs: [configrations, cmake, cloging, build]
 #   steps:
 #     - name: setting up action checkout
@@ -242,4 +236,10 @@ jobs:
 #       shell: bash
          # Execute tests defined by the CMake configuration.
          # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-#       run: ctest
+#       run: ctest --output-on-failure && ninja coverage
+
+#     - name: Upload coverage reports to Codecov
+#       uses: codecov/codecov-action@v3
+#       env:
+#         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
