@@ -109,6 +109,17 @@ jobs:
           cmakeVersion: latestrc
           ninjaVersion: latest
 
+  Codecove:
+    name: Codecove coverage reports Upload
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
+    needs: configrations
+   # if: (github.event_name == 'pull_request' && needs.configurations.outputs.changes == 'true') || (github.event_name != 'pull_request' && github.event_name != 'schedule' && needs.configrations.outputs.changes == 'true')
+    steps:
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
   cloging:
     name: Cloging
     runs-on: ${{ needs.configrations.outputs.linx }}
