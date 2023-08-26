@@ -11,8 +11,8 @@ warning: this project is still under progress so don't run the exicutable files 
 <a href="https://github.com/anupam-halder-india/optimizer/stargazers"><img src="https://img.shields.io/github/stars/anupam-halder-india/optimizer?style=for-the-badge" alt="GitHub Stars"></a>
 <a href="https://github.com/anupam-halder-india/optimizer/issues"><img src="https://img.shields.io/github/issues/anupam-halder-india/optimizer?style=for-the-badge" alt="GitHub Issues"></a>
 <a href="https://github.com/anupam-halder-india/optimizer/network/members"><img src="https://img.shields.io/github/forks/anupam-halder-india/optimizer?style=for-the-badge" alt="Forks Badge"/></a>
-<a href="https://github.com/anupam-halder-india/optimizer/pulls"><img src="https://img.shields.io/github/issues-pr/anupam-halder-india/optimizer?style=for-the-badge" alt="Pull Requests Badge"/></a>
-<a href="https://app.fossa.com/projects/git%2Bgithub.com%2Fanupam-halder-india%2Foptimizer?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fanupam-halder-india%2Foptimizer.svg?type=shield"/></a>
+<a href="https://github.com/anupam-halder-india/optimizer/pulls"><img src="https://img.shields.io/github/issues-pr/anupam-halder-india/optimizer?style=for-the-badge" alt="Pull Requests Badge"/></a><br>
+<a href="https://app.fossa.com/projects/git%2Bgithub.com%2Fanupam-halder-india%2Foptimizer?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fanupam-halder-india%2Foptimizer.svg?type=shield?style=for-the-badge"/></a>
 
 <h3>☑️status badges🏅</h3>
 <a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml/badge.svg" alt="Actions"></a>
