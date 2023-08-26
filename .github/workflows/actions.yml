@@ -128,7 +128,7 @@ jobs:
   start-caching:
     name: Cache Starting
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'pull_request'
-    needs: [configrations, node, cloging, build]
+    needs: [configrations, node, cloging]
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     outputs:
       cache-hit: steps.cache.outputs.cache-hit != 'true'
@@ -208,7 +208,7 @@ jobs:
   end-caching:
     name: Cache Ending 
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'pull_request' && needs.start-caching.outputs.cache-hit != 'true'
-    needs: [configrations, node, cloging, start-caching, build]
+    needs: [configrations, node, cloging, start-caching, build, containerization]
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     steps:
       - name: Save Action Cache
