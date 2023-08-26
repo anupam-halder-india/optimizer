@@ -127,19 +127,21 @@ jobs:
         uses: github/super-linter@v5
 
   start-caching:
-    name: Cache start
-    runs-on: ${{ needs.configrations.outputs.runs-on }}
-    needs: [configrations, node, cloging]
+    name: Cache Starting
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'pull_request'
+    needs: [configrations, node, cloging, build]
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
     steps:
-      - name: caching start
-        id: restore-cache
+      - name: Save Action Cache
         uses: actions/cache@v3
         with:
           path: |
             build/CMakeCache.txt
             build/CMakeFiles
-          key: ${{ runner.os }}-action-cache-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('**/*.cpp') }}-${{ hashFiles('**/**/*.cpp') }}-${{ hashFiles('**/*.h') }}-${{ hashFiles('**/**/*.h') }}-${{ hashFiles('Dockerfile') }}-${{ github.run_id }}
+            build/build.ninja
+            /etc/apt/sources.list.d/docker.list
+            /etc/apt/keyrings
+          key: ${{ runner.os }}-action-cache-${{ hashFiles('CMakeLists.txt') }}
 
   build:
     name: Buliding
@@ -201,9 +203,9 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/optimizer:latest
 
   end-caching:
-    name: Cache Ending
+    name: Cache Ending 
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'pull_request'
-    needs: [configrations, node, cloging, start-caching, build]
+    needs: [configrations, node, cloging, build]
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     steps:
       - name: Save Action Cache
@@ -212,5 +214,5 @@ jobs:
           path: |
             build/CMakeCache.txt
             build/CMakeFiles
-            artifacts
-          key: ${{ runner.os }}-action-cache-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('**/*.cpp') }}-${{ hashFiles('**/**/*.cpp') }}-${{ hashFiles('**/*.h') }}-${{ hashFiles('**/**/*.h') }}-${{ hashFiles('Dockerfile') }}-${{ github.run_id }}
+            build/build.ninja
+          key: ${{ runner.os }}-action-cache-${{ hashFiles('CMakeLists.txt') }}
