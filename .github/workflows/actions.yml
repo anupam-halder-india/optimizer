@@ -21,6 +21,8 @@ env:
   DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
   DEFAULT_BRANCH: master
   GITHUB_TOKEN: ${{ secrets.THE_GITHUB_ADMIN_TOKEN }}
+  TRUE: true
+  FALSE: false
 
 permissions: write-all
 
@@ -35,7 +37,7 @@ jobs:
 
     outputs:
       runs-on: ${{ matrix.os }}
-      changes: true
+      changes: ${{ env.TRUE }}
       trex: ${{ matrix.trx }}
       linx: ${{ matrix.lix }}
       BFCH: ${{ steps.before-commit-hash.outputs.BEFORE_COMMIT_HASH }}
