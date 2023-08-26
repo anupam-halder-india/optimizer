@@ -12,6 +12,7 @@ warning: this project is still under progress so don't run the exicutable files 
 <a href="https://github.com/anupam-halder-india/optimizer/issues"><img src="https://img.shields.io/github/issues/anupam-halder-india/optimizer?style=for-the-badge" alt="GitHub Issues"></a>
 <a href="https://github.com/anupam-halder-india/optimizer/network/members"><img src="https://img.shields.io/github/forks/anupam-halder-india/optimizer?style=for-the-badge" alt="Forks Badge"/></a>
 <a href="https://github.com/anupam-halder-india/optimizer/pulls"><img src="https://img.shields.io/github/issues-pr/anupam-halder-india/optimizer?style=for-the-badge" alt="Pull Requests Badge"/></a>
+<a href="https://cla-assistant.io/anupam-halder-india/optimizer"><img src="https://cla-assistant.io/readme/badge/anupam-halder-india/optimizer?style=for-the-badge" alt="CLA assistant" /></a>
 
 <h3>☑️status badges🏅</h3>
 <a href="https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml"><img src="https://github.com/anupam-halder-india/optimizer/actions/workflows/actions.yml/badge.svg" alt="Actions"></a>

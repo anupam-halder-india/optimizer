@@ -68,7 +68,7 @@ int main() {
     }
   }
   
-  // Asking for installation permission of GitLab Runner
+  // Asking for installation permission of GitLab runner
   string GRIP;
   string arch;
   int wrapper = 1;
