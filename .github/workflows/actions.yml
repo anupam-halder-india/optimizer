@@ -27,7 +27,6 @@ permissions: write-all
 jobs:
   configrations:
     name: Configrations
-    if: github.event_name != "schedule"
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
