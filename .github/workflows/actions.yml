@@ -167,7 +167,7 @@ jobs:
 
   containerization:
     name: Containerization with Docker
-    runs-on: ${{ needs.configrations.outputs.linx }}
+    runs-on: ubuntu-latest
     if: needs.configrations.outputs.changes == 'true' && github.event_name != 'pull_request'
     needs: [configrations, cloging, start-caching, build]
     steps:
@@ -176,23 +176,16 @@ jobs:
 
       - name: docker setup
         run: |
-          if [[ "${{ runner.os }}" == "Linux" ]]; then
-            sudo apt-get update
-            sudo apt-get install ca-certificates curl gnupg
-            if [ ! -e /etc/apt/keyrings ] || [ ! -d /etc/apt/keyrings ] || [ $(stat -c %a /etc/apt/keyrings) -ne 755 ]; then sudo install -m 0755 -d /etc/apt/keyrings; fi
-            if [[ -e /etc/apt/keyrings/docker.gpg && -f /etc/apt/keyrings/docker.gpg && ! -r /etc/apt/keyrings/docker.gpg ]] || [ ! -e /etc/apt/keyrings/docker.gpg ]; then curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg && sudo chmod a+r /etc/apt/keyrings/docker.gpg; fi
-            echo \
-              "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-              "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-              sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-              sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-              sudo service docker start
-          elif [[ "${{ runner.os }}" == "macOS" ]]; then
-            brew update
-            brew install --cask docker
-            pip install docker-compose
-            sudo dockerd
-          fi
+          sudo apt-get update
+          sudo apt-get install ca-certificates curl gnupg
+          if [ ! -e /etc/apt/keyrings ] || [ ! -d /etc/apt/keyrings ] || [ $(stat -c %a /etc/apt/keyrings) -ne 755 ]; then sudo install -m 0755 -d /etc/apt/keyrings; fi
+          if [[ -e /etc/apt/keyrings/docker.gpg && -f /etc/apt/keyrings/docker.gpg && ! -r /etc/apt/keyrings/docker.gpg ]] || [ ! -e /etc/apt/keyrings/docker.gpg ]; then curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg && sudo chmod a+r /etc/apt/keyrings/docker.gpg; fi
+         echo \
+           "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+            "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+            sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+          sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+          sudo service docker start
           docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
           docker buildx create --use
