@@ -21,6 +21,8 @@ env:
   DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
   DEFAULT_BRANCH: master
   GITHUB_TOKEN: ${{ secrets.THE_GITHUB_ADMIN_TOKEN }}
+  TRUE: true
+  FALSE: false
 
 permissions: write-all
 
@@ -35,7 +37,7 @@ jobs:
 
     outputs:
       runs-on: ${{ matrix.os }}
-      changes: ${{ steps.changes.outputs.files }}
+      changes: ${{ env.TRUE }}
       trex: ${{ matrix.trx }}
       linx: ${{ matrix.lix }}
       BFCH: ${{ steps.before-commit-hash.outputs.BEFORE_COMMIT_HASH }}
@@ -76,7 +78,7 @@ jobs:
     name: Node
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
-    if: (github.event_name == 'pull_request' && needs.configurations.outputs.changes == 'true') || (github.event_name != 'pull_request' && needs.configrations.outputs.changes == 'true')
+    if: needs.configurations.outputs.changes == 'true' 
     steps:
       - name: Use Node.js 18 for caching
         uses: actions/setup-node@v3
@@ -87,7 +89,7 @@ jobs:
     name: Python
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
-    if: (github.event_name == 'pull_request' && needs.configurations.outputs.changes == 'true') || (github.event_name != 'pull_request' && needs.configrations.outputs.changes == 'true')
+    if: needs.configurations.outputs.changes == 'true'
     steps:
       - name: Installing Python
         uses: actions/setup-python@v4
@@ -98,7 +100,7 @@ jobs:
     name: CMake Setup
     runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
-    if: (github.event_name == 'pull_request' && needs.configurations.outputs.changes == 'true') || (github.event_name != 'pull_request' && needs.configrations.outputs.changes == 'true')
+    if: needs.configurations.outputs.changes == 'true'
     steps:
       - name: Setting up CMake
         uses: lukka/get-cmake@latest
@@ -118,7 +120,7 @@ jobs:
 
   linting:
     name: Linting
-    if: (github.event_name == 'pull_request' && needs.configurations.outputs.changes == 'true') || (github.event_name != 'pull_request' && needs.configrations.outputs.changes == 'true')
+    if: needs.configurations.outputs.changes == 'true'
     needs: [configrations, cloging]
     runs-on: ubuntu-latest
     steps:
@@ -142,6 +144,7 @@ jobs:
             build/CMakeFiles
             build/build.ninja
             /var/cache/apt/archives
+            /usr/local/Homebrew
             /etc/apt/keyrings
             /etc/apt/keyrings/docker.gpg
           key: action-cache-${{ runner.os }}-${{ hashFiles('CMakeLists.txt') }}
@@ -166,30 +169,37 @@ jobs:
 
   containerization:
     name: Containerization with Docker
-    runs-on: ubuntu-latest
-    if: needs.configrations.outputs.changes == 'true' && github.event_name != 'pull_request'
+    runs-on: ${{ needs.configrations.outputs.linx }}
+    if: needs.configrations.outputs.changes == 'true'
     needs: [configrations, cloging, start-caching, build]
     steps:
       - name: setting up action checkout
         uses: actions/checkout@v3
 
-      - name: docker setup
+      - name: Docker containerization
         run: |
-          sudo apt-get update
-          sudo apt-get install ca-certificates curl gnupg
-          if [ ! -e /etc/apt/keyrings ] || [ ! -d /etc/apt/keyrings ] || [ $(stat -c %a /etc/apt/keyrings) -ne 755 ]; then sudo install -m 0755 -d /etc/apt/keyrings; fi
-          if [[ -e /etc/apt/keyrings/docker.gpg && -f /etc/apt/keyrings/docker.gpg && ! -r /etc/apt/keyrings/docker.gpg ]] || [ ! -e /etc/apt/keyrings/docker.gpg ]; then curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg && sudo chmod a+r /etc/apt/keyrings/docker.gpg; fi
-          echo \
-            "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-            "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-            sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-          sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-          sudo service docker start
+          if [[ "${{ runner.os }}" == "Linux" ]]; then
+            sudo apt-get update
+            sudo apt-get install ca-certificates curl gnupg
+            if [ ! -e /etc/apt/keyrings ] || [ ! -d /etc/apt/keyrings ] || [ $(stat -c %a /etc/apt/keyrings) -ne 755 ]; then sudo install -m 0755 -d /etc/apt/keyrings; fi
+            if [[ -e /etc/apt/keyrings/docker.gpg && -f /etc/apt/keyrings/docker.gpg && ! -r /etc/apt/keyrings/docker.gpg ]] || [ ! -e /etc/apt/keyrings/docker.gpg ]; then curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg && sudo chmod a+r /etc/apt/keyrings/docker.gpg; fi
+            echo \
+              "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+              "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+              sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+              sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin
+              sudo service docker start
+          elif [[ "${{ runner.os }}" == "macOS" ]]; then
+            brew update
+            brew install --cask docker
+            sudo dockerd
+          fi
           docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
           docker buildx create --use
 
-      - name: Docker containerization
+      - name: Docker push
+        if: github.event_name != 'pull_request'
         uses: docker/build-push-action@v4
         with:
           context: .
@@ -211,6 +221,7 @@ jobs:
             build/CMakeFiles
             build/build.ninja
             /var/cache/apt/archives
+            /usr/local/Homebrew
             /etc/apt/keyrings
             /etc/apt/keyrings/docker.gpg
           key: action-cache-${{ runner.os }}-${{ hashFiles('CMakeLists.txt') }}
