@@ -139,8 +139,10 @@ jobs:
             build/CMakeCache.txt
             build/CMakeFiles
             build/build.ninja
-            /etc/apt/sources.list.d/docker.list
+            /var/cache/apt/archives
+            /usr/local/Homebrew
             /etc/apt/keyrings
+            /etc/apt/keyrings/docker.gpg
           key: ${{ runner.os }}-action-cache-${{ hashFiles('CMakeLists.txt') }}
 
   build:
@@ -148,8 +150,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [configrations, python, cmake, cloging, start-caching]
     if: needs.configrations.outputs.changes == 'true'
-    outputs:
-      build-script: ${{ steps.build-steps.run }}
     steps:
       - name: setting up action checkout
         uses: actions/checkout@v3
@@ -159,7 +159,7 @@ jobs:
         id: build-steps
         run: |
           sudo apt-get update
-          sudo apt-get install libcurl4-openssl-dev librpm-dev libapt-pkg-dev ninja-build -y
+          sudo apt-get install libcurl4-openssl-dev librpm-dev libapt-pkg-dev ninja-build
           pip install cpplint && mkdir -p build && cd build && rm -rf * && cmake .. -GNinja && ninja cpplint
 
   containerization:
@@ -174,16 +174,16 @@ jobs:
       - name: docker setup
         run: |
           if [[ "${{ runner.os }}" == "Linux" ]]; then
-            sudo apt install ca-certificates curl gnupg
-            sudo install -m 0755 -d /etc/apt/keyrings
-            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-            sudo chmod a+r /etc/apt/keyrings/docker.gpg
+            sudo apt-get update
+            sudo apt-get install ca-certificates curl gnupg
+            if [ ! -e /etc/apt/keyrings ] || [ ! -d /etc/apt/keyrings ] || [ $(stat -c %a /etc/apt/keyrings) -ne 755 ]; then sudo install -m 0755 -d /etc/apt/keyrings; fi
+            if [ -e /etc/apt/keyrings/docker.gpg ] && [ -d /etc/apt/keyrings/docker.gpg ] && [] then curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg; fi
+            if [ ! -r /etc/apt/keyrings/docker.gpg ] then sudo chmod a+r /etc/apt/keyrings/docker.gpg; fi
             echo \
               "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
               "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
               sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-              sudo apt update
-              sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+              sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
               sudo service docker start
           elif [[ "${{ runner.os }}" == "macOS" ]]; then
             brew update
