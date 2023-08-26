@@ -180,7 +180,7 @@ jobs:
             sudo apt-get update
             sudo apt-get install ca-certificates curl gnupg
             if [ ! -e /etc/apt/keyrings ] || [ ! -d /etc/apt/keyrings ] || [ $(stat -c %a /etc/apt/keyrings) -ne 755 ]; then sudo install -m 0755 -d /etc/apt/keyrings; fi
-            if [[ -e /etc/apt/keyrings/docker.gpg ] && [ -d /etc/apt/keyrings/docker.gpg ] && [ ! -r /etc/apt/keyrings/docker.gpg ]] || [ ! -e /etc/apt/keyrings/docker.gpg]; then curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg && sudo chmod a+r /etc/apt/keyrings/docker.gpg; fi
+            if [[ -e /etc/apt/keyrings/docker.gpg && -f /etc/apt/keyrings/docker.gpg && ! -r /etc/apt/keyrings/docker.gpg ]] || [ ! -e /etc/apt/keyrings/docker.gpg ]; then curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg && sudo chmod a+r /etc/apt/keyrings/docker.gpg; fi
             echo \
               "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
               "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
