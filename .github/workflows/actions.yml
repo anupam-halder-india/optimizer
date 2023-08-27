@@ -21,8 +21,8 @@ env:
   DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
   DEFAULT_BRANCH: master
   GITHUB_TOKEN: ${{ secrets.THE_GITHUB_ADMIN_TOKEN }}
-  TRUE: true
-  FALSE: false
+  TRUE: 'true'
+  FALSE: 'false' 
 
 permissions: write-all
 
