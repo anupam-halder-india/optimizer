@@ -77,6 +77,12 @@ jobs:
       with:
         python-version: 'x'
 
+    - name: build
+      run: |
+        sudo apt-get update
+        sudo apt-get install libcurl4-openssl-dev librpm-dev libapt-pkg-dev ninja-build -y 
+        pip install cpplint && mkdir -p build && cd build && rm -rf * && cmake .. -GNinja && ninja cpplint
+
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
 
@@ -91,13 +97,6 @@ jobs:
       uses: github/codeql-action/analyze@v2
       with:
         category: "/language:${{matrix.language}}"
-
-    - name: Fossa alylise
-      run: |
-        curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install-latest.sh | bash
-        export FOSSA_API_KEY=${{ secrets.FOSSA_API_KEY }}
-        ls -a
-        fossa analyze --detect-vendored
 
 # testing:
 #   name: Test
