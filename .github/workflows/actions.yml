@@ -181,6 +181,7 @@ jobs:
           elif [[ "${{ runner.os }}" == "macOS" ]]; then
             brew update
             brew install --cask docker
+            sudo launchctl start com.docker.dockerd
           fi
           docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
