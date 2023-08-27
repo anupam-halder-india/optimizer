@@ -57,7 +57,7 @@ jobs:
 
       - name: Source Code changes detection
         uses: dorny/paths-filter@v2
-        id: changes
+        id: change
         with:
           filters: |
             files:
