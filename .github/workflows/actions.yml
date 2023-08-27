@@ -35,7 +35,7 @@ jobs:
 
     outputs:
       runs-on: ${{ matrix.os }}
-      changes: ${{ true }} # ${{ steps.changes.outputs.files }}
+      changes: ${{ secrets.TRUE }} # ${{ steps.changes.outputs.files }}
       trex: ${{ matrix.trx }}
       linx: ${{ matrix.lix }}
 
