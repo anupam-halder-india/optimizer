@@ -35,7 +35,7 @@ jobs:
 
     outputs:
       runs-on: ${{ matrix.os }}
-      changes: ${{ true }} #${{ steps.changes.outputs.files }}
+      changes: ${{ true }} # ${{ steps.changes.outputs.files }}
       trex: ${{ matrix.trx }}
       linx: ${{ matrix.lix }}
 
@@ -54,7 +54,7 @@ jobs:
 
   branch-deletion:
     name: marged branch deletion
-    runs-on: ${{ configrations.outputs.runs-on }}
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     steps:
@@ -65,9 +65,9 @@ jobs:
 
   node:
     name: Node
-    runs-on: ${{ configrations.outputs.runs-on }}
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
-    if: configurations.outputs.changes == 'true' 
+    if: needs.configurations.outputs.changes == 'true' 
     steps:
       - name: Use Node.js 18 for caching
         uses: actions/setup-node@v3
@@ -76,9 +76,9 @@ jobs:
 
   python:
     name: Python
-    runs-on: ${{ configrations.outputs.runs-on }}
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
-    if: configurations.outputs.changes == 'true'
+    if: needs.configurations.outputs.changes == 'true'
     steps:
       - name: Installing Python
         uses: actions/setup-python@v4
@@ -87,9 +87,9 @@ jobs:
 
   cmake:
     name: CMake Setup
-    runs-on: ${{ configrations.outputs.runs-on }}
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
     needs: configrations
-    if: configurations.outputs.changes == 'true'
+    if: needs.configurations.outputs.changes == 'true'
     steps:
       - name: Setting up CMake
         uses: lukka/get-cmake@latest
@@ -99,9 +99,9 @@ jobs:
 
   cloging:
     name: Cloging
-    runs-on: ${{ configrations.outputs.linx }}
+    runs-on: ${{ needs.configrations.outputs.linx }}
     needs: [configrations, node, python, cmake]
-    if: configrations.outputs.changes == 'true'
+    if: needs.configrations.outputs.changes == 'true'
     steps:
       - name: Conformation
         shell: bash
@@ -109,7 +109,7 @@ jobs:
 
   linting:
     name: Linting
-    if: configurations.outputs.changes == 'true'
+    if: needs.configurations.outputs.changes == 'true'
     needs: [configrations, cloging]
     runs-on: ubuntu-latest
     steps:
@@ -118,9 +118,9 @@ jobs:
 
   start-caching:
     name: Cache Starting
-    if: configrations.outputs.changes == 'true' && github.event_name != 'pull_request'
+    if: needs.configrations.outputs.changes == 'true' && github.event_name != 'pull_request'
     needs: [configrations, node, cloging]
-    runs-on: ${{ configrations.outputs.runs-on }}
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
     outputs:
       cache-hit: steps.cache.outputs.cache-hit != 'true'
     steps:
@@ -143,7 +143,7 @@ jobs:
     name: Buliding
     runs-on: ubuntu-latest
     needs: [configrations, python, cmake, cloging, start-caching]
-    if: configrations.outputs.changes == 'true'
+    if: needs.configrations.outputs.changes == 'true'
     steps:
       - name: setting up action checkout
         uses: actions/checkout@v3
@@ -158,8 +158,8 @@ jobs:
 
   containerization:
     name: Containerization with Docker
-    runs-on: ${{ configrations.outputs.linx }}
-    if: configrations.outputs.changes == 'true'
+    runs-on: ${{ needs.configrations.outputs.linx }}
+    if: needs.configrations.outputs.changes == 'true'
     needs: [configrations, cloging, start-caching, build]
     steps:
       - name: setting up action checkout
@@ -198,9 +198,9 @@ jobs:
 
   end-caching:
     name: Cache Ending 
-    if: configrations.outputs.changes == 'true' && github.event_name != 'pull_request' && needs.start-caching.outputs.cache-hit != 'true'
+    if: needs.configrations.outputs.changes == 'true' && github.event_name != 'pull_request' && needs.start-caching.outputs.cache-hit != 'true'
     needs: [configrations, node, cloging, start-caching, build, containerization]
-    runs-on: ${{ configrations.outputs.runs-on }}
+    runs-on: ${{ needs.configrations.outputs.runs-on }}
     steps:
       - name: Save Action Cache
         uses: actions/cache@v3
