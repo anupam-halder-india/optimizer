@@ -159,8 +159,8 @@ jobs:
   containerization:
     name: Containerization with Docker
     runs-on: ${{ needs.configrations.outputs.linx }}
-    if: needs.configrations.outputs.changes == 'true'
-    needs: [configrations, cloging, start-caching, build]
+  #  if: needs.configrations.outputs.changes == 'true'
+    needs: configrations # [configrations, cloging, start-caching, build]
     steps:
       - name: setting up action checkout
         uses: actions/checkout@v3
