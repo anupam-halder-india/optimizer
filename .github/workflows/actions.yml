@@ -20,9 +20,7 @@ env:
   ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
   DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
   DEFAULT_BRANCH: master
-  GITHUB_TOKEN: ${{ secrets.THE_GITHUB_ADMIN_TOKEN }}
-  TRUE: 'true'
-  FALSE: 'false' 
+  GITHUB_TOKEN: ${{ secrets.THE_GITHUB_ADMIN_TOKEN }} 
 
 permissions: write-all
 
@@ -37,27 +35,18 @@ jobs:
 
     outputs:
       runs-on: ${{ matrix.os }}
-      changes: ${{ env.TRUE }}
+      changes: ${{ true }} # ${{ steps.changes.outputs.files }}
       trex: ${{ matrix.trx }}
       linx: ${{ matrix.lix }}
-      BFCH: ${{ steps.before-commit-hash.outputs.BEFORE_COMMIT_HASH }}
 
     runs-on: ${{ matrix.os }}
     steps:
       - name: setting up action checkout
         uses: actions/checkout@v3
 
-      - name: Before commit hash
-        id: before-commit-hash
-        shell: bash
-        run: |
-          echo "BEFORE_COMMIT_HASH=${{ github.event.before }}" >> $GITHUB_OUTPUT
-          BEFORE_COMMIT_HASH=${{ github.event.before }}
-          echo "Before commit hash: $BEFORE_COMMIT_HASH"
-
       - name: Source Code changes detection
         uses: dorny/paths-filter@v2
-        id: change
+        id: changes
         with:
           filters: |
             files:
