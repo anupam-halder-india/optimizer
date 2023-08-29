@@ -51,6 +51,10 @@ jobs:
           filters: |
             files:
               - 'src/**'
+              - 'CMakeLists.txt'
+              - '.cpplint'
+              - 'bin/**'
+              - '.deepsource.toml'
 
   branch-deletion:
     name: marged branch deletion
