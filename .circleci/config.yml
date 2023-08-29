@@ -1,23 +1,52 @@
 version: 2.1
+setup: true
+orbs:
+  path-filtering: circleci/path-filtering@1.0.0
+  python: circleci/python@2.1.1
 
-# Define the jobs we want to run for this project
-jobs:
-  build:
-    docker:
-      - image: cimg/base:2023.03
-    steps:
-      - checkout
-      - run: echo "this is the build job"
-  test:
-    docker:
-      - image: cimg/base:2023.03
-    steps:
-      - checkout
-      - run: echo "this is the test job"
+parameters:
+  os:
+    type: string
+    enum:
+      - ubuntu
+      - macos
 
-# Orchestrate our job run sequence
 workflows:
-  build_and_test:
     jobs:
-      - build
-      - test
+      - configrations:
+          docker:
+            - image: << parameters.os >>:latest
+          steps:
+            - checkout
+            - path-filtering/filter:
+                filters:
+                  - filter-type: include
+                    pattern: 'src/**'
+                  - filter-type: include
+                    pattern: 'CMakeLists.txt'
+                  - filter-type: include
+                    pattern: '.cpplint'
+                  - filter-type: include
+                    pattern: '.deepsource.toml'
+                  - filter-type: include
+                    pattern: 'bin/**'
+                command: echo "export changes=true" >> $BASH_ENV
+
+    build:
+      - build:
+          docker:
+            - image: << parameters.os >>:latest
+          steps:
+            - checkout
+            - python/dist
+            name: Build
+            command: |
+              sudo apt-get update
+              sudo apt-get install libcurl4-openssl-dev librpm-dev libapt-pkg-dev ninja-build
+              pip install cpplint && mkdir -p build && cd build && rm -rf * && cmake .. -GNinja && ninja cpplint
+
+    docker:
+      docker:
+        - images: << parameters.os >>:latest
+      steps:
+        
