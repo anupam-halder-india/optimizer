@@ -32,9 +32,12 @@ workflows:
                     pattern: '.deepsource.toml'
                   - filter-type: include
                     pattern: 'bin/**'
-                command: echo "export changes=true" >> $BASH_ENV
+                - run:
+                    name: changes detection
+                    command: echo "export changes=true" >> $BASH_ENV
 
   build:
+    while: 
     jobs:
       - build:
           docker:
@@ -42,10 +45,12 @@ workflows:
           steps:
             - checkout
             - python/dist
-            command: |
-              sudo apt-get update
-              sudo apt-get install libcurl4-openssl-dev librpm-dev libapt-pkg-dev ninja-build
-              pip install cpplint && mkdir -p build && cd build && rm -rf * && cmake .. -GNinja && ninja cpplint
+            run:
+              name: build
+                command: |
+                  sudo apt-get update
+                  sudo apt-get install libcurl4-openssl-dev librpm-dev libapt-pkg-dev ninja-build
+                  pip install cpplint && mkdir -p build && cd build && rm -rf * && cmake .. -GNinja && ninja cpplint
 
   docker:
     jobs:
