@@ -42,8 +42,6 @@ workflows:
           steps:
             - checkout
             - python/dist
-
-            name: Build
             command: |
               sudo apt-get update
               sudo apt-get install libcurl4-openssl-dev librpm-dev libapt-pkg-dev ninja-build
