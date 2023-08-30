@@ -40,10 +40,7 @@ workflows:
           docker:
             - image: << parameters.os >>:latest
           steps:
-            name: checkout
             - checkout
-
-            name: python
             - python/dist
 
             name: Build
@@ -59,7 +56,6 @@ workflows:
             - images: << parameters.os >>:latest
           steps:
             - checkout
-            name: Docker build
             - docker/publish:
                 deploy: false
                 image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
