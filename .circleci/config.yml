@@ -3,6 +3,7 @@ setup: true
 orbs:
   path-filtering: circleci/path-filtering@1.0.0
   python: circleci/python@2.1.1
+  docker: circleci/docker@2.2.0
 
 parameters:
   os:
@@ -12,6 +13,7 @@ parameters:
       - macos
 
 workflows:
+  configrations:
     jobs:
       - configrations:
           docker:
@@ -32,21 +34,34 @@ workflows:
                     pattern: 'bin/**'
                 command: echo "export changes=true" >> $BASH_ENV
 
-    build:
+  build:
+    jobs:
       - build:
           docker:
             - image: << parameters.os >>:latest
           steps:
+            name: checkout
             - checkout
+
+            name: python
             - python/dist
+
             name: Build
             command: |
               sudo apt-get update
               sudo apt-get install libcurl4-openssl-dev librpm-dev libapt-pkg-dev ninja-build
               pip install cpplint && mkdir -p build && cd build && rm -rf * && cmake .. -GNinja && ninja cpplint
 
-    docker:
-      docker:
-        - images: << parameters.os >>:latest
-      steps:
-        
+  docker:
+    jobs:
+      - docker:
+          docker:
+            - images: << parameters.os >>:latest
+          steps:
+            - checkout
+            name: Docker build
+            - docker/publish:
+                deploy: false
+                image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+                use-buildkit: true
+                use-remote-docker: true
