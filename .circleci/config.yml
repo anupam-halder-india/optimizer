@@ -12,55 +12,48 @@ parameters:
       - ubuntu
       - macos
 
-workflows:
+jobs:
   configrations:
-    jobs:
-      - configrations:
-          docker:
-            - image: << parameters.os >>:latest
-          steps:
-            - checkout
-            - path-filtering/filter:
-                filters:
-                  - filter-type: include
-                    pattern: 'src/**'
-                  - filter-type: include
-                    pattern: 'CMakeLists.txt'
-                  - filter-type: include
-                    pattern: '.cpplint'
-                  - filter-type: include
-                    pattern: '.deepsource.toml'
-                  - filter-type: include
-                    pattern: 'bin/**'
-                - run:
-                    name: changes detection
-                    command: echo "export changes=true" >> $BASH_ENV
+    docker:
+      - image: << parameters.os >>:latest
+    steps:
+      - checkout
+      - path-filtering/filter:
+          filters:
+            - filter-type: include
+              pattern: 'src/**'
+            - filter-type: include
+              pattern: 'CMakeLists.txt'
+            - filter-type: include
+              pattern: '.cpplint'
+            - filter-type: include
+              pattern: '.deepsource.toml'
+            - filter-type: include
+              pattern: 'bin/**'
+      - run:
+          name: changes detection
+          command: echo "export changes=true" >> $BASH_ENV
 
   build:
-    while: 
-    jobs:
-      - build:
-          docker:
-            - image: << parameters.os >>:latest
-          steps:
-            - checkout
-            - python/dist
-            run:
-              name: build
-                command: |
-                  sudo apt-get update
-                  sudo apt-get install libcurl4-openssl-dev librpm-dev libapt-pkg-dev ninja-build
-                  pip install cpplint && mkdir -p build && cd build && rm -rf * && cmake .. -GNinja && ninja cpplint
+    while:
+    docker:
+      - image: << parameters.os >>:latest
+    steps:
+      - checkout
+      - python/dist
+      - run:
+          name: Build
+          command: |
+            sudo apt-get update
+            sudo apt-get install libcurl4-openssl-dev librpm-dev libapt-pkg-dev ninja-build
+            pip install cpplint && mkdir -p build && cd build && rm -rf * && cmake .. -GNinja && ninja cpplint
+      
+      - docker/publish:
+          deploy: false
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          use-buildkit: true
+          use-remote-docker: true
 
-  docker:
-    jobs:
-      - docker:
-          docker:
-            - images: << parameters.os >>:latest
-          steps:
-            - checkout
-            - docker/publish:
-                deploy: false
-                image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-                use-buildkit: true
-                use-remote-docker: true
+workflows:
+  - configurations
+  - build
