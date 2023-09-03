@@ -6,7 +6,7 @@ orbs:
   docker: circleci/docker@2.2.0
 
 jobs:
-  configrations:
+  configurations:
     docker:
       - image: ubuntu:latest
       - image: macos:latest
@@ -55,4 +55,4 @@ workflows:
       - configurations
       - build:
           requires:
-            - configurations 
+            - configurations
