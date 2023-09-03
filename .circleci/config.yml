@@ -55,8 +55,9 @@ jobs:
           use-remote-docker: true
 
 workflows:
-  jobs:
-    - configurations
-    - build:
-        requires:
-          - configurations
+  workflow_runs:
+    jobs:
+      - configurations
+      - build:
+          requires:
+            - configurations 
