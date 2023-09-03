@@ -35,7 +35,7 @@ jobs:
           command: echo "export changes=true" >> $BASH_ENV
 
   build:
-    while:
+  - when: << pipeline.parameters.changes == 'true' >>
     docker:
       - image: << parameters.os >>:latest
     steps:
@@ -55,5 +55,8 @@ jobs:
           use-remote-docker: true
 
 workflows:
-  - configurations
-  - build
+  jobs:
+    - configurations
+    - build:
+        requires:
+          - configurations
