@@ -5,17 +5,11 @@ orbs:
   python: circleci/python@2.1.1
   docker: circleci/docker@2.2.0
 
-parameters:
-  os:
-    type: string
-    enum:
-      - ubuntu
-      - macos
-
 jobs:
   configrations:
     docker:
-      - image: << parameters.os >>:latest
+      - image: ubuntu:latest
+      - image: macos:latest
     steps:
       - checkout
       - path-filtering/filter:
@@ -37,7 +31,8 @@ jobs:
   build:
   - when: << pipeline.parameters.changes == 'true' >>
     docker:
-      - image: << parameters.os >>:latest
+      - image: ubuntu:latest
+      - image: macos:latest
     steps:
       - checkout
       - python/dist
