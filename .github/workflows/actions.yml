@@ -42,7 +42,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: setting up action checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Source Code changes detection
         uses: dorny/paths-filter@v2
@@ -150,7 +150,7 @@ jobs:
     if: needs.configrations.outputs.changes == 'true'
     steps:
       - name: setting up action checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure and bulding CMake ninja
         shell: bash
@@ -167,7 +167,7 @@ jobs:
     needs: [configrations, cloging, start-caching, build]
     steps:
       - name: setting up action checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Docker containerization
         run: |
